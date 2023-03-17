@@ -1,0 +1,36 @@
+.button {
+	background: linear-gradient(45deg, rgba(234,143,234,1) 20%, rgba(255,170,207,1) 50%, rgba(246,230,194,1) 100%);
+	background-size: 200% 200%;
+	animation: gradient 3s ease infinite;
+}
+
+.testbutton {
+	background: linear-gradient(90deg, rgba(234,143,234,1), rgba(255,170,207,1) , rgba(246,230,194,1));
+	background-size: 200% 200%;
+	animation: gradient 5s ease infinite;
+}
+
+
+.buttonDaily {
+	background: linear-gradient(90deg, #7571f1, #42c6f2 , #94f2e4);
+	background-size: 200% 200%;
+	animation: gradient 5s ease infinite;
+}
+
+.quizDiv {
+	background: linear-gradient(-45deg, rgba(234,143,234,1) , rgba(255,170,207,1), rgba(246,230,194,1) );
+	background-size: 200% 200%;
+	animation: gradient 10s ease infinite;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
