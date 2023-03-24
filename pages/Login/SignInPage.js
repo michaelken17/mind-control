@@ -4,24 +4,103 @@ import {
   Checkbox,
   colors,
   createTheme,
+  IconButton,
+  InputAdornment,
+  InputBase,
+  Paper,
+  TextField,
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Montserrat } from "next/font/google";
-import React from "react";
-import CustomInput from "./CustomInput";
+import { useEffect, useRef } from "react";
 import localFont from "next/font/local";
 import { motion } from "framer-motion";
+import { VisibilityOff } from "@mui/icons-material";
+import { useSelector, useDispatch } from "react-redux";
+import { loginActions } from "@/redux/slices/loginSlice";
+import { useRouter } from "next/router";
+import Swal from "sweetalert2";
+import Link from "next/link";
 
 const montserrat = Montserrat({ subsets: ["latin"], weight: "400" });
 const cooperHewitt = localFont({ src: "../../public/CooperHewitt-Heavy.otf" });
 
 const SigninPage = () => {
+  const usernameRef = useRef();
+  const passwordRef = useRef();
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const loginHandler = (event) => {
+    event.preventDefault();
+
+    const username = usernameRef.current.value;
+    const password = passwordRef.current.value;
+
+    if (username == "" || password == "") {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Please enter your username and password!",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    } else {
+      dispatch(
+        loginActions.login({
+          username: username,
+          email: "emailtest@gmail.com",
+          password: password,
+        })
+      );
+
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        // didOpen: (toast) => {
+        //   toast.addEventListener("mouseenter", Swal.stopTimer);
+        //   toast.addEventListener("mouseleave", Swal.resumeTimer);
+        // },
+      });
+
+      Toast.fire({
+        icon: "success",
+        title: "Signed in successfully",
+      });
+
+      router.push("/home");
+    }
+  };
+
+  //Press Enter key to login
+  useEffect(() => {
+    const keyDownHandler = (event) => {
+      // console.log("User pressed: ", event.key);
+
+      if (event.key === "Enter") {
+        event.preventDefault();
+
+        // 👇️ call submit function here
+        loginHandler(event);
+      }
+    };
+
+    document.addEventListener("keydown", keyDownHandler);
+
+    return () => {
+      document.removeEventListener("keydown", keyDownHandler);
+    };
+  }, []);
+
   return (
-    <Grid xs={12} sm={12} md={6} lg={7} xl={7}>
+    <Grid xs={12} sm={12} md={6} lg={7} xl={7} item={true}>
       <Box
         sx={{
-          padding:"20px",
+          padding: "20px",
           backgroundColor: "white",
           display: "flex",
           flexDirection: "column",
@@ -76,16 +155,93 @@ const SigninPage = () => {
 
           {/* INPUTS */}
           <div style={{ marginTop: "20px" }}>
-            <CustomInput
-              label="Login"
-              placeholder="Enter your Email..."
-              isIconActive={false}
-            />
-            <CustomInput
-              label="Password"
-              placeholder="Enter your Password..."
-              isIconActive={true}
-            />
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignContent="center"
+              justifyContent="flex-start"
+              mb={2}
+            >
+              <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="flex-start"
+              >
+                <Typography
+                  color="#2f4858"
+                  pb={1}
+                  className={montserrat.className}
+                >
+                  Username
+                </Typography>
+
+                <Paper
+                  sx={{
+                    width: "100%",
+                  }}
+                >
+                  <InputBase
+                    className={montserrat.className}
+                    placeholder="Enter your username..."
+                    fullWidth
+                    sx={{
+                      bgcolor: "white",
+                      p: 1,
+                      borderRadius: "5px",
+                    }}
+                    inputRef={usernameRef}
+                  />
+                </Paper>
+              </Box>
+            </Box>
+
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignContent="center"
+              justifyContent="flex-start"
+              mb={2}
+            >
+              <Box
+                display="flex"
+                flexDirection="column"
+                justifyContent="flex-start"
+              >
+                <Typography
+                  color="#2f4858"
+                  pb={1}
+                  className={montserrat.className}
+                >
+                  Password
+                </Typography>
+
+                <Paper
+                  sx={{
+                    width: "100%",
+                  }}
+                >
+                  <InputBase
+                    className={montserrat.className}
+                    placeholder="Enter your Password..."
+                    fullWidth
+                    sx={{
+                      bgcolor: "white",
+                      p: 1,
+                      borderRadius: "5px",
+                    }}
+                    inputRef={passwordRef}
+                  />
+                </Paper>
+              </Box>
+            </Box>
+
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignContent="center"
+              justifyContent="flex-start"
+              mb={2}
+            ></Box>
           </div>
 
           <motion.div whileHover={{ scale: 1.05 }}>
@@ -102,11 +258,24 @@ const SigninPage = () => {
                   backgroundColor: "#FFAACF",
                 },
               }}
+              onClick={loginHandler}
             >
               Login
             </Button>
           </motion.div>
         </Box>
+        <Link href="/SignUpPage">
+          <Typography
+            sx={{
+              mt: 1,
+              fontSize: 13,
+              textDecoration: "underline",
+              color: "#2f4858",
+            }}
+          >
+            Sign Up
+          </Typography>
+        </Link>
       </Box>
     </Grid>
   );

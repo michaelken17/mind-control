@@ -49,6 +49,7 @@ export default function MentalHealthCheck() {
                 borderRadius: 10,
                 padding: 20,
                 marginTop: 30,
+                marginBottom:30,
                 fontSize: 20,
                 border: "0px ",
               }}

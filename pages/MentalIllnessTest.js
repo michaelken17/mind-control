@@ -25,7 +25,7 @@ const itemData = [
     img: "/image/Mental Illness Illustration/anxietyIll.jpg",
     title: "Anxiety",
     author: "Start Test",
-    link: "/Anxiety",
+    link: "/MentalIllness/Anxiety",
   },
   {
     img: "/image/Mental Illness Illustration/depressionIll.jpg",

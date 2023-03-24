@@ -3,6 +3,7 @@ import Grid from "@mui/material/Grid";
 import SigninPage from "./Login/SignInPage";
 import TitleBox from "./Login/TitleBox";
 import MainLayout from "../components/SignInLayout";
+import React, { useRef } from "react";
 
 export default function login() {
   return (
@@ -13,12 +14,12 @@ export default function login() {
             sm: "90vw",
             xs: "90vw",
             xl: "60vw",
-          }
+          },
         }}
       >
         {/* GRID SYSTEM */}
         <Grid container height="50vh">
-          <SigninPage /> 
+          <SigninPage />
 
           <TitleBox />
         </Grid>

@@ -17,6 +17,7 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "styles/Layout.module.css";
 import { Montserrat } from "next/font/google";
+import { useSelector } from "react-redux";
 
 const montserrat = Montserrat({ subsets: ["latin"], weight: "500" });
 const pages = [
@@ -29,6 +30,7 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
 export default function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [isLoaded, setIsLoad] = useState(false);
 
   const handleOpenNavMenu = () => {
     setAnchorElNav(event.currentTarget);
@@ -43,6 +45,12 @@ export default function Navbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  React.useEffect(() => {
+    setIsLoad(true);
+  }, []);
+
+  const login = useSelector((state) => state.persistedReducer.login);
 
   return (
     <div>
@@ -97,18 +105,20 @@ export default function Navbar() {
                 sx={{ mt: "45px", display: { xs: "block", md: "none" } }}
               >
                 {pages.map((page) => (
-                  <MenuItem
-                    component="a"
+                  <Link
                     key={page.title}
-                    onClick={handleCloseNavMenu}
-                    // linkButton={true}
-                    // href={page.path}
+                    href={page.path}
+                    className={montserrat.className}
                   >
-                    <Link href={page.path} className={montserrat.className}>
+                    <MenuItem
+                      onClick={handleCloseNavMenu}
+                      // linkButton={true}
+                      // href={page.path}
+                    >
                       {page.title}
-                    </Link>
-                    {/* <Typography textAlign="center">{page.title}</Typography> */}
-                  </MenuItem>
+                      {/* <Typography textAlign="center">{page.title}</Typography> */}
+                    </MenuItem>
+                  </Link>
                 ))}
               </Menu>
             </Box>
@@ -137,26 +147,28 @@ export default function Navbar() {
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
                 <Box key={page.title}>
-                  <Button
-                    // href={page.path}
-                    sx={{
-                      mx: 2,
-                      py: 4,
-                      color: "#42493A",
-                      display: "block",
-                      borderBottom: "4px solid white",
-                      "&:hover": {
-                        color: "gray",
-                        backgroundColor: "white",
-                        borderBottom: "4px solid #FFAACF",
-                      },
-                      fontSize: 15,
-                      textTransform: "none",
-                    }}
-                    className={montserrat.className}
-                  >
-                    <Link href={page.path}>{page.title}</Link>
-                  </Button>
+                  <Link href={page.path} legacyBehavior passHref>
+                    <Button
+                      // href={page.path}
+                      sx={{
+                        mx: 2,
+                        py: 4,
+                        color: "#42493A",
+                        display: "block",
+                        borderBottom: "4px solid white",
+                        "&:hover": {
+                          color: "gray",
+                          backgroundColor: "white",
+                          borderBottom: "4px solid #FFAACF",
+                        },
+                        fontSize: 15,
+                        textTransform: "none",
+                      }}
+                      className={montserrat.className}
+                    >
+                      {page.title}
+                    </Button>
+                  </Link>
                 </Box>
               ))}
             </Box>
@@ -191,20 +203,24 @@ export default function Navbar() {
                 ))}
               </Menu>
             </Box> */}
-            <Button
-              variant="outlined"
-              sx={{
-                color: "#FFAACF",
-                borderColor: "#FFAACF",
-                "&:hover": {
-                  color: "#EA8FEA",
-                  backgroundColor: "white",
-                  borderColor: "#EA8FEA",
-                },
-              }}
-            >
-              <Link href="/login">Log In</Link>
-            </Button>
+            {isLoaded && login?.authorized == false && (
+              <Link href="/login" legacyBehavior passHref>
+                <Button
+                  variant="outlined"
+                  sx={{
+                    color: "#FFAACF",
+                    borderColor: "#FFAACF",
+                    "&:hover": {
+                      color: "#EA8FEA",
+                      backgroundColor: "white",
+                      borderColor: "#EA8FEA",
+                    },
+                  }}
+                >
+                  Log In
+                </Button>
+              </Link>
+            )}
           </Toolbar>
         </Container>
       </AppBar>

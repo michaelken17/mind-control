@@ -46,12 +46,12 @@ export default function PanduanMentalHealthTest() {
           }}
           exit={{ y: "100%" }}
         >
-          <text
+          <a
             className={cooperHewitt.className}
             style={{ color: "white", fontSize: "50px" }}
           >
             PANDUAN PENGISIAN <br/>MENTAL HEALTH TEST
-          </text>
+          </a>
           <div
             width="100%"
             style={{ display: "flex", justifyContent: "center", marginTop: 10 }}
@@ -98,7 +98,7 @@ export default function PanduanMentalHealthTest() {
                   display: "inline-block",
                   textAlign: "left",
                   margin: 20,
-                  color:"gray"
+                  color:"#393939"
                 }}
                 variants={container}
                 initial="hidden"

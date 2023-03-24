@@ -14,7 +14,7 @@ const Layout = ({ children }) => {
       { <Navbar />}
       <div
         style={{
-          paddingTop: router.pathname == "/login" ? 0 : 150,
+          paddingTop: router.pathname == "/login" || router.pathname == "/SignUpPage" ? 0 : 150,
           backgroundColor: "white",
           color: "black",
         }}

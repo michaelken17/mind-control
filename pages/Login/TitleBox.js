@@ -33,7 +33,7 @@ const TitleBox = () => {
             Join Our <br /> Community
           </Typography>
           <Typography variant="body1" fontWeight="" color="whitesmoke">
-            Create Your High-Level Cloud Network Service!
+            A healthy mind is the greatest treasure to find
           </Typography>
         </Box>
       </Box>

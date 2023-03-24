@@ -12,8 +12,6 @@ import { motion } from "framer-motion";
 import localFont from "next/font/local";
 import Link from "next/link";
 import styles from "styles/Quiz.module.css";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
 const cooperHewitt = localFont({ src: "../public/CooperHewitt-Heavy.otf" });
 const glacial = localFont({ src: "../public/GlacialIndifference-Regular.otf" });
 
@@ -79,12 +77,12 @@ export default function Home() {
             </div>
 
             <div style={{ marginTop: "15px" }}>
-              <text
-                style={{ fontSize: "25px", color: "#a6a6a6" }}
+              <Typography
+                sx={{ fontSize: "25px", color: "#a6a6a6" }}
                 className={glacial.className}
               >
                 It's Okay Not To Be Okay.
-              </text>
+              </Typography>
             </div>
           </div>
           <div
@@ -190,8 +188,6 @@ export default function Home() {
         >
           <div
             style={{
-              bgcolor: "gray",
-              mt: "0",
               float: "left",
             }}
           >
@@ -243,8 +239,6 @@ export default function Home() {
         >
           <div
             style={{
-              bgcolor: "gray",
-              mt: "0",
               float: "right",
             }}
           >
@@ -294,7 +288,6 @@ export default function Home() {
       </Container>
 
       {/* Footer */}
-
       <motion.div
         initial={{ x: "-100%" }}
         animate={{ x: "0%" }}
