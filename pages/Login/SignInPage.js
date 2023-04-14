@@ -22,9 +22,7 @@ import { loginActions } from "@/redux/slices/loginSlice";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import Link from "next/link";
-
-const montserrat = Montserrat({ subsets: ["latin"], weight: "400" });
-const cooperHewitt = localFont({ src: "../../public/CooperHewitt-Heavy.otf" });
+import {montserrat, glacial, cooperHewitt} from "../fonts";
 
 const SigninPage = () => {
   const usernameRef = useRef();
@@ -145,11 +143,12 @@ const SigninPage = () => {
                 marginTop: 0,
                 marginBottom: 0,
                 fontSize: "20px",
+                letterSpacing: "1px"
               }}
               mt={7}
               mb={1}
             >
-              Sign In to <a style={{ color: "#EA8FEA" }}>MindControl</a>
+              SIGN IN TO <a style={{ color: "#EA8FEA" }}>MINDCONTROL</a>
             </Typography>
           </Box>
 
@@ -270,7 +269,7 @@ const SigninPage = () => {
               mt: 1,
               fontSize: 13,
               textDecoration: "underline",
-              color: "#2f4858",
+              color: "gray",
             }}
           >
             Sign Up

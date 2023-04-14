@@ -11,51 +11,22 @@ import {
 import { motion } from "framer-motion";
 import localFont from "next/font/local";
 import Link from "next/link";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import styles from "styles/Quiz.module.css";
-const cooperHewitt = localFont({ src: "../public/CooperHewitt-Heavy.otf" });
-const glacial = localFont({ src: "../public/GlacialIndifference-Regular.otf" });
-
-const itemData = [
-  {
-    img: "/image/Mental Illness Illustration/anxietyIll.jpg",
-    title: "Anxiety",
-    author: "Start Test",
-    link: "/Anxiety",
-  },
-  {
-    img: "/image/Mental Illness Illustration/depressionIll.jpg",
-    title: "Depression",
-    author: "Start Test",
-    link: "/Depression",
-  },
-  {
-    img: "/image/Mental Illness Illustration/bipolarIll.jpg",
-    title: "Bipolar Disorder",
-    author: "Start Test",
-    link: "/BipolarDisorder",
-  },
-  {
-    img: "/image/Mental Illness Illustration/ptsdIll.jpg",
-    title: "PTSD",
-    author: "Start Test",
-    link: "/PTSD",
-  },
-  {
-    img: "/image/Mental Illness Illustration/anorexiaIll.jpg",
-    title: "Eating Disorders",
-    author: "Start Test",
-    link: "/EatingDisorders",
-  },
-
-  {
-    img: "/image/Mental Illness Illustration/schizo.jpg",
-    title: "Schizophrenia",
-    author: "Start Test",
-    link: "/Schizophrenia",
-  },
-];
+import {montserrat, glacial, cooperHewitt} from "./fonts";
 
 export default function Home() {
+  const mentalIllnessData = useSelector(
+    (x) => x.persistedReducer.app.mentalIllnessData
+  );
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
   return (
     <div style={{ position: "relative" }}>
       {/* MindControl Logo */}
@@ -119,49 +90,53 @@ export default function Home() {
           </a>
           <motion.div style={{ display: "flex", justifyContent: "center" }}>
             <ImageList
-              sx={{ width: "1000px", height: "100%", padding: "20px" }}
-              cols={3}
+              sx={{ width: "80%", height: "100%", padding: "20px" }}
+              cols={4}
             >
-              {itemData.map((item) => (
-                <Link href={item.link} key={item.img}>
-                  <motion.div
-                    whileHover={{ scale: 1.03 }}
-                    style={{
-                      borderRadius: "20px",
-                      margin: 5,
-                    }}
-                    transition={{
-                      duration: 5,
-                      type: "spring",
-                      stiffness: 400,
-                      damping: 10,
-                      bounce: 1,
-                    }}
-                  >
-                    <ImageListItem sx={{}}>
-                      <motion.img
-                        style={{
-                          borderRadius: "20px",
-                          width: "100%",
-                          height: "250px",
-                        }}
-                        src={item.img}
-                        alt={item.title}
-                        loading="eager"
-                      />
+              {isLoaded &&
+                mentalIllnessData.map((item) => (
+                  <Link href={item.link} key={item.img}>
+                    <motion.div
+                      whileHover={{ scale: 1.03 }}
+                      style={{
+                        borderRadius: "20px",
+                        margin: 5,
+                      }}
+                      transition={{
+                        duration: 5,
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 10,
+                        bounce: 1,
+                      }}
+                    >
+                      <ImageListItem sx={{}}>
+                        <motion.img
+                          style={{
+                            borderRadius: "20px",
+                            width: "100%",
+                            height: "100%",
+                          }}
+                          src={item.img}
+                          alt={item.title}
+                          loading="eager"
+                        />
 
-                      <ImageListItemBar
-                        sx={{
-                          borderBottomLeftRadius: "20px",
-                          borderBottomRightRadius: "20px",
-                        }}
-                        className={glacial.className}
-                        title={<h2>{item.title}</h2>}
-                      />
-                    </ImageListItem>
-                  </motion.div>
-                </Link>
-              ))}
+                        <ImageListItemBar
+                          sx={{
+                            borderBottomLeftRadius: "20px",
+                            borderBottomRightRadius: "20px",
+                          }}
+                          className={glacial.className}
+                          title={<h2>{item.title}</h2>}
+                          subtitle={
+                            <a style={{ fontSize: 14 }}> {item.author}</a>
+                          }
+                        />
+                      </ImageListItem>
+                    </motion.div>
+                  </Link>
+                ))}
             </ImageList>
           </motion.div>
           <div>
@@ -293,7 +268,7 @@ export default function Home() {
         animate={{ x: "0%" }}
         transition={{ duration: 1, ease: "easeOut" }}
         exit={{ x: "100%" }}
-        style={{paddingTop:"20px"}}
+        style={{ paddingTop: "20px" }}
       >
         <Box
           className={styles.quizDiv}
@@ -304,7 +279,7 @@ export default function Home() {
             display: { xs: "none", md: "block" },
           }}
         >
-          <Link style={{ fontSize: "25px", color: "white" }} href="/aboutus">
+          <Link style={{ fontSize: "25px", color: "white" }} href="/AboutUs">
             About Us
           </Link>
         </Box>

@@ -5,11 +5,9 @@ import { Montserrat } from "next/font/google";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
-
+import { montserrat, glacial, cooperHewitt } from "../fonts";
 import styles from "styles/Quiz.module.css";
 import Link from "next/link";
-
-const montserrat = Montserrat({ subsets: ["latin"], weight: "400" });
 
 const theme = createTheme({
   typography: {
@@ -42,28 +40,30 @@ export default function MentalHealthCheck() {
           ></img>
 
           <motion.div style={{ textAlign: "center" }}>
-            <motion.button
-              className={styles.button}
-              whileHover={{ scale: 1.1 }}
-              style={{
-                borderRadius: 10,
-                padding: 20,
-                marginTop: 30,
-                marginBottom:30,
-                fontSize: 20,
-                border: "0px ",
-              }}
-              transition={{
-                duration: 1,
-                type: "spring",
-                stiffness: 300,
-                damping: 20,
-                bounce: 1,
-              }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <Link href="/PanduanMentalHealthTest">Take Your Mental Health Test</Link>
-            </motion.button>
+            <Link href="Panduan">
+              <motion.button
+                className={styles.button}
+                whileHover={{ scale: 1.1 }}
+                style={{
+                  borderRadius: 10,
+                  padding: 20,
+                  marginTop: 30,
+                  marginBottom: 30,
+                  fontSize: 20,
+                  border: "0px ",
+                }}
+                transition={{
+                  duration: 1,
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 20,
+                  bounce: 1,
+                }}
+                whileTap={{ scale: 0.9 }}
+              >
+                Take Your Mental Health Check
+              </motion.button>
+            </Link>
           </motion.div>
         </Container>
       </motion.div>

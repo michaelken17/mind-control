@@ -116,14 +116,6 @@ const SignUpPage = () => {
             alignItems: "center",
             height: "100%",
             width: "50%",
-            // boxShadow: `0 0 5 px black`,
-            // borderRadius: {
-            //   xs: "30px",
-            //   sm: "30px",
-            //   md: "30px 0 0 30px",
-            //   lg: "30px 0 0 30px",
-            //   xl: "30px 0 0 30px",
-            // },
           }}
         >
           <Box>
@@ -155,11 +147,12 @@ const SignUpPage = () => {
                   marginTop: 0,
                   marginBottom: 0,
                   fontSize: "20px",
+                  letterSpacing:"1px"
                 }}
                 mt={7}
                 mb={1}
               >
-                Sign Up to <a style={{ color: "#EA8FEA" }}>MindControl</a>
+                SIGN UP TO <a style={{ color: "#EA8FEA" }}>MINDCONTROL</a>
               </Typography>
             </Box>
 

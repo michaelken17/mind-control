@@ -1,4 +1,3 @@
-import { Montserrat } from "next/font/google";
 import { Button, Container, List, ListItem, Typography } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
@@ -6,10 +5,10 @@ import { motion } from "framer-motion";
 import localFont from "next/font/local";
 import styles from "styles/Quiz.module.css";
 import Link from "next/link";
-import {container, item} from "/animation";
-
-const montserrat = Montserrat({ subsets: ["latin"], weight: "400" });
-const cooperHewitt = localFont({ src: "../public/CooperHewitt-Heavy.otf" });
+import { container, item } from "/animation";
+import { useRouter } from "next/router";
+import Swal from "sweetalert2";
+import {montserrat, glacial, cooperHewitt} from "../../fonts";
 
 const theme = createTheme({
   typography: {
@@ -23,13 +22,34 @@ const theme = createTheme({
   },
 });
 
-export default function PanduanMentalHealthTest() {
+// ANXIETY
+export default function Panduan() {
+  const router = useRouter();
+
+  const startHandler = (event) => {
+    event.preventDefault();
+
+    Swal.fire({
+      title: "Apakah anda yakin untuk memulai tes?",
+      showDenyButton: true,
+      //   showCancelButton: true,
+      background: "white",
+      confirmButtonText: `<h2 color:"black">Ya</h2>`,
+      confirmButtonColor: "#FFAACF",
+      denyButtonColor: "#EA8FEA",
+      denyButtonText: `<h2 color:"black">Tidak</h2>`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        router.push("Test");
+      }
+    });
+  };
 
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="md" sx={{}}>
         <motion.div
-          className={styles.quizDiv}
           style={{
             textAlign: "center",
             borderRadius: 10,
@@ -44,13 +64,14 @@ export default function PanduanMentalHealthTest() {
             duration: 1,
             delay: 0,
           }}
-          exit={{ y: "100%" }}
+          exit={{ opacity: 0}}
         >
           <a
             className={cooperHewitt.className}
-            style={{ color: "white", fontSize: "50px" }}
+            style={{ color: "black", fontSize: "50px" }}
           >
-            PANDUAN PENGISIAN <br/>MENTAL HEALTH TEST
+            PANDUAN PENGISIAN <br />
+            ANXIETY TEST
           </a>
           <div
             width="100%"
@@ -66,8 +87,8 @@ export default function PanduanMentalHealthTest() {
               }}
             >
               <img
-                src="image/mentalhealthillust.jpg"
-                width="100%"
+                src="/image/Mental Illness Illustration/anxiety2.jpg"
+                width="70%"
                 style={{ borderRadius: 10 }}
               />
 
@@ -93,12 +114,12 @@ export default function PanduanMentalHealthTest() {
             <motion.div>
               <motion.ul
                 style={{
-                  fontSize: "17px",
+                  fontSize: "18px",
                   listStyleType: "none",
                   display: "inline-block",
-                  textAlign: "left",
+                  textAlign: "justify",
                   margin: 20,
-                  color:"#393939"
+                  color: "#393939",
                 }}
                 variants={container}
                 initial="hidden"
@@ -121,22 +142,8 @@ export default function PanduanMentalHealthTest() {
                       overflow: "hidden",
                     }}
                   >
-                    1. Jawablah pertanyaan berdasarkan seberapa sering anda
-                    mengalami situasi tersebut
-                  </motion.li>
-                </div>
-
-                <div style={{ overflow: "hidden" }}>
-                  <motion.li
-                    variants={item}
-                    style={{
-                      paddingBottom: 6,
-                      paddingTop: 10,
-                      overflow: "hidden",
-                    }}
-                  >
-                    2. Pilihlah jawaban yang paling menggambarkan situasi anda
-                    saat ini
+                    - Pertanyaan-pertanyaan ini menanyakan tentang perasaan
+                    mengenai Anxiety (kecemasan) secara lebih rinci
                   </motion.li>
                 </div>
                 <div style={{ overflow: "hidden" }}>
@@ -148,7 +155,20 @@ export default function PanduanMentalHealthTest() {
                       overflow: "hidden",
                     }}
                   >
-                    3. Kerjakanlah di tempat yang nyaman dan kondusif agar lebih
+                    - Untuk setiap pertanyaan, pilihlah yang paling menggambarkan seberapa 
+                    sering Anda diganggu oleh daftar gejala selama <b style={{ color: "red" }}>7 hari terakhir. </b>
+                  </motion.li>
+                </div>
+                <div style={{ overflow: "hidden" }}>
+                  <motion.li
+                    variants={item}
+                    style={{
+                      paddingBottom: 6,
+                      paddingTop: 10,
+                      overflow: "hidden",
+                    }}
+                  >
+                    - Kerjakanlah di tempat yang nyaman dan kondusif agar lebih
                     fokus
                   </motion.li>
                 </div>
@@ -161,7 +181,7 @@ export default function PanduanMentalHealthTest() {
                       overflow: "hidden",
                     }}
                   >
-                    4. Jika keluar di tengah test, maka jawaban tidak tersimpan
+                    - Jika keluar di tengah test, maka jawaban tidak tersimpan
                   </motion.li>
                 </div>
                 <div style={{ overflow: "hidden" }}>
@@ -173,22 +193,22 @@ export default function PanduanMentalHealthTest() {
                       overflow: "hidden",
                     }}
                   >
-                    5. Hasil tes didapatkan setelah mengisi semua pertanyaan
+                    - Hasil tes didapatkan setelah mengisi semua pertanyaan
                   </motion.li>
                 </div>
               </motion.ul>
             </motion.div>
 
             <motion.button
-              className={styles.testbutton}
+              // className={styles.testbutton}
               animate={{}}
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.9 }}
               style={{
-                borderRadius: 10,
-                padding: 20,
-                paddingLeft: 50,
-                paddingRight: 50,
+                borderRadius: 0,
+                padding: 15,
+                paddingLeft: 60,
+                paddingRight: 60,
                 fontSize: 20,
                 border: "0px ",
               }}
@@ -199,6 +219,7 @@ export default function PanduanMentalHealthTest() {
                 bounce: 5,
                 ease: "easeInOut",
               }}
+              onClick={startHandler}
             >
               <Link href="">Mulai Test</Link>
             </motion.button>

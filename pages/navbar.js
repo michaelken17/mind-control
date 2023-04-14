@@ -19,11 +19,11 @@ import styles from "styles/Layout.module.css";
 import { Montserrat } from "next/font/google";
 import { useSelector } from "react-redux";
 
-const montserrat = Montserrat({ subsets: ["latin"], weight: "500" });
+import {montserratBold, glacial, cooperHewitt} from "./fonts";
 const pages = [
-  { title: "Mental Health Check", path: "/MentalHealthCheck" },
-  { title: "Daily Health Check", path: "/DailyHealthCheck" },
-  { title: "Mental Illness Test", path: "/MentalIllnessTest" },
+  { title: "Mental Health Check", path: "/MentalHealthCheck/Start" },
+  { title: "Daily Health Check", path: "/DailyHealthCheck/Start" },
+  { title: "Mental Illness Test", path: "/MentalIllnessTest/Home  " },
 ];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
@@ -108,7 +108,7 @@ export default function Navbar() {
                   <Link
                     key={page.title}
                     href={page.path}
-                    className={montserrat.className}
+                    className={montserratBold.className}
                   >
                     <MenuItem
                       onClick={handleCloseNavMenu}
@@ -164,7 +164,7 @@ export default function Navbar() {
                         fontSize: 15,
                         textTransform: "none",
                       }}
-                      className={montserrat.className}
+                      className={montserratBold.className}
                     >
                       {page.title}
                     </Button>
