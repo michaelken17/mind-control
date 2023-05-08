@@ -23,8 +23,11 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
-import appSlice, { appActions, submitMHC } from "@/redux/slices/appSlice";
+import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
+import {
+  appActions,
+  submitSD,
+} from "@/redux/slices/appSlice";
 
 const theme = createTheme({
   typography: {
@@ -38,18 +41,18 @@ const theme = createTheme({
   },
 });
 
-// MENTAL HEALTH CHECK
-export default function MHCTest() {
+// Sleep Disorder
+export default function SleepDisorderTest() {
   const router = useRouter();
-  const MHCQuestions = useSelector((x) => x.persistedReducer.app.MHCQuestions);
-  const MHCChoices = useSelector((x) => x.persistedReducer.app.MHCChoices);
+  const SDQuestions = useSelector((x) => x.persistedReducer.app.SDQuestions);
+  const SDChoices = useSelector((x) => x.persistedReducer.app.SDChoices);
   const [isAnswered, setisAnswered] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentQuestion, setcurrentQuestion] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(1);
   const dispatch = useDispatch();
 
-  const [MHCdata, setMHCdata] = useState([
+  const [SDData, setSDData] = useState([
     { no: 1, jawaban: 0 },
     { no: 2, jawaban: 0 },
     { no: 3, jawaban: 0 },
@@ -58,28 +61,27 @@ export default function MHCTest() {
     { no: 6, jawaban: 0 },
     { no: 7, jawaban: 0 },
     { no: 8, jawaban: 0 },
-    { no: 9, jawaban: 0 },
   ]);
 
   const toggleHandler = (value) => () => {
     setSelectedIndex(value);
     setisAnswered(true);
 
-    const updateData = [...MHCdata];
+    const updateData = [...SDData];
     const x = updateData.find((a) => a.no === currentQuestion + 1);
 
-    x.jawaban = value.score;
-    setMHCdata(updateData);
+    x.jawaban = value.score[currentQuestion];
+    setSDData(updateData);
   };
 
   const nextHandler = () => {
-    if (currentQuestion + 1 != MHCQuestions.length) {
+    if (currentQuestion + 1 != SDQuestions.length) {
       setcurrentQuestion(currentQuestion + 1);
       setisAnswered(false);
       setSelectedIndex(0);
     } else {
-      dispatch(appActions.submitMHC({}));
-      dispatch(appActions.submitMHC(MHCdata));
+      dispatch(appActions.submitSD({}));
+      dispatch(appActions.submitSD(SDData));
       router.push("Result");
     }
   };
@@ -89,13 +91,13 @@ export default function MHCTest() {
   }, [selectedIndex]);
 
   useEffect(() => {
-    console.log(MHCdata);
-  }, [MHCdata]);
+    console.log(SDData);
+  }, [SDData]);
 
   useEffect(() => {
     setIsLoaded(true);
-    // console.log(MHCChoices);
-    // console.log(MHCQuestions);
+    // console.log(depressionQuestions]);
+    // console.log(anxietyAnswer);
   }, []);
 
   return (
@@ -104,7 +106,7 @@ export default function MHCTest() {
         <motion.div
           className={styles.quizDiv}
           style={{
-            padding: 10,
+            padding: 20,
             borderRadius: 10,
             fontSize: 20,
             height: "100%",
@@ -139,8 +141,7 @@ export default function MHCTest() {
                 }}
                 className={montserrat.className}
               >
-                Selama 2 Minggu terakhir, seberapa sering Anda terganggu
-                oleh masalah berikut?
+                Dalam 7 hari terakhir,
                 {isLoaded && (
                   <Box sx={{ position: "relative", float: "right" }}>
                     <CircularProgress
@@ -166,7 +167,7 @@ export default function MHCTest() {
                           strokeLinecap: "round",
                         },
                       }}
-                      value={currentQuestion * 14}
+                      value={currentQuestion * 14.3}
                       size={40}
                       thickness={4}
                     />
@@ -187,7 +188,7 @@ export default function MHCTest() {
                         component="div"
                         color="text.secondary"
                       >
-                        {currentQuestion + 1}/{MHCQuestions.length}
+                        {currentQuestion + 1}/{SDQuestions.length}
                       </Typography>
                     </Box>
                   </Box>
@@ -202,28 +203,25 @@ export default function MHCTest() {
                 }}
                 className={montserrat.className}
               >
-                <b>
-                  {/* {currentQuestion + 1} */}
-                  {MHCQuestions[currentQuestion].question}
-                </b>
+                <b>{SDQuestions[currentQuestion].question}</b>
               </Typography>
               <Typography
                 sx={{
-                  fontSize: "16px",
+                  fontSize: "15px",
                   color: "black",
                   mx: 2,
                   textAlign: "left",
                 }}
                 className={montserrat.className}
               >
-                <i>{MHCQuestions[currentQuestion].english}</i>
+                <i>{SDQuestions[currentQuestion].english}</i>
               </Typography>
             </div>
 
             <div style={{ paddingLeft: "20px", paddingRight: "20px" }}>
               <List>
                 {isLoaded &&
-                  MHCChoices.map((value) => (
+                  SDChoices.map((value) => (
                     <ListItemButton
                       key={value.score}
                       button
@@ -247,12 +245,8 @@ export default function MHCTest() {
                       }}
                     >
                       <ListItemText
-                        // primary={<b>{value.name}</b>}
-                        // secondary={
-                        //   <b>{value.desc}</b>
-                        // }
-                        primary={value.name}
-                        secondary={value.desc}
+                        primary={value.name[currentQuestion].indo}
+                        secondary={<i>{value.name[currentQuestion].english}</i>}
                       />
                     </ListItemButton>
                   ))}
@@ -266,6 +260,8 @@ export default function MHCTest() {
                 whileTap={{ scale: 0.9 }}
                 style={{
                   borderRadius: 5,
+                  // margin: "auto",
+                  // float: "right",
                   padding: 10,
                   paddingLeft: 30,
                   paddingRight: 30,
@@ -282,10 +278,10 @@ export default function MHCTest() {
                 }}
                 onClick={() => nextHandler()}
               >
-                {currentQuestion + 1 == MHCQuestions.length ? (
-                  <Typography>End Test</Typography>
+                {currentQuestion + 1 == SDQuestions.length ? (
+                  <a>End Test</a>
                 ) : (
-                  <Typography>Next</Typography>
+                  <a>Next</a>
                 )}
               </motion.button>
             )}

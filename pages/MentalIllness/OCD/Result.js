@@ -25,8 +25,8 @@ import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
-import { rekomendasiAnxiety } from "../../RekomendasiKegiatan";
-import { AnxietySeverity } from "../../ShortFormConversionTable";
+import { rekomendasiOCD } from "../../RekomendasiKegiatan";
+import { OCDSeverity } from "../../ShortFormConversionTable";
 
 const theme = createTheme({
   typography: {
@@ -53,20 +53,18 @@ function borderClassname(severity) {
   }
 }
 
-export default function ResultAnxiety() {
+export default function ResultOCD() {
   const router = useRouter();
-  const anxietyAnswer = useSelector(
-    (x) => x.persistedReducer.app.AnxietyAns
-  );
+  const OCDAnswer = useSelector((x) => x.persistedReducer.app.OCDAns);
   const [isLoaded, setIsLoaded] = useState(false);
   const [severity, setSeverity] = useState(0);
 
-  let ansArray = anxietyAnswer.map((x) => x.jawaban);
+  let ansArray = OCDAnswer.map((x) => x.jawaban);
   let rawScore = ansArray.reduce((a, b) => a + b, 0);
 
   useEffect(() => {
     setIsLoaded(true);
-    setSeverity(AnxietySeverity(rawScore));
+    setSeverity(OCDSeverity(rawScore));
   }, []);
 
   return (
@@ -74,7 +72,7 @@ export default function ResultAnxiety() {
       <Container component="main" maxWidth="md" sx={{}}>
         {isLoaded && (
           <motion.div
-            className={borderClassname(rekomendasiAnxiety[severity].severity)}
+            className={borderClassname(rekomendasiOCD[severity].severity)}
             style={{
               padding: 20,
               borderRadius: 10,
@@ -109,7 +107,7 @@ export default function ResultAnxiety() {
                   }}
                   className={montserrat.className}
                 >
-                  <h2>{rekomendasiAnxiety[severity].header}</h2>
+                  <h2>{rekomendasiOCD[severity].header}</h2>
                 </Typography>
                 <Typography
                   sx={{
@@ -120,8 +118,8 @@ export default function ResultAnxiety() {
                   }}
                   className={montserrat.className}
                 >
-                  Hasil tes menunjukkan tingkat keparahan Anxietas anda adalah{" "}
-                  <b>{rekomendasiAnxiety[severity].severity}</b>.
+                  Hasil tes menunjukkan tingkat keparahan OCD anda adalah{" "}
+                  <b>{rekomendasiOCD[severity].severity}</b>.
                 </Typography>
 
                 <div
@@ -143,7 +141,7 @@ export default function ResultAnxiety() {
                   >
                     <img
                       src={
-                        rekomendasiAnxiety[severity].severity ==
+                        rekomendasiOCD[severity].severity ==
                         "Tidak ada atau sedikit"
                           ? "/image/Mental Illness Illustration/happy.jpg"
                           : "/image/Mental Illness Illustration/confused.jpg"
@@ -174,7 +172,7 @@ export default function ResultAnxiety() {
                   }}
                   className={montserrat.className}
                 >
-                  {rekomendasiAnxiety[severity].text}
+                  {rekomendasiOCD[severity].text}
                 </Typography>
               </div>
             </div>

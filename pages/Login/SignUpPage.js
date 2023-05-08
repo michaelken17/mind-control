@@ -7,9 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { Montserrat } from "next/font/google";
 import { useEffect, useRef } from "react";
-import localFont from "next/font/local";
 import { motion } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
 import { loginActions } from "@/redux/slices/loginSlice";
@@ -20,9 +18,8 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
+import {montserrat, glacial, cooperHewitt} from "../../public/fonts";
 
-const montserrat = Montserrat({ subsets: ["latin"], weight: "400" });
-const cooperHewitt = localFont({ src: "../public/CooperHewitt-Heavy.otf" });
 
 const SignUpPage = () => {
   const usernameRef = useRef();
@@ -99,7 +96,6 @@ const SignUpPage = () => {
     >
       <Box
         sx={{
-        mt:10,
           bgcolor: "white",
           height: "100vh",
           display: "flex",
@@ -132,7 +128,7 @@ const SignUpPage = () => {
                 }}
               >
                 <img
-                  src="image/mcwebicon.png"
+                  src="/image/mcwebicon.png"
                   width="100%"
                   style={{ borderRadius: 10 }}
                 />

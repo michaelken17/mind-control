@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Button, Container } from "@mui/material";
-import { montserrat, glacial, cooperHewitt } from "../fonts";
+import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
@@ -61,7 +61,7 @@ export default function MentalIllnessTest() {
           ></img>
           <div style={{ marginTop: "15px" }}>
             <Typography
-              sx={{ fontSize: "22px", color: "#a6a6a6" }}
+              sx={{ fontSize: "22px", color: "black" }}
               className={glacial.className}
             >
               Mental Illness Test akan membantu memberikan solusi dan
@@ -135,6 +135,9 @@ export default function MentalIllnessTest() {
                           }}
                           className={glacial.className}
                           title={<h2>{item.title}</h2>}
+                          subtitle={
+                            <a style={{ fontSize: 14 }}> {item.author}</a>
+                          }
                         />
                       </ImageListItem>
                     </motion.div>

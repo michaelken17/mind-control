@@ -15,7 +15,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styles from "styles/Quiz.module.css";
-import {montserrat, glacial, cooperHewitt} from "./fonts";
+import {montserrat, glacial, cooperHewitt} from "../public/fonts";
 
 export default function Home() {
   const mentalIllnessData = useSelector(
@@ -49,7 +49,7 @@ export default function Home() {
 
             <div style={{ marginTop: "15px" }}>
               <Typography
-                sx={{ fontSize: "25px", color: "#a6a6a6" }}
+                sx={{ fontSize: "25px", color: "black" }}
                 className={glacial.className}
               >
                 It's Okay Not To Be Okay.
@@ -192,7 +192,7 @@ export default function Home() {
 
               <Typography
                 className={glacial.className}
-                sx={{ fontSize: "20px", color: "#a6a6a6" }}
+                sx={{ fontSize: "20px", color: "black" }}
               >
                 Mental Health Check membantu anda untuk mengetahui kondisi
                 kesehatan mental pribadi dan mempersiapkan untuk langkah
@@ -245,7 +245,7 @@ export default function Home() {
                 className={glacial.className}
                 sx={{
                   fontSize: "20px",
-                  color: "#a6a6a6",
+                  color: "black",
                   textAlign: "justify",
                 }}
               >

@@ -11,6 +11,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@frogress/line": "^1.2.2",
     "@mui/icons-material": "^5.11.9",
     "@mui/material": "^5.11.10",
     "@reduxjs/toolkit": "^1.9.3",
@@ -27,6 +28,7 @@
     "react-redux": "^8.0.5",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
+    "styled-components": "^5.3.10",
     "sweetalert2": "^11.7.3"
   }
 }

@@ -14,11 +14,10 @@ const MainLayout = ({ children }) => {
         className={styles.quizDiv}
         sx={{
           bgcolor: "black",
-
+          display:"flex",
+          paddingTop: "100px",
           height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent:"center",
         }}
       >
         {children}

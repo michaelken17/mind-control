@@ -1,4 +1,3 @@
-import { Montserrat } from "next/font/google";
 import { Button, Container, List, ListItem, Typography } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
@@ -7,17 +6,13 @@ import localFont from "next/font/local";
 import styles from "styles/Quiz.module.css";
 import Link from "next/link";
 import { container, item } from "/animation";
-import Swal from "sweetalert2";
 import { useRouter } from "next/router";
-import {
-  montserrat,
-  glacial,
-  cooperHewitt,
-  openSans,
-} from "../../public/fonts";
+import Swal from "sweetalert2";
+import {montserrat, glacial, cooperHewitt} from "../../../public/fonts";
+
 const theme = createTheme({
   typography: {
-    fontFamily: openSans,
+    fontFamily: montserrat,
   },
   button: {
     fontFamily: montserrat,
@@ -27,7 +22,8 @@ const theme = createTheme({
   },
 });
 
-export default function PanduanMentalHealthTest() {
+// ANXIETY
+export default function PanduanOCD() {
   const router = useRouter();
 
   const startHandler = (event) => {
@@ -45,15 +41,15 @@ export default function PanduanMentalHealthTest() {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        router.push("Test");
+        router.push("OCDTest");
       }
     });
   };
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="md" sx={{}}>
         <motion.div
-          // className={styles.quizDiv}
           style={{
             textAlign: "center",
             borderRadius: 10,
@@ -68,23 +64,15 @@ export default function PanduanMentalHealthTest() {
             duration: 1,
             delay: 0,
           }}
-          exit={{ y: "100%" }}
+          exit={{ opacity: 0}}
         >
-          <Typography
+          <a
             className={cooperHewitt.className}
-            sx={{
-              color: "#393939",
-              fontSize: {
-                lg: "50px",
-                md: "40px",
-                sm: "30px",
-                xs: "30px",
-              },
-            }}
+            style={{ color: "black", fontSize: "50px" }}
           >
             PANDUAN PENGISIAN <br />
-            MENTAL HEALTH CHECK
-          </Typography>
+            OCD TEST
+          </a>
           <div
             width="100%"
             style={{ display: "flex", justifyContent: "center", marginTop: 10 }}
@@ -99,8 +87,8 @@ export default function PanduanMentalHealthTest() {
               }}
             >
               <img
-                src="../image/mentalhealthillust.jpg"
-                width="70%"
+                src="/image/Mental Illness Illustration/ocdIll.jpg"
+                width="80%"
                 style={{ borderRadius: 10 }}
               />
 
@@ -119,17 +107,17 @@ export default function PanduanMentalHealthTest() {
           </div>
           <div
             style={{
-              background: "rgba(255, 255, 255,0.3)",
+              background: "rgba(255, 255, 255,0.5)",
               paddingBottom: 20,
             }}
           >
             <motion.div>
               <motion.ul
                 style={{
-                  fontSize: "17px",
+                  fontSize: "18px",
                   listStyleType: "none",
                   display: "inline-block",
-                  textAlign: "left",
+                  textAlign: "justify",
                   margin: 20,
                   color: "#393939",
                 }}
@@ -154,46 +142,7 @@ export default function PanduanMentalHealthTest() {
                       overflow: "hidden",
                     }}
                   >
-                    <Typography
-                      sx={{
-                        fontSize: {
-                          lg: "17px",
-                          md: "16px",
-                          sm: "15px",
-                          xs: "13px",
-                        },
-                      }}
-                    >
-                      1. Pertanyaan-pertanyaan ini menanyakan tentang hal-hal
-                      yang mungkin mengganggu Anda.
-                    </Typography>
-                  </motion.li>
-                </div>
-
-                <div style={{ overflow: "hidden" }}>
-                  <motion.li
-                    variants={item}
-                    style={{
-                      paddingBottom: 6,
-                      paddingTop: 10,
-                      overflow: "hidden",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontSize: {
-                          lg: "17px",
-                          md: "16px",
-                          sm: "15px",
-                          xs: "13px",
-                        },
-                      }}
-                    >
-                      2. Pilihlah jawaban yang paling menggambarkan seberapa
-                      banyak (atau seberapa sering) Anda terganggu oleh setiap
-                      masalah selama
-                      <b style={{ color: "red" }}> 2 minggu terakhir.</b>
-                    </Typography>
+                    - Pertanyaan-pertanyaan ini menanyakan tentang perasaan OCD secara lebih rinci 
                   </motion.li>
                 </div>
                 <div style={{ overflow: "hidden" }}>
@@ -205,19 +154,8 @@ export default function PanduanMentalHealthTest() {
                       overflow: "hidden",
                     }}
                   >
-                    <Typography
-                      sx={{
-                        fontSize: {
-                          lg: "17px",
-                          md: "16px",
-                          sm: "15px",
-                          xs: "13px",
-                        },
-                      }}
-                    >
-                      3. Kerjakanlah di tempat yang nyaman dan kondusif agar
-                      lebih fokus
-                    </Typography>
+                    - Untuk setiap pertanyaan, pilihlah yang paling menggambarkan seberapa 
+                    sering Anda diganggu oleh daftar gejala selama <b style={{ color: "red" }}>7 hari terakhir. </b>
                   </motion.li>
                 </div>
                 <div style={{ overflow: "hidden" }}>
@@ -229,19 +167,8 @@ export default function PanduanMentalHealthTest() {
                       overflow: "hidden",
                     }}
                   >
-                    <Typography
-                      sx={{
-                        fontSize: {
-                          lg: "17px",
-                          md: "16px",
-                          sm: "15px",
-                          xs: "13px",
-                        },
-                      }}
-                    >
-                      4. Jika keluar di tengah test, maka jawaban tidak
-                      tersimpan
-                    </Typography>
+                    - Kerjakanlah di tempat yang nyaman dan kondusif agar lebih
+                    fokus
                   </motion.li>
                 </div>
                 <div style={{ overflow: "hidden" }}>
@@ -253,37 +180,37 @@ export default function PanduanMentalHealthTest() {
                       overflow: "hidden",
                     }}
                   >
-                    <Typography
-                      sx={{
-                        fontSize: {
-                          lg: "17px",
-                          md: "16px",
-                          sm: "15px",
-                          xs: "13px",
-                        },
-                      }}
-                    >
-                      5. Hasil tes didapatkan setelah mengisi semua pertanyaan
-                    </Typography>
+                    - Jika keluar di tengah test, maka jawaban tidak tersimpan
+                  </motion.li>
+                </div>
+                <div style={{ overflow: "hidden" }}>
+                  <motion.li
+                    variants={item}
+                    style={{
+                      paddingBottom: 6,
+                      paddingTop: 10,
+                      overflow: "hidden",
+                    }}
+                  >
+                    - Hasil tes didapatkan setelah mengisi semua pertanyaan
                   </motion.li>
                 </div>
               </motion.ul>
             </motion.div>
 
             <motion.button
-              className={styles.testbutton}
+              // className={styles.testbutton}
               animate={{}}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.9 }}
               style={{
-                borderRadius: 10,
-                padding: 20,
-                paddingLeft: 50,
-                paddingRight: 50,
+                borderRadius: 0,
+                padding: 15,
+                paddingLeft: 60,
+                paddingRight: 60,
                 fontSize: 20,
                 border: "0px ",
               }}
-              onClick={startHandler}
               transition={{
                 type: "spring",
                 stiffness: 400,
@@ -291,8 +218,9 @@ export default function PanduanMentalHealthTest() {
                 bounce: 5,
                 ease: "easeInOut",
               }}
+              onClick={startHandler}
             >
-              Mulai Test
+              <Link href="">Mulai Test</Link>
             </motion.button>
           </div>
         </motion.div>

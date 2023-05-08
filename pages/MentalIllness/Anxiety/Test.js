@@ -21,9 +21,14 @@ import Link from "next/link";
 import { container, item } from "/animation";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import {montserrat, glacial, cooperHewitt} from "../../fonts";
+import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
+import {
+  appActions,
+  submitAnxiety,
+} from "@/redux/slices/appSlice";
+
 
 const theme = createTheme({
   typography: {
@@ -50,6 +55,7 @@ export default function Test() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentQuestion, setcurrentQuestion] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(1);
+  const dispatch = useDispatch();
 
   const [anxietyData, setanxietyData] = useState([
     { no: 1, jawaban: 0 },
@@ -77,16 +83,12 @@ export default function Test() {
       setcurrentQuestion(currentQuestion + 1);
       setisAnswered(false);
       setSelectedIndex(0);
-    }
-    else{
+    } else {
+      dispatch(appActions.submitAnxiety({}));
+      dispatch(appActions.submitAnxiety(anxietyData));
       router.push("Result");
     }
   };
-
-  // useEffect(() => {
-  //   console.log(currentQuestion);
-  //   console.log(anxietyQuestions.length);
-  // }, [currentQuestion]);
 
   useEffect(() => {
     // console.log(selectedIndex);
@@ -135,8 +137,8 @@ export default function Test() {
             <div style={{ overflow: "auto" }}>
               <Typography
                 sx={{
-                  fontSize: "15px",
-                  color: "gray",
+                  fontSize: "17px",
+                  color: "black",
                   mx: 2,
                   mt: 2,
                   textAlign: "left",
@@ -205,9 +207,18 @@ export default function Test() {
                 }}
                 className={montserrat.className}
               >
-                <b>
-                  {currentQuestion + 1}. {anxietyQuestions[currentQuestion]}
-                </b>
+                <b>{anxietyQuestions[currentQuestion].question}</b>
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "15px",
+                  color: "black",
+                  mx: 2,
+                  textAlign: "left",
+                }}
+                className={montserrat.className}
+              >
+                <i>{anxietyQuestions[currentQuestion].english}</i>
               </Typography>
             </div>
 

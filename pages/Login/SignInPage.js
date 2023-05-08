@@ -22,7 +22,7 @@ import { loginActions } from "@/redux/slices/loginSlice";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import Link from "next/link";
-import {montserrat, glacial, cooperHewitt} from "../fonts";
+import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
 
 const SigninPage = () => {
   const usernameRef = useRef();
@@ -58,7 +58,7 @@ const SigninPage = () => {
         position: "top-end",
         showConfirmButton: false,
         timer: 2000,
-        timerProgressBar: true,
+        timerProgressBar: false,
         // didOpen: (toast) => {
         //   toast.addEventListener("mouseenter", Swal.stopTimer);
         //   toast.addEventListener("mouseleave", Swal.resumeTimer);
@@ -70,7 +70,7 @@ const SigninPage = () => {
         title: "Signed in successfully",
       });
 
-      router.push("/home");
+      router.push("/Home");
     }
   };
 
@@ -95,7 +95,7 @@ const SigninPage = () => {
   }, []);
 
   return (
-    <Grid xs={12} sm={12} md={6} lg={7} xl={7} item={true}>
+    <Grid xs={12} sm={12} md={7} lg={6} xl={7} item={true}>
       <Box
         sx={{
           padding: "20px",
@@ -103,7 +103,7 @@ const SigninPage = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          height: "100%",
+          height:"60vh",
           // boxShadow: `0 0 5 px black`,
           borderRadius: {
             xs: "30px",
@@ -143,7 +143,7 @@ const SigninPage = () => {
                 marginTop: 0,
                 marginBottom: 0,
                 fontSize: "20px",
-                letterSpacing: "1px"
+                letterSpacing: "1px",
               }}
               mt={7}
               mb={1}
@@ -228,6 +228,7 @@ const SigninPage = () => {
                       p: 1,
                       borderRadius: "5px",
                     }}
+                    type="password"
                     inputRef={passwordRef}
                   />
                 </Paper>
@@ -263,7 +264,7 @@ const SigninPage = () => {
             </Button>
           </motion.div>
         </Box>
-        <Link href="/SignUpPage">
+        <Link href="Login/SignUpPage">
           <Typography
             sx={{
               mt: 1,

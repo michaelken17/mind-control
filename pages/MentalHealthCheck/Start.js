@@ -1,13 +1,14 @@
 import * as React from "react";
 
-import { Button, Container } from "@mui/material";
+import { Button, Container, Typography } from "@mui/material";
 import { Montserrat } from "next/font/google";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
-import { montserrat, glacial, cooperHewitt } from "../fonts";
+import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
 import styles from "styles/Quiz.module.css";
 import Link from "next/link";
+import ErrorIcon from "@mui/icons-material/Error";
 
 const theme = createTheme({
   typography: {
@@ -19,6 +20,8 @@ const theme = createTheme({
 });
 
 export default function MentalHealthCheck() {
+  const [readMore, setReadMore] = React.useState(false);
+
   return (
     <ThemeProvider theme={theme}>
       <motion.div
@@ -38,6 +41,58 @@ export default function MentalHealthCheck() {
               width: "100%",
             }}
           ></img>
+          <div style={{ marginTop: "15px" }}>
+            <Typography
+              sx={{ fontSize: "22px", color: "black", textAlign: "center" }}
+              className={glacial.className}
+            >
+              Mental Health Check membantu anda untuk mengetahui kondisi
+              kesehatan mental pribadi dan mengidentifikasi tingkat keparahan
+              penyakit mental yang di derita.
+            </Typography>
+            {readMore && (
+              <div style={{ marginTop: "10px", display:"flex" }} >
+                <ErrorIcon
+                  fontSize="15px"
+                  sx={{ marginTop: "5px", marginRight: "5px", color: "orange" }}
+                />
+                <Typography
+                  sx={{
+                    fontSize: "16px",
+                    color: "#5d5d5d",
+                    textAlign: "justify",
+                  }}
+                  className={glacial.className}
+                >
+                  Tes skrining ini ditujukan untuk usia{" "}
+                  <b style={{ color: "red" }}>18 tahun ke atas</b> yang terdiri
+                  dari pertanyaan yang membantu mengidentifikasi potensi gejala
+                  gangguan jiwa yang Anda alami. Mental Health Check di adaptasi
+                  dari buku{" "}
+                  <i>
+                    DSM-5-TR Self-Rated Level 1 Cross-Cutting Symptom
+                    Measure—Adult
+                  </i>
+                </Typography>
+              </div>
+            )}
+            <Typography
+              sx={{
+                color: "gray",
+                textAlign: "center",
+                fontSize: "15px",
+                marginTop: "12px",
+              }}
+              onClick={() => {
+                if (readMore == true) setReadMore(false);
+                else setReadMore(true);
+              }}
+            >
+              {readMore == true
+                ? "Baca lebih sedikit..."
+                : "Baca selengkapnya..."}
+            </Typography>
+          </div>
 
           <motion.div style={{ textAlign: "center" }}>
             <Link href="Panduan">
@@ -61,7 +116,16 @@ export default function MentalHealthCheck() {
                 }}
                 whileTap={{ scale: 0.9 }}
               >
-                Take Your Mental Health Check
+                <Typography
+                  sx={{
+                    fontSize: "20px",
+                    color: "white",
+                    textAlign: "center",
+                  }}
+                  className={glacial.className}
+                >
+                  Take Your Mental Health Check
+                </Typography>
               </motion.button>
             </Link>
           </motion.div>
