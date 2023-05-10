@@ -6,14 +6,18 @@ import { motion } from "framer-motion";
 import localFont from "next/font/local";
 import styles from "styles/Quiz.module.css";
 import Link from "next/link";
-import {container, item} from "/animation";
-
-const montserrat = Montserrat({ subsets: ["latin"], weight: "400" });
-const cooperHewitt = localFont({ src: "../public/CooperHewitt-Heavy.otf" });
-
+import { container, item } from "/animation";
+import Swal from "sweetalert2";
+import { useRouter } from "next/router";
+import {
+  montserrat,
+  glacial,
+  cooperHewitt,
+  openSans,
+} from "../../public/fonts";
 const theme = createTheme({
   typography: {
-    fontFamily: montserrat,
+    fontFamily: openSans,
   },
   button: {
     fontFamily: montserrat,
@@ -24,12 +28,32 @@ const theme = createTheme({
 });
 
 export default function PanduanMentalHealthTest() {
+  const router = useRouter();
 
+  const startHandler = (event) => {
+    event.preventDefault();
+
+    Swal.fire({
+      title: "Apakah anda yakin untuk memulai tes?",
+      showDenyButton: true,
+      //   showCancelButton: true,
+      background: "white",
+      confirmButtonText: `<h2 color:"black">Ya</h2>`,
+      confirmButtonColor: "#FFAACF",
+      denyButtonColor: "#EA8FEA",
+      denyButtonText: `<h2 color:"black">Tidak</h2>`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        router.push("Test");
+      }
+    });
+  };
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="md" sx={{}}>
         <motion.div
-          className={styles.quizDiv}
+          // className={styles.quizDiv}
           style={{
             textAlign: "center",
             borderRadius: 10,
@@ -46,12 +70,21 @@ export default function PanduanMentalHealthTest() {
           }}
           exit={{ y: "100%" }}
         >
-          <text
+          <Typography
             className={cooperHewitt.className}
-            style={{ color: "white", fontSize: "50px" }}
+            sx={{
+              color: "#393939",
+              fontSize: {
+                lg: "50px",
+                md: "40px",
+                sm: "30px",
+                xs: "30px",
+              },
+            }}
           >
-            PANDUAN PENGISIAN <br/>MENTAL HEALTH TEST
-          </text>
+            PANDUAN PENGISIAN <br />
+            MENTAL HEALTH CHECK
+          </Typography>
           <div
             width="100%"
             style={{ display: "flex", justifyContent: "center", marginTop: 10 }}
@@ -66,8 +99,8 @@ export default function PanduanMentalHealthTest() {
               }}
             >
               <img
-                src="image/mentalhealthillust.jpg"
-                width="100%"
+                src="../image/mentalhealthillust.jpg"
+                width="70%"
                 style={{ borderRadius: 10 }}
               />
 
@@ -86,7 +119,7 @@ export default function PanduanMentalHealthTest() {
           </div>
           <div
             style={{
-              background: "rgba(255, 255, 255,0.5)",
+              background: "rgba(255, 255, 255,0.3)",
               paddingBottom: 20,
             }}
           >
@@ -98,7 +131,7 @@ export default function PanduanMentalHealthTest() {
                   display: "inline-block",
                   textAlign: "left",
                   margin: 20,
-                  color:"gray"
+                  color: "#393939",
                 }}
                 variants={container}
                 initial="hidden"
@@ -121,8 +154,19 @@ export default function PanduanMentalHealthTest() {
                       overflow: "hidden",
                     }}
                   >
-                    1. Jawablah pertanyaan berdasarkan seberapa sering anda
-                    mengalami situasi tersebut
+                    <Typography
+                      sx={{
+                        fontSize: {
+                          lg: "17px",
+                          md: "16px",
+                          sm: "15px",
+                          xs: "13px",
+                        },
+                      }}
+                    >
+                      1. Pertanyaan-pertanyaan ini menanyakan tentang hal-hal
+                      yang mungkin mengganggu Anda.
+                    </Typography>
                   </motion.li>
                 </div>
 
@@ -135,8 +179,21 @@ export default function PanduanMentalHealthTest() {
                       overflow: "hidden",
                     }}
                   >
-                    2. Pilihlah jawaban yang paling menggambarkan situasi anda
-                    saat ini
+                    <Typography
+                      sx={{
+                        fontSize: {
+                          lg: "17px",
+                          md: "16px",
+                          sm: "15px",
+                          xs: "13px",
+                        },
+                      }}
+                    >
+                      2. Pilihlah jawaban yang paling menggambarkan seberapa
+                      banyak (atau seberapa sering) Anda terganggu oleh setiap
+                      masalah selama
+                      <b style={{ color: "red" }}> 2 minggu terakhir.</b>
+                    </Typography>
                   </motion.li>
                 </div>
                 <div style={{ overflow: "hidden" }}>
@@ -148,8 +205,19 @@ export default function PanduanMentalHealthTest() {
                       overflow: "hidden",
                     }}
                   >
-                    3. Kerjakanlah di tempat yang nyaman dan kondusif agar lebih
-                    fokus
+                    <Typography
+                      sx={{
+                        fontSize: {
+                          lg: "17px",
+                          md: "16px",
+                          sm: "15px",
+                          xs: "13px",
+                        },
+                      }}
+                    >
+                      3. Kerjakanlah di tempat yang nyaman dan kondusif agar
+                      lebih fokus
+                    </Typography>
                   </motion.li>
                 </div>
                 <div style={{ overflow: "hidden" }}>
@@ -161,7 +229,19 @@ export default function PanduanMentalHealthTest() {
                       overflow: "hidden",
                     }}
                   >
-                    4. Jika keluar di tengah test, maka jawaban tidak tersimpan
+                    <Typography
+                      sx={{
+                        fontSize: {
+                          lg: "17px",
+                          md: "16px",
+                          sm: "15px",
+                          xs: "13px",
+                        },
+                      }}
+                    >
+                      4. Jika keluar di tengah test, maka jawaban tidak
+                      tersimpan
+                    </Typography>
                   </motion.li>
                 </div>
                 <div style={{ overflow: "hidden" }}>
@@ -173,7 +253,18 @@ export default function PanduanMentalHealthTest() {
                       overflow: "hidden",
                     }}
                   >
-                    5. Hasil tes didapatkan setelah mengisi semua pertanyaan
+                    <Typography
+                      sx={{
+                        fontSize: {
+                          lg: "17px",
+                          md: "16px",
+                          sm: "15px",
+                          xs: "13px",
+                        },
+                      }}
+                    >
+                      5. Hasil tes didapatkan setelah mengisi semua pertanyaan
+                    </Typography>
                   </motion.li>
                 </div>
               </motion.ul>
@@ -182,7 +273,7 @@ export default function PanduanMentalHealthTest() {
             <motion.button
               className={styles.testbutton}
               animate={{}}
-              whileHover={{ scale: 1.1 }}
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.9 }}
               style={{
                 borderRadius: 10,
@@ -192,6 +283,7 @@ export default function PanduanMentalHealthTest() {
                 fontSize: 20,
                 border: "0px ",
               }}
+              onClick={startHandler}
               transition={{
                 type: "spring",
                 stiffness: 400,
@@ -200,7 +292,7 @@ export default function PanduanMentalHealthTest() {
                 ease: "easeInOut",
               }}
             >
-              <Link href="">Mulai Test</Link>
+              Mulai Test
             </motion.button>
           </div>
         </motion.div>

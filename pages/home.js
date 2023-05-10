@@ -11,66 +11,45 @@ import {
 import { motion } from "framer-motion";
 import localFont from "next/font/local";
 import Link from "next/link";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import styles from "styles/Quiz.module.css";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
-const cooperHewitt = localFont({ src: "../public/CooperHewitt-Heavy.otf" });
-const glacial = localFont({ src: "../public/GlacialIndifference-Regular.otf" });
-
-const itemData = [
-  {
-    img: "/image/Mental Illness Illustration/anxietyIll.jpg",
-    title: "Anxiety",
-    author: "Start Test",
-    link: "/Anxiety",
-  },
-  {
-    img: "/image/Mental Illness Illustration/depressionIll.jpg",
-    title: "Depression",
-    author: "Start Test",
-    link: "/Depression",
-  },
-  {
-    img: "/image/Mental Illness Illustration/bipolarIll.jpg",
-    title: "Bipolar Disorder",
-    author: "Start Test",
-    link: "/BipolarDisorder",
-  },
-  {
-    img: "/image/Mental Illness Illustration/ptsdIll.jpg",
-    title: "PTSD",
-    author: "Start Test",
-    link: "/PTSD",
-  },
-  {
-    img: "/image/Mental Illness Illustration/anorexiaIll.jpg",
-    title: "Eating Disorders",
-    author: "Start Test",
-    link: "/EatingDisorders",
-  },
-
-  {
-    img: "/image/Mental Illness Illustration/schizo.jpg",
-    title: "Schizophrenia",
-    author: "Start Test",
-    link: "/Schizophrenia",
-  },
-];
+import { montserrat, glacial, cooperHewitt } from "../public/fonts";
 
 export default function Home() {
+  const mentalIllnessData = useSelector(
+    (x) => x.persistedReducer.app.mentalIllnessData
+  );
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsLoaded(true);
+  }, []);
+
   return (
-    <div style={{ position: "relative" }}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{
+        duration: 1,
+        delay: 0,
+        ease: [0, 0.71, 0.2, 1.01],
+      }}
+      style={{ textAlign: "center" }}
+      exit={{ opacity: 0 }}
+    >
       {/* MindControl Logo */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.2 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{
-          duration: 1,
-          delay: 0,
-          ease: [0, 0.71, 0.2, 1.01],
-        }}
-        style={{ textAlign: "center" }}
-        exit={{ opacity: 0, scale: 0.2 }}
+      <div
+      // initial={{ opacity: 0 }}
+      //  animate={{ opacity: 1 }}
+      // transition={{
+      //   duration: 1,
+      //   delay: 0,
+      //   ease: [0, 0.71, 0.2, 1.01],
+      // }}
+      // style={{ textAlign: "center" }}
+      // exit={{ opacity: 0}}
       >
         <Container>
           <div>
@@ -79,12 +58,12 @@ export default function Home() {
             </div>
 
             <div style={{ marginTop: "15px" }}>
-              <text
-                style={{ fontSize: "25px", color: "#a6a6a6" }}
+              <Typography
+                sx={{ fontSize: "25px", color: "black" }}
                 className={glacial.className}
               >
                 It's Okay Not To Be Okay.
-              </text>
+              </Typography>
             </div>
           </div>
           <div
@@ -96,15 +75,10 @@ export default function Home() {
             }}
           ></div>
         </Container>
-      </motion.div>
+      </div>
 
       {/* Mental Ilness Check */}
-      <motion.div
-        initial={{ x: "-100%" }}
-        animate={{ x: "0%" }}
-        transition={{ duration: 1, ease: "easeOut", delay: 0.5 }}
-        exit={{ x: "100%" }}
-      >
+      <div>
         <Box
           className={styles.quizDiv}
           sx={{
@@ -121,49 +95,53 @@ export default function Home() {
           </a>
           <motion.div style={{ display: "flex", justifyContent: "center" }}>
             <ImageList
-              sx={{ width: "1000px", height: "100%", padding: "20px" }}
-              cols={3}
+              sx={{ width: "80%", height: "100%", padding: "20px" }}
+              cols={4}
             >
-              {itemData.map((item) => (
-                <Link href={item.link} key={item.img}>
-                  <motion.div
-                    whileHover={{ scale: 1.03 }}
-                    style={{
-                      borderRadius: "20px",
-                      margin: 5,
-                    }}
-                    transition={{
-                      duration: 5,
-                      type: "spring",
-                      stiffness: 400,
-                      damping: 10,
-                      bounce: 1,
-                    }}
-                  >
-                    <ImageListItem sx={{}}>
-                      <motion.img
-                        style={{
-                          borderRadius: "20px",
-                          width: "100%",
-                          height: "250px",
-                        }}
-                        src={item.img}
-                        alt={item.title}
-                        loading="eager"
-                      />
+              {isLoaded &&
+                mentalIllnessData.map((item) => (
+                  <Link href={item.link} key={item.img}>
+                    <motion.div
+                      whileHover={{ scale: 1.03 }}
+                      style={{
+                        borderRadius: "20px",
+                        margin: 5,
+                      }}
+                      transition={{
+                        duration: 5,
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 10,
+                        bounce: 1,
+                      }}
+                    >
+                      <ImageListItem sx={{}}>
+                        <motion.img
+                          style={{
+                            borderRadius: "20px",
+                            width: "100%",
+                            height: "100%",
+                          }}
+                          src={item.img}
+                          alt={item.title}
+                          loading="eager"
+                        />
 
-                      <ImageListItemBar
-                        sx={{
-                          borderBottomLeftRadius: "20px",
-                          borderBottomRightRadius: "20px",
-                        }}
-                        className={glacial.className}
-                        title={<h2>{item.title}</h2>}
-                      />
-                    </ImageListItem>
-                  </motion.div>
-                </Link>
-              ))}
+                        <ImageListItemBar
+                          sx={{
+                            borderBottomLeftRadius: "20px",
+                            borderBottomRightRadius: "20px",
+                          }}
+                          className={glacial.className}
+                          title={<h2>{item.title}</h2>}
+                          subtitle={
+                            <a style={{ fontSize: 14 }}> {item.author}</a>
+                          }
+                        />
+                      </ImageListItem>
+                    </motion.div>
+                  </Link>
+                ))}
             </ImageList>
           </motion.div>
           <div>
@@ -175,7 +153,7 @@ export default function Home() {
             </a>
           </div>
         </Box>
-      </motion.div>
+      </div>
 
       {/* Tulisan */}
       <Container>
@@ -190,8 +168,6 @@ export default function Home() {
         >
           <div
             style={{
-              bgcolor: "gray",
-              mt: "0",
               float: "left",
             }}
           >
@@ -221,7 +197,7 @@ export default function Home() {
 
               <Typography
                 className={glacial.className}
-                sx={{ fontSize: "20px", color: "#a6a6a6" }}
+                sx={{ fontSize: "20px", color: "black" }}
               >
                 Mental Health Check membantu anda untuk mengetahui kondisi
                 kesehatan mental pribadi dan mempersiapkan untuk langkah
@@ -243,8 +219,6 @@ export default function Home() {
         >
           <div
             style={{
-              bgcolor: "gray",
-              mt: "0",
               float: "right",
             }}
           >
@@ -276,7 +250,7 @@ export default function Home() {
                 className={glacial.className}
                 sx={{
                   fontSize: "20px",
-                  color: "#a6a6a6",
+                  color: "black",
                   textAlign: "justify",
                 }}
               >
@@ -294,14 +268,7 @@ export default function Home() {
       </Container>
 
       {/* Footer */}
-
-      <motion.div
-        initial={{ x: "-100%" }}
-        animate={{ x: "0%" }}
-        transition={{ duration: 1, ease: "easeOut" }}
-        exit={{ x: "100%" }}
-        style={{paddingTop:"20px"}}
-      >
+      <div>
         <Box
           className={styles.quizDiv}
           sx={{
@@ -311,11 +278,11 @@ export default function Home() {
             display: { xs: "none", md: "block" },
           }}
         >
-          <Link style={{ fontSize: "25px", color: "white" }} href="/aboutus">
+          <Link style={{ fontSize: "25px", color: "white" }} href="/AboutUs">
             About Us
           </Link>
         </Box>
-      </motion.div>
-    </div>
+      </div>
+    </motion.div>
   );
 }
