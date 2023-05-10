@@ -10,7 +10,6 @@
 	animation: gradient 5s ease infinite;
 }
 
-
 .buttonDaily {
 	background: linear-gradient(90deg, #7571f1, #42c6f2 , #94f2e4);
 	background-size: 200% 200%;
@@ -20,6 +19,32 @@
 .quizDiv {
 	background: linear-gradient(-45deg, rgba(234,143,234,1) , rgba(255,170,207,1), rgba(246,230,194,1) );
 	background-size: 200% 200%;
+	animation: gradient 10s ease infinite;
+}
+
+.resultNone {
+	background-color: #7ee8fa; background-image: linear-gradient(315deg, #7ee8fa 0%, #80ff72 74%); 
+	background-size: 120% 120%;
+	animation: gradient 10s ease infinite;
+}
+
+.resultMild {
+	background-color: #ffd400;
+    background-image: linear-gradient(315deg, #ffd400 0%, #ffdd3c 44%, #ffea61 54%, #fff192 70%, #ffffb7 100%);
+	background-size: 120% 120%;
+	animation: gradient 10s ease infinite;
+}
+
+.resultModerate {
+	background-color: #ff4e00;
+    background-image: linear-gradient(315deg, #ff4e00 0%, #ec9f05 74%);   
+	background-size: 120% 120%;
+	animation: gradient 10s ease infinite;
+}
+.resultSevere {
+	background-color: #3f0d12;
+    background-image: linear-gradient(315deg, #3f0d12 0%, #a71d31 74%);
+	background-size: 120% 120%;
 	animation: gradient 10s ease infinite;
 }
 
