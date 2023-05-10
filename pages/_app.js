@@ -14,7 +14,7 @@ export default function App({ Component, pageProps, router }) {
   return (
     <Provider store={store}>
       <Head>
-        <link rel="shortcut icon" href="image/mcwebicon.png" />
+        <link rel="shortcut icon" href="/image/mcwebicon.png" />
         <title>Mindcontrol</title>
       </Head>
       <main className={openSans.className}>

@@ -8,7 +8,8 @@ import Link from "next/link";
 import { container, item } from "/animation";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
-import {montserrat, glacial, cooperHewitt} from "../../../public/fonts";
+import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
+import ErrorIcon from "@mui/icons-material/Error";
 
 const theme = createTheme({
   typography: {
@@ -64,15 +65,24 @@ export default function PanduanOCD() {
             duration: 1,
             delay: 0,
           }}
-          exit={{ opacity: 0}}
+          exit={{ opacity: 0 }}
         >
-          <a
+          <Typography
             className={cooperHewitt.className}
-            style={{ color: "black", fontSize: "50px" }}
+            sx={{
+              color: "black",
+              fontSize: "50px",
+              fontSize: {
+                lg: "50px",
+                md: "40px",
+                sm: "30px",
+                xs: "30px",
+              },
+            }}
           >
             PANDUAN PENGISIAN <br />
             OCD TEST
-          </a>
+          </Typography>
           <div
             width="100%"
             style={{ display: "flex", justifyContent: "center", marginTop: 10 }}
@@ -125,14 +135,6 @@ export default function PanduanOCD() {
                 initial="hidden"
                 animate="show"
               >
-                {/* <div style={{ overflow: "hidden" }}>
-                  <motion.li
-                    style={{ fontWeight: "bold", fontSize: "20px" }}
-                    variants={item}
-                  >
-                    Panduan Pengisian
-                  </motion.li>
-                </div> */}
                 <div style={{ overflow: "hidden" }}>
                   <motion.li
                     variants={item}
@@ -142,20 +144,19 @@ export default function PanduanOCD() {
                       overflow: "hidden",
                     }}
                   >
-                    - Pertanyaan-pertanyaan ini menanyakan tentang perasaan OCD secara lebih rinci 
-                  </motion.li>
-                </div>
-                <div style={{ overflow: "hidden" }}>
-                  <motion.li
-                    variants={item}
-                    style={{
-                      paddingBottom: 6,
-                      paddingTop: 10,
-                      overflow: "hidden",
-                    }}
-                  >
-                    - Untuk setiap pertanyaan, pilihlah yang paling menggambarkan seberapa 
-                    sering Anda diganggu oleh daftar gejala selama <b style={{ color: "red" }}>7 hari terakhir. </b>
+                    <Typography
+                      sx={{
+                        fontSize: {
+                          lg: "17px",
+                          md: "16px",
+                          sm: "15px",
+                          xs: "13px",
+                        },
+                      }}
+                    >
+                      - Pertanyaan-pertanyaan ini menanyakan tentang perasaan
+                      OCD secara lebih rinci
+                    </Typography>
                   </motion.li>
                 </div>
                 <div style={{ overflow: "hidden" }}>
@@ -167,8 +168,22 @@ export default function PanduanOCD() {
                       overflow: "hidden",
                     }}
                   >
-                    - Kerjakanlah di tempat yang nyaman dan kondusif agar lebih
-                    fokus
+                    {" "}
+                    <Typography
+                      sx={{
+                        fontSize: {
+                          lg: "17px",
+                          md: "16px",
+                          sm: "15px",
+                          xs: "13px",
+                        },
+                      }}
+                    >
+                      - Untuk setiap pertanyaan, pilihlah yang paling
+                      menggambarkan seberapa sering Anda diganggu oleh daftar
+                      gejala selama{" "}
+                      <b style={{ color: "red" }}>7 hari terakhir. </b>
+                    </Typography>
                   </motion.li>
                 </div>
                 <div style={{ overflow: "hidden" }}>
@@ -180,7 +195,19 @@ export default function PanduanOCD() {
                       overflow: "hidden",
                     }}
                   >
-                    - Jika keluar di tengah test, maka jawaban tidak tersimpan
+                    <Typography
+                      sx={{
+                        fontSize: {
+                          lg: "17px",
+                          md: "16px",
+                          sm: "15px",
+                          xs: "13px",
+                        },
+                      }}
+                    >
+                      - Kerjakanlah di tempat yang nyaman dan kondusif agar
+                      lebih fokus
+                    </Typography>
                   </motion.li>
                 </div>
                 <div style={{ overflow: "hidden" }}>
@@ -192,12 +219,70 @@ export default function PanduanOCD() {
                       overflow: "hidden",
                     }}
                   >
-                    - Hasil tes didapatkan setelah mengisi semua pertanyaan
+                    {" "}
+                    <Typography
+                      sx={{
+                        fontSize: {
+                          lg: "17px",
+                          md: "16px",
+                          sm: "15px",
+                          xs: "13px",
+                        },
+                      }}
+                    >
+                      - Jika keluar di tengah test, maka jawaban tidak tersimpan
+                    </Typography>
+                  </motion.li>
+                </div>
+                <div style={{ overflow: "hidden" }}>
+                  <motion.li
+                    variants={item}
+                    style={{
+                      paddingBottom: 6,
+                      paddingTop: 10,
+                      overflow: "hidden",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: {
+                          lg: "17px",
+                          md: "16px",
+                          sm: "15px",
+                          xs: "13px",
+                        },
+                      }}
+                    >
+                      - Hasil tes didapatkan setelah mengisi semua pertanyaan
+                    </Typography>
                   </motion.li>
                 </div>
               </motion.ul>
             </motion.div>
-
+            <div style={{ display: "flex" }}>
+              <ErrorIcon
+                fontSize="15px"
+                sx={{ marginTop: "3px", marginRight: "5px", color: "orange" }}
+              />
+              <Typography
+                sx={{
+                  fontSize: { lg: "15px", md: "14px", sm: "13px", xs: "12px" },
+                  color: "#5d5d5d",
+                  textAlign: "justify",
+                  marginBottom: "15px",
+                }}
+                className={glacial.className}
+              >
+                Tes skrining ini ditujukan untuk usia{" "}
+                <b style={{ color: "black" }}>18 tahun ke atas</b>. Tes di
+                adaptasi dari buku DSM-5-TR:{" "}
+                <i>
+                  LEVEL 2—Repetitive Thoughts and Behaviors—Adult (adapted from
+                  the Florida Obsessive-Compulsive Inventory [FOCI] Severity
+                  Scale [Part B])
+                </i>
+              </Typography>
+            </div>
             <motion.button
               // className={styles.testbutton}
               animate={{}}

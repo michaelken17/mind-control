@@ -46,7 +46,6 @@ const pages = [
   { title: "Daily Health Check", path: "/DailyHealthCheck/Start" },
   { title: "Mental Illness Test", path: "/MentalIllnessTest/Home  " },
 ];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
@@ -106,8 +105,6 @@ const HtmlTooltip = styled(({ className, ...props }) => (
 }));
 
 export default function Navbar() {
-  const [anchorElNav, setAnchorElNav] = useState(null);
-  const [anchorElUser, setAnchorElUser] = useState(null);
   const [isLoaded, setIsLoad] = useState(false);
   const [MHP, setMHP] = useState(40);
   const [open, setOpen] = React.useState(false);
@@ -117,6 +114,7 @@ export default function Navbar() {
   const openAvatar = Boolean(anchorEl);
   const dispatch = useDispatch();
   const router = useRouter();
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -125,6 +123,7 @@ export default function Navbar() {
     setAnchorEl(null);
     setOpen;
   };
+
   const handleLogout = () => {
     dispatch(loginActions.logout());
 
@@ -152,7 +151,6 @@ export default function Navbar() {
   const handleDrawerOpen = () => {
     setOpen(true);
   };
-
   const handleDrawerClose = () => {
     setOpen(false);
   };
@@ -162,6 +160,9 @@ export default function Navbar() {
   }, []);
 
   const login = useSelector((state) => state.persistedReducer.login);
+  const mentalIllnessData = useSelector(
+    (x) => x.persistedReducer.app.mentalIllnessData
+  );
 
   return (
     <div>
@@ -188,6 +189,7 @@ export default function Navbar() {
                 />
               </Link>
             </Typography>
+
             <IconButton
               color="black"
               aria-label="open drawer"
@@ -231,32 +233,80 @@ export default function Navbar() {
 
             {/* Nav bar options*/}
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page) => (
-                <Box key={page.title}>
-                  <Link href={page.path} legacyBehavior passHref>
-                    <Button
-                      // href={page.path}
-                      sx={{
-                        mx: 2,
-                        py: 4,
-                        color: "#42493A",
-                        display: "block",
-                        borderBottom: "4px solid white",
-                        "&:hover": {
-                          color: "gray",
-                          backgroundColor: "white",
-                          borderBottom: "4px solid #FFAACF",
-                        },
-                        fontSize: 15,
-                        textTransform: "none",
-                      }}
-                      className={montserratBold.className}
+              {pages.map((page) =>
+                page.title == "Mental Illness Test" ? (
+                  // MENTAL ILLNESS DROPDOWN MENU
+                  <Box key={page.title}>
+                    <HtmlTooltip
+                      interactive="true"
+                      open={showTooltip}
+                      onOpen={() => setShowTooltip(true)}
+                      onClose={() => setShowTooltip(false)}
+                      title={
+                        <Typography>
+                          {mentalIllnessData.map((item) => {
+                            return (
+                              <MenuItem
+                                key={item.title}
+                                className={montserrat.className}
+                                sx={{ padding: "10px", fontSize: "15px" }}
+                              >
+                                <Link href={item.link}>{item.title}</Link>
+                              </MenuItem>
+                            );
+                          })}
+                        </Typography>
+                      }
                     >
-                      {page.title}
-                    </Button>
-                  </Link>
-                </Box>
-              ))}
+                      <Link href={page.path}>
+                        <Button
+                          sx={{
+                            mx: 2,
+                            py: 4,
+                            color: "#42493A",
+                            display: "block",
+                            borderBottom: "4px solid white",
+                            "&:hover": {
+                              color: "gray",
+                              backgroundColor: "white",
+                              borderBottom: "4px solid #FFAACF",
+                            },
+                            fontSize: 15,
+                            textTransform: "none",
+                          }}
+                          className={montserratBold.className}
+                        >
+                          {page.title}
+                        </Button>
+                      </Link>
+                    </HtmlTooltip>
+                  </Box>
+                ) : (
+                  <Box key={page.title}>
+                    <Link href={page.path} legacyBehavior passHref>
+                      <Button
+                        sx={{
+                          mx: 2,
+                          py: 4,
+                          color: "#42493A",
+                          display: "block",
+                          borderBottom: "4px solid white",
+                          "&:hover": {
+                            color: "gray",
+                            backgroundColor: "white",
+                            borderBottom: "4px solid #FFAACF",
+                          },
+                          fontSize: 15,
+                          textTransform: "none",
+                        }}
+                        className={montserratBold.className}
+                      >
+                        {page.title}
+                      </Button>
+                    </Link>
+                  </Box>
+                )
+              )}
             </Box>
 
             {/* Mental Health Bar */}
@@ -280,7 +330,7 @@ export default function Navbar() {
                     rounded={36}
                     height={20}
                     width={300}
-                    percent={40}  
+                    percent={40}
                     transition={{ easing: "linear" }}
                     progressColor="linear-gradient(to right, #FF6962, #FF7974, #FF8986, #FF9997, #FFA9A9)"
                   />
@@ -416,24 +466,15 @@ export default function Navbar() {
           {pages.map((text) => (
             <ListItem key={text.title} disablePadding>
               <ListItemButton sx={{ padding: "12px" }}>
-                <Typography className={montserrat.className}>
-                  {text.title}
-                </Typography>
+                <Link href={text.path}>
+                  <Typography className={montserrat.className}>
+                    {text.title}
+                  </Typography>
+                </Link>
               </ListItemButton>
             </ListItem>
           ))}
         </List>
-
-        {/* <List>
-          {["Depression", "Anxiety", "OCD", "Sleep Disorder"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-         
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List> */}
       </Drawer>
       <Main open={open}>
         <DrawerHeader />

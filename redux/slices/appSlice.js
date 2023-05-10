@@ -23,7 +23,7 @@ const mentalIllnessData = [
     img: "/image/Mental Illness Illustration/5.png",
     title: "Sleep Disorder",
     author: "Gangguan Tidur",
-    link: "/MentalIllness/SleepDisorder/SleepDisorderTest",
+    link: "/MentalIllness/SleepDisorder/Panduan",
   },
 ];
 
@@ -82,29 +82,6 @@ const MHCQuestions = [
     english: "Problems with sleep that affected your sleep quality over all",
   },
 ];
-
-// ANXIETY
-const anxietyQuestions = [
-  { question: "Saya merasa takut.", english: "I felt fearful." },
-  { question: "Saya merasa cemas.", english: "I felt anxious." },
-  { question: "Saya merasa khawatir.", english: "I felt worried." },
-  {
-    question:
-      "Saya merasa sulit untuk fokus pada apa pun selain kecemasan saya.",
-    english: "I found it hard to focus on anything other than my anxiety.",
-  },
-  { question: "Saya merasa gugup.", english: "I felt nervous." },
-  { question: "Saya merasa tidak nyaman.", english: "I felt uneasy." },
-  { question: "Saya merasa tegang.", english: "I felt tense." },
-];
-const anxietyChoices = [
-  { name: "Tidak pernah", score: 1 },
-  { name: "Jarang", score: 2 },
-  { name: "Kadang-kadang", score: 3 },
-  { name: "Sering", score: 4 },
-  { name: "Selalu", score: 5 },
-];
-
 // DEPRESSION
 const depressionQuestions = [
   { question: "Saya merasa tidak berharga.", english: "I felt worthless." },
@@ -129,6 +106,108 @@ const depressionChoices = [
   { name: "Kadang-kadang", score: 3 },
   { name: "Sering", score: 4 },
   { name: "Selalu", score: 5 },
+];
+const depressionSolutions = [
+  {
+    solution:
+      "Tetaplah berhubungan dengan orang lain. Carilah dan ajak teman untuk berbicara",
+    image: "/image/Mental Illness Illustration/berhubungan.jpg",
+  },
+
+  {
+    solution:
+      "Rencanakan dan lakukan hal-hal yang menyenangkan seperti melakukan hal baru atau sekedar berkegiatan",
+    image: "/image/Mental Illness Illustration/activity.jpg",
+  },
+  {
+    solution: "Biasakan untuk tetap makan dan tidur teratur",
+    image: "/image/Mental Illness Illustration/eat.jpg",
+  },
+  {
+    solution: "Berolahraga secara teratur, biarpun olahraga ringan",
+    image: "/image/Mental Illness Illustration/workout.jpg",
+  },
+  {
+    solution: "Hindari penggunaan alkohol dan narkoba",
+    image: "/image/Mental Illness Illustration/noalcohol.jpg",
+  },
+  {
+    solution: "Membentuk pikiran positif",
+    image: "/image/Mental Illness Illustration/positive.jpg",
+  },
+  {
+    solution: "Membuat buku harian atau diary",
+    image: "/image/Mental Illness Illustration/diary.jpg",
+  },
+  {
+    solution: "Hubungi tenaga profesional, seperti psikolog atau psikiater",
+    image: "/image/Mental Illness Illustration/psychologist.jpg",
+  },
+];
+
+// ANXIETY
+const anxietyQuestions = [
+  { question: "Saya merasa takut.", english: "I felt fearful." },
+  { question: "Saya merasa cemas.", english: "I felt anxious." },
+  { question: "Saya merasa khawatir.", english: "I felt worried." },
+  {
+    question:
+      "Saya merasa sulit untuk fokus pada apa pun selain kecemasan saya.",
+    english: "I found it hard to focus on anything other than my anxiety.",
+  },
+  { question: "Saya merasa gugup.", english: "I felt nervous." },
+  { question: "Saya merasa tidak nyaman.", english: "I felt uneasy." },
+  { question: "Saya merasa tegang.", english: "I felt tense." },
+];
+const anxietyChoices = [
+  { name: "Tidak pernah", score: 1 },
+  { name: "Jarang", score: 2 },
+  { name: "Kadang-kadang", score: 3 },
+  { name: "Sering", score: 4 },
+  { name: "Selalu", score: 5 },
+];
+const anxietySolutions = [
+  {
+    solution: "Membaca buku yang menarik bagi anda",
+    image: "/image/Mental Illness Illustration/book.jpg",
+  },
+
+  {
+    solution: "Bermeditasi, melatih teknik pernapasan dan mindfullness",
+    image: "/image/Mental Illness Illustration/meditate.jpg",
+  },
+  {
+    solution: "Memusatkan pikiran pada aktivitas yang dijalani",
+    image: "/image/Mental Illness Illustration/activity.jpg",
+  },
+  {
+    solution: "Menghindari minuman berkafein dan beralkohol",
+    image: "/image/Mental Illness Illustration/noalcohol.jpg",
+  },
+  {
+    solution: "Bercerita kepada orang terdekat",
+    image: "/image/Mental Illness Illustration/conversation.jpg",
+  },
+  {
+    solution: "Meluangkan waktu untuk diri sendiri (Me time)",
+    image: "/image/Mental Illness Illustration/metime.jpg",
+  },
+  {
+    solution: "Berolahraga secara teratur, biarpun olahraga ringan",
+    image: "/image/Mental Illness Illustration/workout.jpg",
+  },
+  {
+    solution: "Makan secara teratur dan minum cukup air",
+    image: "/image/Mental Illness Illustration/eat.jpg",
+  },
+  {
+    solution: "Melakukan positive self-talk atau afirmasi positif",
+    image: "/image/Mental Illness Illustration/positive.jpg",
+  },
+  {
+    solution: "Berkonsultasi dengan tenaga profesional, seperti psikolog atau psikiater",
+    image: "/image/Mental Illness Illustration/psychologist.jpg",
+  },
 ];
 
 // OCD
@@ -308,6 +387,50 @@ const OCDChoices = [
     score: 4,
   },
 ];
+const OCDSolutions = [
+  {
+    solution: "Identifikasi pemicunya (dengan berkonsultasi ke psikiater atau psikolog)",
+    image: "/image/Mental Illness Illustration/book.jpg",
+  },
+
+  {
+    solution: "Lawan gejala yang muncul dengan menantang pikiran obsesif",
+    image: "/image/Mental Illness Illustration/meditate.jpg",
+  },
+  {
+    solution: "Latihlah kesadaran (mindfulness) dalam berbagai hal yang dilakukan untuk mengelola stres",
+    image: "/image/Mental Illness Illustration/activity.jpg",
+  },
+  {
+    solution: "Banyak berolahraga",
+    image: "/image/Mental Illness Illustration/noalcohol.jpg",
+  },
+  {
+    solution: "Tidur yang nyenyak dan cukup",
+    image: "/image/Mental Illness Illustration/conversation.jpg",
+  },
+  {
+    solution: "Hindari nikotin dan alkohol",
+    image: "/image/Mental Illness Illustration/metime.jpg",
+  },
+  {
+    solution: "Hubungi keluarga dan teman",
+    image: "/image/Mental Illness Illustration/berhubungan.jpg",
+  },
+  {
+    solution: "Hubungi terapis ERP",
+    image: "/image/Mental Illness Illustration/eat.jpg",
+  },
+  {
+    solution: "Beristirahatlah sejenak dalam menggunakan gadget. Lakukan kegiatan seperti membaca buku, menulis buku harian",
+    image: "/image/Mental Illness Illustration/diary.jpg",
+  },
+  {
+    solution: "Melakukan teknik relaksasi agar dapat menenangkan pikiran",
+    image: "/image/Mental Illness Illustration/meditate.jpg",
+  }
+];
+
 
 // SLEEP DISORDER
 const SDQuestions = [
@@ -427,9 +550,11 @@ const appSlice = createSlice({
 
     anxietyQuestions,
     anxietyChoices,
+    anxietySolutions,
 
     depressionQuestions,
     depressionChoices,
+    depressionSolutions,
 
     OCDQuestions,
     OCDChoices,

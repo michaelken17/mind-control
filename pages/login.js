@@ -14,13 +14,11 @@ export default function login() {
             sm: "90vw",
             xs: "90vw",
             xl: "60vw",
-          }, display:"flex", justifyContent:"center"
+          },
         }}
-       
-
       >
         {/* GRID SYSTEM */}
-        <Grid container>
+        <Grid container alignItems="center" justifyContent="center">
           <SigninPage />
 
           <TitleBox />

@@ -27,6 +27,7 @@ import { useEffect, useState } from "react";
 import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
 import { rekomendasiOCD } from "../../RekomendasiKegiatan";
 import { OCDSeverity } from "../../ShortFormConversionTable";
+import ErrorIcon from "@mui/icons-material/Error";
 
 const theme = createTheme({
   typography: {

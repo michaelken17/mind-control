@@ -262,7 +262,7 @@ export default function MHCResult() {
         labels: {
           padding: 20,
           font: {
-            size: 12,
+            size: 10,
           },
         },
       },
@@ -302,7 +302,7 @@ export default function MHCResult() {
             // className={styles.quizDiv}
             style={{
               backgroundColor: "black",
-              padding: 10,
+              padding: 0,
               borderRadius: 10,
               fontSize: 20,
               height: "100%",
@@ -342,17 +342,18 @@ export default function MHCResult() {
               <Grid
                 container
                 sx={{ textAlign: "center", justifyContent: "center" }}
+                column={12}
               >
-                <Grid item xs={12} md={12}>
+                <Grid item xs={12} md={12} lg={7}>
                   <Bar
                     className={montserrat.className}
                     data={data}
                     options={optionsBar}
                     style={{
-                      display: "block",
-                      marginLeft: "auto",
-                      marginRight: "auto",
-                      width: "70%",
+                      // display: "block",
+                      // marginLeft: "auto",
+                      // marginRight: "auto",
+                      width: "100%",
                     }}
                   ></Bar>
                 </Grid>

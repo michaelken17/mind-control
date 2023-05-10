@@ -15,7 +15,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styles from "styles/Quiz.module.css";
-import {montserrat, glacial, cooperHewitt} from "../public/fonts";
+import { montserrat, glacial, cooperHewitt } from "../public/fonts";
 
 export default function Home() {
   const mentalIllnessData = useSelector(
@@ -28,18 +28,28 @@ export default function Home() {
   }, []);
 
   return (
-    <div style={{ position: "relative" }}>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{
+        duration: 1,
+        delay: 0,
+        ease: [0, 0.71, 0.2, 1.01],
+      }}
+      style={{ textAlign: "center" }}
+      exit={{ opacity: 0 }}
+    >
       {/* MindControl Logo */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.2 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{
-          duration: 1,
-          delay: 0,
-          ease: [0, 0.71, 0.2, 1.01],
-        }}
-        style={{ textAlign: "center" }}
-        exit={{ opacity: 0, scale: 0.2 }}
+      <div
+      // initial={{ opacity: 0 }}
+      //  animate={{ opacity: 1 }}
+      // transition={{
+      //   duration: 1,
+      //   delay: 0,
+      //   ease: [0, 0.71, 0.2, 1.01],
+      // }}
+      // style={{ textAlign: "center" }}
+      // exit={{ opacity: 0}}
       >
         <Container>
           <div>
@@ -65,15 +75,10 @@ export default function Home() {
             }}
           ></div>
         </Container>
-      </motion.div>
+      </div>
 
       {/* Mental Ilness Check */}
-      <motion.div
-        initial={{ x: "-100%" }}
-        animate={{ x: "0%" }}
-        transition={{ duration: 1, ease: "easeOut", delay: 0.5 }}
-        exit={{ x: "100%" }}
-      >
+      <div>
         <Box
           className={styles.quizDiv}
           sx={{
@@ -148,7 +153,7 @@ export default function Home() {
             </a>
           </div>
         </Box>
-      </motion.div>
+      </div>
 
       {/* Tulisan */}
       <Container>
@@ -263,13 +268,7 @@ export default function Home() {
       </Container>
 
       {/* Footer */}
-      <motion.div
-        initial={{ x: "-100%" }}
-        animate={{ x: "0%" }}
-        transition={{ duration: 1, ease: "easeOut" }}
-        exit={{ x: "100%" }}
-        style={{ paddingTop: "20px" }}
-      >
+      <div>
         <Box
           className={styles.quizDiv}
           sx={{
@@ -283,7 +282,7 @@ export default function Home() {
             About Us
           </Link>
         </Box>
-      </motion.div>
-    </div>
+      </div>
+    </motion.div>
   );
 }

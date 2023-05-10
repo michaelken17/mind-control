@@ -5,6 +5,7 @@ import {
   CircularProgress,
   Container,
   FormControlLabel,
+  Grid,
   List,
   ListItem,
   ListItemButton,
@@ -27,7 +28,8 @@ import { useEffect, useState } from "react";
 import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
 import { depressionSeverity } from "../../ShortFormConversionTable";
 import { rekomendasiDepression } from "../../RekomendasiKegiatan";
-
+import CircleIcon from "@mui/icons-material/Circle";
+import ErrorIcon from "@mui/icons-material/Error";
 
 const theme = createTheme({
   typography: {
@@ -54,12 +56,14 @@ function borderClassname(severity) {
   }
 }
 
-
 //DEPRESSION
 export default function ResultDepression() {
   const router = useRouter();
   const depressionAnswer = useSelector(
     (x) => x.persistedReducer.app.DepressionAns
+  );
+  const depressionSolutions = useSelector(
+    (x) => x.persistedReducer.app.depressionSolutions
   );
   const [isLoaded, setIsLoaded] = useState(false);
   const [severity, setSeverity] = useState(0);
@@ -70,14 +74,17 @@ export default function ResultDepression() {
   useEffect(() => {
     setIsLoaded(true);
     setSeverity(depressionSeverity(rawScore));
+    console.log(depressionSolutions);
   }, []);
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="md" sx={{}}>
+      <Container component="main" maxWidth="lg" sx={{}}>
         {isLoaded && (
           <motion.div
-            className={borderClassname(rekomendasiDepression[severity].severity)}
+            className={borderClassname(
+              rekomendasiDepression[severity].severity
+            )}
             style={{
               padding: 20,
               borderRadius: 10,
@@ -116,7 +123,12 @@ export default function ResultDepression() {
                 </Typography>
                 <Typography
                   sx={{
-                    fontSize: "16px",
+                    fontSize: {
+                      lg: "17px",
+                      md: "15px",
+                      sm: "15px",
+                      xs: "15px",
+                    },
                     color: "black",
                     textAlign: "left",
                     mb: 2,
@@ -144,15 +156,19 @@ export default function ResultDepression() {
                       textAlign: "center",
                     }}
                   >
-                    <img
+                    <Box
+                      component="img"
+                      sx={{
+                        maxHeight: { xs: 210, md: 240, lg: 300 },
+                        maxWidth: { xs: 200, md: 240, lg: 300 },borderRadius: 10
+                      }}
+                      alt=""
                       src={
                         rekomendasiDepression[severity].severity ==
                         "Tidak ada atau sedikit"
                           ? "/image/Mental Illness Illustration/happy.jpg"
                           : "/image/Mental Illness Illustration/confused.jpg"
                       }
-                      width="70%"
-                      style={{ borderRadius: 10 }}
                     />
 
                     <a
@@ -171,14 +187,146 @@ export default function ResultDepression() {
 
                 <Typography
                   sx={{
-                    fontSize: "16px",
+                    fontSize: {
+                      lg: "17px",
+                      md: "15px",
+                      sm: "15px",
+                      xs: "13px",
+                    },
                     color: "black",
                     textAlign: "justify",
+                    marginBottom: "10px",
                   }}
                   className={montserrat.className}
                 >
                   {rekomendasiDepression[severity].text}
                 </Typography>
+
+                {/* LIST SOLUSI */}
+                <Grid container spacing={1} columns={16}>
+                  {depressionSolutions
+                    .filter((item, index) => index < 5)
+                    .map((x, index) => (
+                      <Grid item lg={8} md={8} sm={8}>
+                        <Box
+                          component="img"
+                          sx={{
+                            height: 233,
+                            width: 350,
+                            maxHeight: { xs: 230, md: 230, lg: 250 },
+                            maxWidth: { xs: 290, md: 290, lg: 300 },
+                          }}
+                          alt=""
+                          src={x.image}
+                        />
+                        <Typography
+                          sx={{
+                            fontSize: {
+                              lg: "17px",
+                              md: "15px",
+                              sm: "15px",
+                              xs: "13px",
+                            },
+                            color: "black",
+                            textAlign: "left",
+                          }}
+                          className={montserrat.className}
+                        >
+                          {/* <CircleIcon sx={{ paddingTop: "11px" }} />{" "} */}
+                          {x.solution}
+                        </Typography>
+                      </Grid>
+                    ))}
+                  {depressionSolutions
+                    .filter((item, index) => index >= 5)
+                    .map((x, index) => (
+                      <Grid item lg={8} md={8} sm={8}>
+                        <Box
+                          component="img"
+                          sx={{
+                            height: 350,
+                            width: 300,
+                            maxHeight: { xs: 230, md: 230, lg: 250 },
+                            maxWidth: { xs: 290, md: 290, lg: 300 },
+                          }}
+                          alt=""
+                          src={x.image}
+                        />
+                        <Typography
+                          sx={{
+                            fontSize: {
+                              lg: "17px",
+                              md: "15px",
+                              sm: "15px",
+                              xs: "13px",
+                            },
+
+                            color: "black",
+                            textAlign: "left",
+                          }}
+                          className={montserrat.className}
+                        >
+                          {/* <CircleIcon sx={{ paddingTop: "11px" }} />{" "} */}
+                          {x.solution}
+                        </Typography>
+                      </Grid>
+                    ))}
+                </Grid>
+                <div style={{ display: "flex", marginTop: "50px" }}>
+                  <ErrorIcon
+                    fontSize="17px"
+                    sx={{
+                      marginTop: "3px",
+                      marginRight: "5px",
+                      color: "orange",
+                    }}
+                  />
+                  <Typography
+                    sx={{
+                      fontSize: {
+                        lg: "17px",
+                        md: "16px",
+                        sm: "15px",
+                        xs: "16px",
+                      },
+                      color: "#5d5d5d",
+                      textAlign: "justify",
+                      marginBottom: "15px",
+                    }}
+                    className={glacial.className}
+                  >
+                    Untuk selanjutnya, Anda dapat menggunakan fitur{" "}
+                    <i>Daily Health Check</i> yang tersedia dibawah ini untuk
+                    memantau kesehatan mental Anda tiap harinya dan mendapatkan
+                    rekomendasi kegiatan yang berguna demi meningkatkan
+                    kesehatan mental.
+                  </Typography>
+                </div>
+                {/* Button for daily health check */}
+                <motion.div style={{ textAlign: "center" }}>
+                  <Link href="../../DailyHealthCheck/Start">
+                    <button
+                      style={{
+                        borderRadius: 10,
+                        padding: 20,
+                        marginTop: "0px",
+                        fontSize: 20,
+                        border: "0px ",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: "18px",
+                          color: "white",
+                          textAlign: "center",
+                        }}
+                        className={glacial.className}
+                      >
+                        Daily Health Check
+                      </Typography>
+                    </button>
+                  </Link>
+                </motion.div>
               </div>
             </div>
           </motion.div>

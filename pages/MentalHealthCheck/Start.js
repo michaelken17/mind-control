@@ -43,7 +43,7 @@ export default function MentalHealthCheck() {
           ></img>
           <div style={{ marginTop: "15px" }}>
             <Typography
-              sx={{ fontSize: "22px", color: "black", textAlign: "center" }}
+              sx={{ fontSize: {xs:"16px", md:"19px", lg:"22px"}, color: "black", textAlign: "center" }}
               className={glacial.className}
             >
               Mental Health Check membantu anda untuk mengetahui kondisi
