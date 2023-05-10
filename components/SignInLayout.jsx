@@ -8,17 +8,16 @@ const MainLayout = ({ children }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{opacity:0}}
-      transition={{ duration: 1 }}
+      transition={{ duration: 0.5 }}
     >
       <Box
         className={styles.quizDiv}
         sx={{
           bgcolor: "black",
-
+          display:"flex",
+          paddingTop: "100px",
           height: "100vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent:"center",
         }}
       >
         {children}
