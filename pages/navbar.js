@@ -232,9 +232,11 @@ export default function Navbar() {
             </Typography>
 
             {/* Nav bar options*/}
+
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) =>
-                page.title == "Mental Illness Test" ? (
+                page.title == "Mental Illness Test"  &&
+                login?.authorized !== false ? (
                   // MENTAL ILLNESS DROPDOWN MENU
                   <Box key={page.title}>
                     <HtmlTooltip
@@ -281,7 +283,7 @@ export default function Navbar() {
                       </Link>
                     </HtmlTooltip>
                   </Box>
-                ) : (
+                ) : login?.authorized !== false ? (
                   <Box key={page.title}>
                     <Link href={page.path} legacyBehavior passHref>
                       <Button
@@ -305,6 +307,8 @@ export default function Navbar() {
                       </Button>
                     </Link>
                   </Box>
+                ) : (
+                  <Box></Box>
                 )
               )}
             </Box>

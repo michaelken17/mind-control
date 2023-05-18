@@ -160,7 +160,8 @@ export default function ResultDepression() {
                       component="img"
                       sx={{
                         maxHeight: { xs: 210, md: 240, lg: 300 },
-                        maxWidth: { xs: 200, md: 240, lg: 300 },borderRadius: 10
+                        maxWidth: { xs: 200, md: 240, lg: 300 },
+                        borderRadius: 10,
                       }}
                       alt=""
                       src={
@@ -202,77 +203,7 @@ export default function ResultDepression() {
                   {rekomendasiDepression[severity].text}
                 </Typography>
 
-                {/* LIST SOLUSI */}
-                <Grid container spacing={1} columns={16}>
-                  {depressionSolutions
-                    .filter((item, index) => index < 5)
-                    .map((x, index) => (
-                      <Grid item lg={8} md={8} sm={8}>
-                        <Box
-                          component="img"
-                          sx={{
-                            height: 233,
-                            width: 350,
-                            maxHeight: { xs: 230, md: 230, lg: 250 },
-                            maxWidth: { xs: 290, md: 290, lg: 300 },
-                          }}
-                          alt=""
-                          src={x.image}
-                        />
-                        <Typography
-                          sx={{
-                            fontSize: {
-                              lg: "17px",
-                              md: "15px",
-                              sm: "15px",
-                              xs: "13px",
-                            },
-                            color: "black",
-                            textAlign: "left",
-                          }}
-                          className={montserrat.className}
-                        >
-                          {/* <CircleIcon sx={{ paddingTop: "11px" }} />{" "} */}
-                          {x.solution}
-                        </Typography>
-                      </Grid>
-                    ))}
-                  {depressionSolutions
-                    .filter((item, index) => index >= 5)
-                    .map((x, index) => (
-                      <Grid item lg={8} md={8} sm={8}>
-                        <Box
-                          component="img"
-                          sx={{
-                            height: 350,
-                            width: 300,
-                            maxHeight: { xs: 230, md: 230, lg: 250 },
-                            maxWidth: { xs: 290, md: 290, lg: 300 },
-                          }}
-                          alt=""
-                          src={x.image}
-                        />
-                        <Typography
-                          sx={{
-                            fontSize: {
-                              lg: "17px",
-                              md: "15px",
-                              sm: "15px",
-                              xs: "13px",
-                            },
-
-                            color: "black",
-                            textAlign: "left",
-                          }}
-                          className={montserrat.className}
-                        >
-                          {/* <CircleIcon sx={{ paddingTop: "11px" }} />{" "} */}
-                          {x.solution}
-                        </Typography>
-                      </Grid>
-                    ))}
-                </Grid>
-                <div style={{ display: "flex", marginTop: "50px" }}>
+                <div style={{ display: "flex", marginTop: "10px" }}>
                   <ErrorIcon
                     fontSize="17px"
                     sx={{
@@ -285,15 +216,15 @@ export default function ResultDepression() {
                     sx={{
                       fontSize: {
                         lg: "17px",
-                        md: "16px",
+                        md: "15px",
                         sm: "15px",
-                        xs: "16px",
+                        xs: "13px",
                       },
-                      color: "#5d5d5d",
+                      color: "black",
                       textAlign: "justify",
                       marginBottom: "15px",
                     }}
-                    className={glacial.className}
+                    className={montserrat.className}
                   >
                     Untuk selanjutnya, Anda dapat menggunakan fitur{" "}
                     <i>Daily Health Check</i> yang tersedia dibawah ini untuk
@@ -308,10 +239,11 @@ export default function ResultDepression() {
                     <button
                       style={{
                         borderRadius: 10,
-                        padding: 20,
+                        padding: 10,
                         marginTop: "0px",
                         fontSize: 20,
                         border: "0px ",
+                        backgroundColor: "#FFAACF",
                       }}
                     >
                       <Typography

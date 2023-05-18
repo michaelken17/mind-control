@@ -1,10 +1,19 @@
 import * as React from "react";
 
-import { Button, Container, Typography } from "@mui/material";
+import {
+  Badge,
+  Button,
+  Container,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
-import {glacial, montserrat} from "../../public/fonts"
+import { glacial, montserrat } from "../../public/fonts";
 import styles from "styles/Quiz.module.css";
 import Link from "next/link";
 
@@ -35,17 +44,52 @@ export default function DailyHealthCheck() {
           <img
             src="/image/DailyHealthCheck.png"
             style={{
-              width: "100%",
+              width: "90%",
             }}
           ></img>
           <div style={{ marginTop: "15px" }}>
             <Typography
-              sx={{ fontSize: "22px", color: "black", textAlign: "center" }}
-              className={glacial.className}
+              sx={{
+                fontSize: { xs: "16px", md: "18px", lg: "18px" },
+                color: "black",
+                textAlign: "center",
+              }}
+              className={montserrat.className}
             >
-              Daily Health Check membantu mengamati kesehatan mental Anda setiap harinya dan memberikan rekomendasi 
-              berbagai macam aktivitas yang dapat meningkatkannya
+              Menjaga kesehatan mental Anda hanya dapat tercapai jika Anda
+              benar-benar menginginkannya dan mau mengusahakannya.{" "}
+              <b>Semuanya dimulai dari inisiatif diri sendiri</b>
             </Typography>
+            <List
+              sx={{
+                marginTop: "20px",
+                fontSize: { xs: "16px", md: "18px", lg: "17px" },
+                color: "black",
+                textAlign: "justify",
+                padding: { xs: "16px", md: "0px", lg: "0px" },
+              }}
+              className={montserrat.className}
+            >
+              <ListItem sx={{ marginTop: "10px" }}>
+                <ListItemText
+                  primary="Daily Health Check sebaiknya dilakukan tiap hari selama minimal
+                    3 minggu untuk memonitor kesehatan mental diri sendiri. Dengan
+                    begitu, kebiasaan positif dapat terbentuk"
+                />
+              </ListItem>
+              <ListItem sx={{ marginTop: "10px" }}>
+                <ListItemText
+                  primary="Kuesioner berisi pertanyaan mengenai bagaimana hari anda dan
+                    perasaan anda selama seharian ini"
+                />
+              </ListItem>
+              <ListItem sx={{ marginTop: "10px" }}>
+                <ListItemText
+                  primary="Isilah kuesioner di akhir hari (cth: saat sebelum tidur) untuk
+                    merefleksikan mengenai hari yang telah anda jalani"
+                />
+              </ListItem>
+            </List>
           </div>
           <motion.div style={{ textAlign: "center", padding: 20 }}>
             <motion.button
@@ -55,6 +99,8 @@ export default function DailyHealthCheck() {
                 borderRadius: 10,
                 padding: 20,
                 marginTop: 30,
+                marginLeft: "20px",
+                marginRight: "20px",
                 fontSize: 20,
                 border: "0px ",
               }}
@@ -67,8 +113,37 @@ export default function DailyHealthCheck() {
               }}
               whileTap={{ scale: 0.9 }}
             >
-              <Link href="/">Take Your Daily Health Check</Link>
+              <Link href="RekomendasiKegiatan">
+                Lihat Rekomendasi Kegiatan Hari Ini
+              </Link>
             </motion.button>
+
+            <Badge
+              badgeContent={"!"}
+              sx={{
+                "& .MuiBadge-badge": {
+                  fontSize: "20px",
+                  height: "25px",
+                  width: "25px",
+                  backgroundColor: "#FFA842",
+                  marginRight: { xs: "20px" },
+                },
+              }}
+            >
+              <button
+                style={{
+                  borderRadius: 10,
+                  padding: 20,
+                  marginLeft: "20px",
+                  marginRight: "20px",
+                  fontSize: 20,
+                  border: "0px ",
+                  backgroundColor: "#FF4E9B",
+                }}
+              >
+                <Link href="/">Lakukan Daily Health Check Hari ini!</Link>
+              </button>
+            </Badge>
           </motion.div>
         </Container>
       </motion.div>

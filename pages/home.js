@@ -1,6 +1,7 @@
 import {
   Box,
   Container,
+  Grid,
   IconButton,
   ImageList,
   ImageListItem,
@@ -40,45 +41,35 @@ export default function Home() {
       exit={{ opacity: 0 }}
     >
       {/* MindControl Logo */}
-      <div
-      // initial={{ opacity: 0 }}
-      //  animate={{ opacity: 1 }}
-      // transition={{
-      //   duration: 1,
-      //   delay: 0,
-      //   ease: [0, 0.71, 0.2, 1.01],
-      // }}
-      // style={{ textAlign: "center" }}
-      // exit={{ opacity: 0}}
-      >
+      <div>
         <Container>
           <div>
-            <div style={{ alignContent: "center", textAlign: "center" }}>
-              <img src="/image/MCFullLogo.png" alt="bg" width="70%"></img>
-            </div>
-
+            {/* <div style={{ alignContent: "center", textAlign: "center" }}>
+              <img src="/image/MCFullLogo.png" alt="bg" width="50%"></img>
+            </div> */}
+            <Box
+              component="img"
+              sx={{
+                height: { xs: 160, sm: 220, md: 220, lg: 280 },
+                width: { xs: 290, sm: 400, md: 400, lg: 500 },
+              }}
+              alt="bg"
+              src="/image/MCFullLogo.png"
+            />
             <div style={{ marginTop: "15px" }}>
               <Typography
-                sx={{ fontSize: "25px", color: "black" }}
+                sx={{ fontSize: { xs: "19px", md: "23px" }, color: "gray" }}
                 className={glacial.className}
               >
                 It's Okay Not To Be Okay.
               </Typography>
             </div>
           </div>
-          <div
-            style={{
-              marginTop: "50px",
-              alignItems: "center",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          ></div>
         </Container>
       </div>
 
       {/* Mental Ilness Check */}
-      <div>
+      {/* <div>
         <Box
           className={styles.quizDiv}
           sx={{
@@ -153,103 +144,100 @@ export default function Home() {
             </a>
           </div>
         </Box>
-      </div>
+      </div> */}
 
-      {/* Tulisan */}
+      {/* Mental Health Check */}
       <Container>
-        <div
-          style={{
-            marginTop: "50px",
-            width: "100%",
-            backgroundColor: "white",
-            height: "100%",
-            overflow: "auto",
+        <Box
+          sx={{
+            // bgcolor: "gray",
+            marginTop: "20px",
+            textAlign: {
+              xs: "justify",
+              sm: "center",
+              md: "center",
+              xl: "center",
+            },
+            display: {},
           }}
         >
-          <div
-            style={{
-              float: "left",
+          <Typography
+            className={cooperHewitt.className}
+            sx={{
+              fontSize: { xs: "19px", md: "22px" },
+              color: "#FFAACF",
             }}
           >
+            Lakukan Pemeriksaan Kesehatan Mental?
+          </Typography>
+
+          <Typography
+            className={montserrat.className}
+            sx={{ fontSize: { xs: "15px", md: "17px" }, color: "black" }}
+          >
+            Mental Health Check berfungsi sebagai tes penilaian diri yang
+            membantu Anda untuk mengetahui kondisi kesehatan mental pribadi dan
+            mempersiapkan untuk langkah selanjutnya.
+          </Typography>
+          <br />
+        </Box>
+      </Container>
+
+      {/* Fitur Lainnya */}
+      <Container sx={{marginTop:"20px"}}>
+        <Grid container columns={{ xs: 4, sm: 8, xl: 12 }} spacing={{xl:7}}>
+          <Grid item xl={6}>
             <Box
               sx={{
-                width: "35vw",
-                height: "100%",
                 // bgcolor: "gray",
-                textAlign: "left",
-                display: { xs: "none", md: "block" },
+                textAlign: "justify",
               }}
             >
               <Typography
                 className={cooperHewitt.className}
                 sx={{
-                  fontSize: "30px",
+                  fontSize: { xs: "19px", md: "22px" },
                   color: "#FFAACF",
-                  "&:hover": {
-                    color: "#EA8FEA",
-                  },
                 }}
               >
-                <Link href="/PanduanMentalHealthTest">
-                  Take a Mental Health Check
-                </Link>
+                Take a Mental Health Check
               </Typography>
 
               <Typography
-                className={glacial.className}
-                sx={{ fontSize: "20px", color: "black" }}
+                className={montserrat.className}
+                sx={{ fontSize: { xs: "15px", md: "17px" }, color: "black" }}
               >
-                Mental Health Check membantu anda untuk mengetahui kondisi
-                kesehatan mental pribadi dan mempersiapkan untuk langkah
-                selanjutnya
+                Pengecekan penyakit mental berfungsi sebagai tes penilaian diri
+                yang dapat mengidentifikasi tingkat keparahan penyakit mental
+                yang dialami secara spesifik. Tes akan membantu memberikan
+                solusi dan rekomendasi untuk meningkatkan kesehatan mental dan
+                juga membantu menentukan apakah harus mencari bantuan dari
+                psikolog untuk mengatasi masalah kesehatan mental.
               </Typography>
               <br />
             </Box>
-          </div>
-        </div>
+          </Grid>
 
-        <div
-          style={{
-            marginTop: "0px",
-            width: "100%",
-            backgroundColor: "white",
-            height: "100%",
-            overflow: "auto",
-          }}
-        >
-          <div
-            style={{
-              float: "right",
-            }}
-          >
+          <Grid item xl={6}>
             <Box
               sx={{
-                width: "35vw",
-                height: "100%",
-                // bgcolor: "gray",
-                textAlign: "right",
-                display: { xs: "none", md: "block" },
+                textAlign: "justify",
               }}
             >
               <Typography
                 className={cooperHewitt.className}
                 sx={{
-                  fontSize: "30px",
+                  fontSize: { xs: "19px", md: "22px" },
                   color: "#FFAACF",
-                  "&:hover": {
-                    color: "#EA8FEA",
-                  },
                 }}
               >
-                <Link href="/PanduanMentalHealthTest">
-                  Do your Daily Mental Health Check!
-                </Link>
+                Do your Daily Mental Health Check!
               </Typography>
 
               <Typography
-                className={glacial.className}
+                className={montserrat.className}
                 sx={{
-                  fontSize: "20px",
+                  fontSize: { xs: "15px", md: "17px" },
                   color: "black",
                   textAlign: "justify",
                 }}
@@ -261,28 +249,23 @@ export default function Home() {
                 Pertanyaan harian kesehatan mental ini dapat membantu
                 mempertahankan keadaan pikiran dan emosi anda.
               </Typography>
-              <br />
             </Box>
-          </div>
-        </div>
+          </Grid>
+        </Grid>
       </Container>
 
       {/* Footer */}
-      <div>
-        <Box
-          className={styles.quizDiv}
-          sx={{
-            p: "10px",
-            textAlign: "center",
-            justifyContent: "center",
-            display: { xs: "none", md: "block" },
-          }}
-        >
-          <Link style={{ fontSize: "25px", color: "white" }} href="/AboutUs">
-            About Us
-          </Link>
-        </Box>
-      </div>
+      <Box
+        className={styles.quizDiv}
+        sx={{
+          p: "10px",
+          textAlign: "center",
+          justifyContent: "center",
+          display: { xs: "none", xl: "block" },
+          marginTop:"53px"
+        }}
+      >
+      </Box>
     </motion.div>
   );
 }

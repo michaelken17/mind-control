@@ -160,7 +160,7 @@ export default function PanduanMentalHealthTest() {
                           lg: "17px",
                           md: "16px",
                           sm: "15px",
-                          xs: "13px",
+                          xs: "14px",
                         },
                       }}
                     >
@@ -185,7 +185,7 @@ export default function PanduanMentalHealthTest() {
                           lg: "17px",
                           md: "16px",
                           sm: "15px",
-                          xs: "13px",
+                          xs: "14px",
                         },
                       }}
                     >
@@ -211,7 +211,7 @@ export default function PanduanMentalHealthTest() {
                           lg: "17px",
                           md: "16px",
                           sm: "15px",
-                          xs: "13px",
+                          xs: "14px",
                         },
                       }}
                     >
@@ -235,7 +235,7 @@ export default function PanduanMentalHealthTest() {
                           lg: "17px",
                           md: "16px",
                           sm: "15px",
-                          xs: "13px",
+                          xs: "14px",
                         },
                       }}
                     >
