@@ -9,11 +9,11 @@ import Link from "next/link";
 const Layout = ({ children }) => {
   const router = useRouter();
   return (
-    <Box style={{ }} className={openSans.className}>
+    <Box sx={{bgcolor:"white"}} className={openSans.className}>
       { <Navbar />}
       <div
         style={{
-          paddingTop: router.pathname == "/Login" || router.pathname == "/Login/SignUpPage" ? 0 : 20,
+          paddingTop: router.pathname == "/Login" || router.pathname == "/Login/SignUpPage" || router.pathname == "/Login/LoginConsultant"|| router.pathname == "/Login/SignUpConsultant"? 0 : 20,
           backgroundColor: "white",
           color: "black",
         }}

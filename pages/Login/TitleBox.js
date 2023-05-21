@@ -17,7 +17,7 @@ const TitleBox = () => {
             lg: "flex",
             xl: "flex",
           },
-          height:"60vh",
+          height:"65vh",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
@@ -30,11 +30,11 @@ const TitleBox = () => {
           justifyContent="center"
           alignItems="flex-start"
         >
-          <h3 class={montserrat.className} style={{ color: "#2f4858", marginBottom:"10px" }}>
+          <h3 className={montserrat.className} style={{ color: "#2f4858", marginBottom:"10px" }}>
             Not until we are lost do we <br /> begin to understand ourselves.
           </h3>
           <a
-            class={montserratItalic.className}
+            className={montserratItalic.className}
             style={{ fontSize: "15px", color: "#2f4858" }}
           >
             - Henry David Thoreau

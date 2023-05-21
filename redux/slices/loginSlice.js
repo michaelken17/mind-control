@@ -7,6 +7,7 @@ const loginSlice = createSlice({
     username: null,
     isLoggedOut: null,
     email: null,
+    consultant:false,
   },
   reducers: {
     login: (state, action) => {
@@ -15,6 +16,7 @@ const loginSlice = createSlice({
         state.user = action.payload.Username;
         state.email = action.payload.Email;
         state.pass = action.payload.Password;
+        state.consultant = action.payload.Consultant;
     },
     logout: (state, action) => {
         state.authorized= false;

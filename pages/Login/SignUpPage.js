@@ -182,7 +182,7 @@ const SignUpPage = () => {
                   >
                     <InputBase
                       className={montserrat.className}
-                      placeholder="Enter your Full Name..."
+                      placeholder="Masukkan nama lengkap anda..."
                       fullWidth
                       sx={{
                         bgcolor: "white",
@@ -223,7 +223,7 @@ const SignUpPage = () => {
                   >
                     <InputBase
                       className={montserrat.className}
-                      placeholder="Enter your Email..."
+                      placeholder="Masukkan Email anda..."
                       fullWidth
                       sx={{
                         bgcolor: "white",
@@ -264,7 +264,7 @@ const SignUpPage = () => {
                   >
                     <InputBase
                       className={montserrat.className}
-                      placeholder="Enter your Password..."
+                      placeholder="Masukkan password anda..."
                       fullWidth
                       sx={{
                         bgcolor: "white",
