@@ -155,20 +155,20 @@ export default function Navbar() {
     setOpen(false);
   };
 
-  React.useEffect(() => {
-    setIsLoad(true);
-  }, []);
-
   const login = useSelector((state) => state.persistedReducer.login);
   const mentalIllnessData = useSelector(
     (x) => x.persistedReducer.app.mentalIllnessData
   );
 
+  React.useEffect(() => {
+    setIsLoad(true);
+    console.log(login);
+  }, []);
+
   return (
     <div>
       <AppBar position="fixed" open={open}>
         <Container maxWidth="" sx={{ backgroundColor: "white" }}>
-          {/* <CssBaseline /> */}
           <Toolbar>
             <Typography
               sx={{
@@ -234,7 +234,7 @@ export default function Navbar() {
             {/* Nav bar options*/}
 
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {pages.map((page) =>
+              {/* {pages.map((page) =>
                 page.title == "Mental Illness Test"  &&
                 login?.authorized !== false ? (
                   // MENTAL ILLNESS DROPDOWN MENU
@@ -310,37 +310,69 @@ export default function Navbar() {
                 ) : (
                   <Box></Box>
                 )
-              )}
+              )} */}
             </Box>
 
             {/* Mental Health Bar */}
-            {isLoaded && login?.authorized != false && (
-              <HtmlTooltip
-                title={
-                  <React.Fragment>
-                    <Typography className={montserrat.className}>
-                      Mental Health Points
-                    </Typography>
-                    <a>MHP: 50</a>
-                  </React.Fragment>
-                }
-              >
-                <Box
+            {isLoaded &&
+              login?.authorized != false &&
+              login?.consultant == false && (
+                <HtmlTooltip
                   sx={{
-                    display: { xs: "none", sm: "none", md: "none", lg: "flex" },
+                    [`& .${tooltipClasses.tooltip}`]: {
+                      maxWidth: 400,
+                    },
                   }}
+                  title={
+                    <Box>
+                      <Typography className={montserrat.className}>
+                        Mental Health Points: 0
+                      </Typography>
+
+                      <Typography
+                        className={montserrat.className}
+                        sx={{ fontSize: "13px" }}
+                      >
+                        <br />
+                        Setiap{" "}
+                        <b style={{ color: "black" }}>
+                          Daily Health Check
+                        </b>{" "}
+                        yang dilakukan secara <b>berturut</b> akan menambahkan
+                        poin.
+                        <br />
+                        <br />
+                        Saat poin mencapai 100, Anda akan mendapatkan sesi
+                        konsultasi <b style={{ color: "red" }}>GRATIS</b> <br />
+                        <br />
+                        Poin akan menjadi 0 lagi ketika sudah mengklaim
+                        konsultasi gratis atau <i>streak</i> Daily Health Check
+                        berakhir
+                      </Typography>
+                    </Box>
+                  }
                 >
-                  <LineProgressBar
-                    rounded={36}
-                    height={20}
-                    width={300}
-                    percent={40}
-                    transition={{ easing: "linear" }}
-                    progressColor="linear-gradient(to right, #FF6962, #FF7974, #FF8986, #FF9997, #FFA9A9)"
-                  />
-                </Box>
-              </HtmlTooltip>
-            )}
+                  <Box
+                    sx={{
+                      display: {
+                        xs: "none",
+                        sm: "none",
+                        md: "none",
+                        lg: "flex",
+                      },
+                    }}
+                  >
+                    <LineProgressBar
+                      rounded={36}
+                      height={20}
+                      width={300}
+                      percent={0}
+                      transition={{ easing: "linear" }}
+                      progressColor="linear-gradient(to right, #FF6962, #FF7974, #FF8986, #FF9997, #FFA9A9)"
+                    />
+                  </Box>
+                </HtmlTooltip>
+              )}
 
             {/* Profile Avatar */}
             {isLoaded && login?.authorized != false && (

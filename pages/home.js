@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Container,
   Grid,
   IconButton,
@@ -16,13 +17,38 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styles from "styles/Quiz.module.css";
-import { montserrat, glacial, cooperHewitt } from "../public/fonts";
+import {
+  montserrat,
+  glacial,
+  cooperHewitt,
+  montserratExtraBold,
+  montserratLight,
+} from "../public/fonts";
+import Swal from "sweetalert2";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const mentalIllnessData = useSelector(
     (x) => x.persistedReducer.app.mentalIllnessData
   );
+  const login = useSelector((state) => state.persistedReducer.login);
   const [isLoaded, setIsLoaded] = useState(false);
+  const router = useRouter();
+  const startHandler = (event) => {
+    event.preventDefault();
+
+    if (login?.authorized == false) {
+      Swal.fire({
+        icon: "warning",
+        title: "Mohon <b>Log In</b> terlebih dahulu!",
+        showDenyButton: false,
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    } else {
+      router.push("MentalHealthCheck/Start");
+    }
+  };
 
   useEffect(() => {
     setIsLoaded(true);
@@ -56,12 +82,15 @@ export default function Home() {
               alt="bg"
               src="/image/MCFullLogo.png"
             />
-            <div style={{ marginTop: "15px" }}>
+            <div style={{ marginTop: "1px" }}>
               <Typography
-                sx={{ fontSize: { xs: "19px", md: "23px" }, color: "gray" }}
+                sx={{
+                  fontSize: { xs: "19px", md: "20px", xl: "20px" },
+                  color: "gray",
+                }}
                 className={glacial.className}
               >
-                It's Okay Not To Be Okay.
+                it's okay not to be okay.
               </Typography>
             </div>
           </div>
@@ -162,13 +191,13 @@ export default function Home() {
           }}
         >
           <Typography
-            className={cooperHewitt.className}
+            className={montserratExtraBold.className}
             sx={{
               fontSize: { xs: "19px", md: "22px" },
               color: "#FFAACF",
             }}
           >
-            Lakukan Pemeriksaan Kesehatan Mental?
+            Lakukan Mental Health Check?
           </Typography>
 
           <Typography
@@ -183,9 +212,34 @@ export default function Home() {
         </Box>
       </Container>
 
+      {/* MHC button */}
+
+      <Button
+        className={styles.testbutton}
+        sx={{
+          borderRadius: "10px",
+          fontSize: "20px",
+          px: "50px",
+          py: "12px",
+          border: "0px ",
+          textTransform: "none",
+          color: "white",
+        }}
+        onClick={startHandler}
+      >
+        <Typography className={montserrat.className}>Mulai Tes</Typography>
+      </Button>
+
       {/* Fitur Lainnya */}
-      <Container sx={{marginTop:"20px"}}>
-        <Grid container columns={{ xs: 4, sm: 8, xl: 12 }} spacing={{xl:7}}>
+
+      <Container sx={{ marginTop: "30px" }}>
+        <Typography
+          className={montserratLight.className}
+          sx={{ textAlign: "left", color: "gray", marginBottom: "10px" }}
+        >
+          Fitur-fitur lainnya...
+        </Typography>
+        <Grid container columns={{ xs: 4, sm: 8, xl: 12 }} spacing={{ xl: 17 }}>
           <Grid item xl={6}>
             <Box
               sx={{
@@ -194,15 +248,23 @@ export default function Home() {
               }}
             >
               <Typography
-                className={cooperHewitt.className}
+                className={montserratExtraBold.className}
                 sx={{
                   fontSize: { xs: "19px", md: "22px" },
                   color: "#FFAACF",
                 }}
               >
-                Take a Mental Health Check
+                <i>Mental Illness Test</i>
               </Typography>
-
+              <Typography
+                className={montserrat.className}
+                sx={{
+                  fontSize: { xs: "19px", md: "18px" },
+                  color: "#EA8FEA",
+                }}
+              >
+                Tes Penilaian Diri Penyakit Kesehatan Mental
+              </Typography>
               <Typography
                 className={montserrat.className}
                 sx={{ fontSize: { xs: "15px", md: "17px" }, color: "black" }}
@@ -225,15 +287,23 @@ export default function Home() {
               }}
             >
               <Typography
-                className={cooperHewitt.className}
+                className={montserratExtraBold.className}
                 sx={{
                   fontSize: { xs: "19px", md: "22px" },
                   color: "#FFAACF",
                 }}
               >
-                Do your Daily Mental Health Check!
+                <i>Daily Health Check</i>
               </Typography>
-
+              <Typography
+                className={montserrat.className}
+                sx={{
+                  fontSize: { xs: "19px", md: "18px" },
+                  color: "#EA8FEA",
+                }}
+              >
+                Pemeriksaan Kesehatan Mental Harian
+              </Typography>
               <Typography
                 className={montserrat.className}
                 sx={{
@@ -262,10 +332,9 @@ export default function Home() {
           textAlign: "center",
           justifyContent: "center",
           display: { xs: "none", xl: "block" },
-          marginTop:"53px"
+          marginTop: "30px",
         }}
-      >
-      </Box>
+      ></Box>
     </motion.div>
   );
 }

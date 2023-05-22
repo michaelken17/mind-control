@@ -50,12 +50,13 @@ const SigninPage = () => {
           username: username,
           email: "emailtest@gmail.com",
           password: password,
+          consultant: false
         })
       );
 
       const Toast = Swal.mixin({
         toast: true,
-        position: "top-end",
+        position: "bottom-end",
         showConfirmButton: false,
         timer: 2000,
         timerProgressBar: false,
@@ -70,7 +71,7 @@ const SigninPage = () => {
         title: "Signed in successfully",
       });
 
-      router.push("/Home");
+       router.push("/Home");
     }
   };
 
@@ -103,7 +104,7 @@ const SigninPage = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          height:"60vh",
+          height: "65vh",
           // boxShadow: `0 0 5 px black`,
           borderRadius: {
             xs: "30px",
@@ -114,13 +115,13 @@ const SigninPage = () => {
           },
         }}
       >
-        <Box width="50%">
+        <Box width="70%">
           <Box display="flex" flexDirection="column" alignItems="center">
             {/* LOGO */}
             <Box
               sx={{
-                width: "50%",
-                height: "50%",
+                width: "40%",
+                height: "40%",
                 //  borderRadius: "12px",
                 display: "flex",
                 alignItems: "center",
@@ -181,7 +182,7 @@ const SigninPage = () => {
                 >
                   <InputBase
                     className={montserrat.className}
-                    placeholder="Enter your username..."
+                    placeholder="Tulis username anda..."
                     fullWidth
                     sx={{
                       bgcolor: "white",
@@ -221,7 +222,7 @@ const SigninPage = () => {
                 >
                   <InputBase
                     className={montserrat.className}
-                    placeholder="Enter your Password..."
+                    placeholder="Tulis password anda..."
                     fullWidth
                     sx={{
                       bgcolor: "white",
@@ -274,6 +275,19 @@ const SigninPage = () => {
             }}
           >
             Sign Up
+          </Typography>
+        </Link>
+
+        <Link href="Login/LoginConsultant">
+          <Typography
+            sx={{
+              mt: 1,
+              fontSize: 13,
+              color: "#FFAACF",
+            }}
+            className={montserrat.className}
+          >
+            Login sebagai Konsultan
           </Typography>
         </Link>
       </Box>

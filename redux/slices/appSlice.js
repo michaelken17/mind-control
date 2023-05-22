@@ -82,6 +82,7 @@ const MHCQuestions = [
     english: "Problems with sleep that affected your sleep quality over all",
   },
 ];
+
 // DEPRESSION
 const depressionQuestions = [
   { question: "Saya merasa tidak berharga.", english: "I felt worthless." },
@@ -205,7 +206,8 @@ const anxietySolutions = [
     image: "/image/Mental Illness Illustration/positive.jpg",
   },
   {
-    solution: "Berkonsultasi dengan tenaga profesional, seperti psikolog atau psikiater",
+    solution:
+      "Berkonsultasi dengan tenaga profesional, seperti psikolog atau psikiater",
     image: "/image/Mental Illness Illustration/psychologist.jpg",
   },
 ];
@@ -389,7 +391,8 @@ const OCDChoices = [
 ];
 const OCDSolutions = [
   {
-    solution: "Identifikasi pemicunya (dengan berkonsultasi ke psikiater atau psikolog)",
+    solution:
+      "Identifikasi pemicunya (dengan berkonsultasi ke psikiater atau psikolog)",
     image: "/image/Mental Illness Illustration/book.jpg",
   },
 
@@ -398,7 +401,8 @@ const OCDSolutions = [
     image: "/image/Mental Illness Illustration/meditate.jpg",
   },
   {
-    solution: "Latihlah kesadaran (mindfulness) dalam berbagai hal yang dilakukan untuk mengelola stres",
+    solution:
+      "Latihlah kesadaran (mindfulness) dalam berbagai hal yang dilakukan untuk mengelola stres",
     image: "/image/Mental Illness Illustration/activity.jpg",
   },
   {
@@ -422,15 +426,15 @@ const OCDSolutions = [
     image: "/image/Mental Illness Illustration/eat.jpg",
   },
   {
-    solution: "Beristirahatlah sejenak dalam menggunakan gadget. Lakukan kegiatan seperti membaca buku, menulis buku harian",
+    solution:
+      "Beristirahatlah sejenak dalam menggunakan gadget. Lakukan kegiatan seperti membaca buku, menulis buku harian",
     image: "/image/Mental Illness Illustration/diary.jpg",
   },
   {
     solution: "Melakukan teknik relaksasi agar dapat menenangkan pikiran",
     image: "/image/Mental Illness Illustration/meditate.jpg",
-  }
+  },
 ];
-
 
 // SLEEP DISORDER
 const SDQuestions = [
@@ -536,6 +540,7 @@ const SDChoices = [
 ];
 
 const MHCanswer = [];
+const MHCdata = [];
 const DepressionAns = [];
 const AnxietyAns = [];
 const OCDAns = [];
@@ -572,6 +577,36 @@ const appSlice = createSlice({
       { no: 7, jawaban: 0 },
       { no: 8, jawaban: 0 },
       { no: 9, jawaban: 0 },
+    ],
+    MHCdata: [
+      {
+        img: "/image/Mental Illness Illustration/4.png",
+        title: "Depression",
+        author: "Gangguan Depresi",
+        link: "/MentalIllness/Depression/Panduan",
+        severity: 0,
+      },
+      {
+        img: "/image/Mental Illness Illustration/1.png",
+        title: "Anxiety",
+        author: "Gangguan Kecemasan",
+        link: "/MentalIllness/Anxiety/Panduan",
+        severity: 0,
+      },
+      {
+        img: "/image/Mental Illness Illustration/3.png",
+        title: "OCD",
+        author: "Obsessive-Compulsive Disorder",
+        link: "/MentalIllness/OCD/Panduan",
+        severity: 0,
+      },
+      {
+        img: "/image/Mental Illness Illustration/5.png",
+        title: "Sleep Disorder",
+        author: "Gangguan Tidur",
+        link: "/MentalIllness/SleepDisorder/Panduan",
+        severity: 0,
+      },
     ],
     DepressionAns: [
       { no: 1, jawaban: 0 },
@@ -625,6 +660,9 @@ const appSlice = createSlice({
     },
     submitAnxiety: (state, action) => {
       state.AnxietyAns = action.payload;
+    },
+    MHCData: (state, action) => {
+      state.MHCdata = action.payload;
     },
   },
 });
