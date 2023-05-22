@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Button, Container, Grid } from "@mui/material";
+import { Button, Container, Grid } from "@mui/material";
 import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
@@ -35,16 +36,20 @@ export default function MentalIllnessTest() {
   );
   const MHCData = useSelector((x) => x.persistedReducer.app.MHCdata);
 
+  const MHCData = useSelector((x) => x.persistedReducer.app.MHCdata);
+
   const [isLoaded, setIsLoaded] = React.useState(false);
 
   React.useEffect(() => {
     setIsLoaded(true);
+    console.log(MHCData);
     console.log(MHCData);
   }, []);
 
   return (
     <ThemeProvider theme={theme}>
       <motion.div
+        initial={{ opacity: 0 }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{
@@ -53,6 +58,7 @@ export default function MentalIllnessTest() {
           ease: [0, 0.71, 0.2, 1.01],
         }}
         exit={{ opacity: 0 }}
+        style={{ marginTop: 20, marginBottom: "20px" }}
         style={{ marginTop: 20, marginBottom: "20px" }}
       >
         <Container component="main" maxWidth="md" sx={{ textAlign: "center" }}>
@@ -64,6 +70,7 @@ export default function MentalIllnessTest() {
           ></img>
           <div style={{ marginTop: "15px" }}>
             <Typography
+              sx={{ fontSize: { xs: "15px", md: "17px", xl:"20px", lg:"18px" }, color: "black" }}
               sx={{ fontSize: { xs: "15px", md: "17px", xl:"20px", lg:"18px" }, color: "black" }}
               className={glacial.className}
             >

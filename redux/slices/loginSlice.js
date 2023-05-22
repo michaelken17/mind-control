@@ -8,6 +8,7 @@ const loginSlice = createSlice({
     isLoggedOut: null,
     email: null,
     consultant:false,
+    consultant:false,
   },
   reducers: {
     login: (state, action) => {

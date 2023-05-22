@@ -235,6 +235,7 @@ export default function Navbar() {
 
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {/* {pages.map((page) =>
+              {/* {pages.map((page) =>
                 page.title == "Mental Illness Test"  &&
                 login?.authorized !== false ? (
                   // MENTAL ILLNESS DROPDOWN MENU
