@@ -40,9 +40,8 @@ export default function SleepDisorder() {
       denyButtonColor: "#EA8FEA",
       denyButtonText: `<h2 color:"black">Tidak</h2>`,
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        router.push("Test");
+        router.push("SleepDisorderTest");
       }
     });
   };

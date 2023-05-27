@@ -34,6 +34,8 @@ export default function Home() {
   const login = useSelector((state) => state.persistedReducer.login);
   const [isLoaded, setIsLoaded] = useState(false);
   const router = useRouter();
+  const axios = require("axios");
+
   const startHandler = (event) => {
     event.preventDefault();
 
@@ -96,84 +98,6 @@ export default function Home() {
           </div>
         </Container>
       </div>
-
-      {/* Mental Ilness Check */}
-      {/* <div>
-        <Box
-          className={styles.quizDiv}
-          sx={{
-            paddingTop: "20px",
-            paddingBottom: "10px",
-            px: "50px",
-            textAlign: "center",
-            justifyContent: "center",
-            display: { xs: "none", md: "block" },
-          }}
-        >
-          <a style={{ fontSize: "25px", color: "white" }}>
-            Take a Mental Illness Check
-          </a>
-          <motion.div style={{ display: "flex", justifyContent: "center" }}>
-            <ImageList
-              sx={{ width: "80%", height: "100%", padding: "20px" }}
-              cols={4}
-            >
-              {isLoaded &&
-                mentalIllnessData.map((item) => (
-                  <Link href={item.link} key={item.img}>
-                    <motion.div
-                      whileHover={{ scale: 1.03 }}
-                      style={{
-                        borderRadius: "20px",
-                        margin: 5,
-                      }}
-                      transition={{
-                        duration: 5,
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 10,
-                        bounce: 1,
-                      }}
-                    >
-                      <ImageListItem sx={{}}>
-                        <motion.img
-                          style={{
-                            borderRadius: "20px",
-                            width: "100%",
-                            height: "100%",
-                          }}
-                          src={item.img}
-                          alt={item.title}
-                          loading="eager"
-                        />
-
-                        <ImageListItemBar
-                          sx={{
-                            borderBottomLeftRadius: "20px",
-                            borderBottomRightRadius: "20px",
-                          }}
-                          className={glacial.className}
-                          title={<h2>{item.title}</h2>}
-                          subtitle={
-                            <a style={{ fontSize: 14 }}> {item.author}</a>
-                          }
-                        />
-                      </ImageListItem>
-                    </motion.div>
-                  </Link>
-                ))}
-            </ImageList>
-          </motion.div>
-          <div>
-            <a
-              href="https://www.freepik.com/author/stories"
-              style={{ fontSize: "11px", color: "white" }}
-            >
-              Images by storyset on Freepik
-            </a>
-          </div>
-        </Box>
-      </div> */}
 
       {/* Mental Health Check */}
       <Container>

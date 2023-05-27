@@ -304,7 +304,7 @@ export default function MHCResult() {
   }, [isBad]);
 
   useEffect(() => {
-    console.log(MentalIllnessList);
+    // console.log(MentalIllnessList);
   }, [MentalIllnessList]);
 
   const mentalIllnessBtn = (event) => {

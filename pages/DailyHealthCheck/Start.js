@@ -50,7 +50,7 @@ export default function DailyHealthCheck() {
           <div style={{ marginTop: "15px" }}>
             <Typography
               sx={{
-                fontSize: { xs: "16px", md: "18px", lg: "18px" },
+                fontSize: { xs: "16px", md: "18px", lg: "17px" },
                 color: "black",
                 textAlign: "center",
               }}
@@ -141,7 +141,7 @@ export default function DailyHealthCheck() {
                   backgroundColor: "#FF4E9B",
                 }}
               >
-                <Link href="/">Lakukan Daily Health Check Hari ini!</Link>
+                <Link href="Test">Lakukan Daily Health Check Hari ini!</Link>
               </button>
             </Badge>
           </motion.div>

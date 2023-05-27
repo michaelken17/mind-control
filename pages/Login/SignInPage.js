@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Montserrat } from "next/font/google";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import localFont from "next/font/local";
 import { motion } from "framer-motion";
 import { VisibilityOff } from "@mui/icons-material";
@@ -23,12 +23,24 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import Link from "next/link";
 import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
+import appSlice, { appActions, MHCData } from "@/redux/slices/appSlice";
 
 const SigninPage = () => {
   const usernameRef = useRef();
   const passwordRef = useRef();
   const dispatch = useDispatch();
   const router = useRouter();
+  const axios = require("axios");
+  // const [isDoneMHC, setisDoneMHC] = useState(false);
+  // const [isDoneDpr, setisDoneDpr] = useState(false);
+  // const [isDoneAnx, setisDoneAnx] = useState(false);
+  // const [isDoneOcd, setisDoneOcd] = useState(false);
+  // const [isDoneSd, setisDoneSd] = useState(false);
+  // const [isDoneDHC, setisDoneDHC] = useState(false);
+
+  // useEffect(() => {
+  //   console.log(isDoneMHC);
+  // }, [isDoneMHC]);
 
   const loginHandler = (event) => {
     event.preventDefault();
@@ -40,38 +52,155 @@ const SigninPage = () => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Please enter your username and password!",
+        text: "Mohon mengisi semua data!",
         timer: 2000,
         showConfirmButton: false,
       });
     } else {
-      dispatch(
-        loginActions.login({
-          username: username,
-          email: "emailtest@gmail.com",
-          password: password,
-          consultant: false
-        })
-      );
+      axios
+        .get("https://localhost:7184/api/Users/GetData?Username=" + username)
+        .then((resp) => {
+          console.log(resp.data[0]);
 
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "bottom-end",
-        showConfirmButton: false,
-        timer: 2000,
-        timerProgressBar: false,
-        // didOpen: (toast) => {
-        //   toast.addEventListener("mouseenter", Swal.stopTimer);
-        //   toast.addEventListener("mouseleave", Swal.resumeTimer);
-        // },
-      });
+          if (resp.data[0] === undefined) {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "Username tidak terdaftar!",
+              timer: 2000,
+              showConfirmButton: false,
+            });
+          } else {
+            axios
+              .get(
+                "https://localhost:7184/api/Users/CheckPassword?username=" +
+                  username +
+                  "&password=" +
+                  password
+              )
+              .then((respCheck) => {
+                console.log(respCheck);
+                if (respCheck.data == "False") {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Password tidak sesuai!",
+                    timer: 2000,
+                    showConfirmButton: false,
+                  });
+                } else {
+                  // Check if user has done MHC
+                  axios
+                    .get(
+                      "https://localhost:7184/api/MHCheck/CheckUserMhCheckHeaderExit?userId=" +
+                        resp.data[0].userId
+                    )
+                    .then((respcheckMHC) => {
+                      console.log(respcheckMHC.data);
+                      // respcheckMHC.data == "False" ? setisDoneMHC(false) : setisDoneMHC(true);
 
-      Toast.fire({
-        icon: "success",
-        title: "Signed in successfully",
-      });
+                      if (respcheckMHC.data == "True") {
+                        axios
+                          .get(
+                            "https://localhost:7184/api/MHCheck/GetSeverity?userId=" +
+                              resp.data[0].userId
+                          )
+                          .then((respSeverity) => {
+                            console.log(respSeverity.data);
+                            const MentalIllnessList = [
+                              {
+                                img: "/image/Mental Illness Illustration/4.png",
+                                title: "Depression",
+                                author: "Gangguan Depresi",
+                                link: "/MentalIllness/Depression/Panduan",
+                                severity: respSeverity.data.anxSeverity,
+                              },
+                              {
+                                img: "/image/Mental Illness Illustration/1.png",
+                                title: "Anxiety",
+                                author: "Gangguan Kecemasan",
+                                link: "/MentalIllness/Anxiety/Panduan",
+                                severity: respSeverity.data.dprSeverity,
+                              },
+                              {
+                                img: "/image/Mental Illness Illustration/3.png",
+                                title: "OCD",
+                                author: "Obsessive-Compulsive Disorder",
+                                link: "/MentalIllness/OCD/Panduan",
+                                severity: respSeverity.data.ocdSeverity,
+                              },
+                              {
+                                img: "/image/Mental Illness Illustration/5.png",
+                                title: "Sleep Disorder",
+                                author: "Gangguan Tidur",
+                                link: "/MentalIllness/SleepDisorder/Panduan",
+                                severity: respSeverity.data.sdSeverity,
+                              },
+                            ];
+                            dispatch(appActions.MHCData(MentalIllnessList));
+                          });
+                      }
 
-       router.push("/Home");
+                      dispatch(
+                        loginActions.login({
+                          username: username,
+                          email: resp.data[0].email,
+                          fullname: resp.data[0].fullName,
+                          MHpoints: resp.data[0].healthPoint,
+                          password: password,
+                          consultant: false,
+                          userid: resp.data[0].userId,
+                          isDoneMHC: respcheckMHC.data,
+                          // isDoneDpr: isDoneDpr,
+                          // isDoneAnx: isDoneAnx,
+                          // isDoneOcd: isDoneOcd,
+                          // isDoneSd: isDoneSd,
+                          // isDoneDHC: isDoneDHC,
+                        })
+                      );
+
+                      const Toast = Swal.mixin({
+                        toast: true,
+                        position: "bottom-end",
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: false,
+                        // didOpen: (toast) => {
+                        //   toast.addEventListener("mouseenter", Swal.stopTimer);
+                        //   toast.addEventListener("mouseleave", Swal.resumeTimer);
+                        // },
+                      });
+
+                      Toast.fire({
+                        icon: "success",
+                        title: "Sign In berhasil!",
+                      });
+
+                      router.push("/Home");
+                    });
+
+                  // Check if user has done MIT's
+                  // dispatch(
+                  //   loginActions.login({
+                  //     username: username,
+                  //     email: resp.data[0].email,
+                  //     fullname: resp.data[0].fullName,
+                  //     MHpoints: resp.data[0].healthPoint,
+                  //     password: password,
+                  //     consultant: false,
+                  //     userid: resp.data[0].userId,
+                  //     // isDoneMHC: isDoneMHC,
+                  //     // isDoneDpr: isDoneDpr,
+                  //     // isDoneAnx: isDoneAnx,
+                  //     // isDoneOcd: isDoneOcd,
+                  //     // isDoneSd: isDoneSd,
+                  //     // isDoneDHC: isDoneDHC,
+                  //   })
+                  // );
+                }
+              });
+          }
+        });
     }
   };
 
@@ -82,7 +211,6 @@ const SigninPage = () => {
 
       if (event.key === "Enter") {
         event.preventDefault();
-
         // 👇️ call submit function here
         loginHandler(event);
       }

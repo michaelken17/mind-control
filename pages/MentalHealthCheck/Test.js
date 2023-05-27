@@ -25,6 +25,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
 import appSlice, { appActions, submitMHC } from "@/redux/slices/appSlice";
+import ArrowBack from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForward from "@mui/icons-material/ArrowForwardIos";
+import axios from "axios";
+import { loginActions } from "@/redux/slices/loginSlice";
 
 const theme = createTheme({
   typography: {
@@ -47,6 +51,7 @@ export default function MHCTest() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentQuestion, setcurrentQuestion] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(1);
+  const login = useSelector((state) => state.persistedReducer.login);
   const dispatch = useDispatch();
 
   const [MHCdata, setMHCdata] = useState([
@@ -58,7 +63,6 @@ export default function MHCTest() {
     { no: 6, jawaban: 0 },
     { no: 7, jawaban: 0 },
     { no: 8, jawaban: 0 },
-    { no: 9, jawaban: 0 },
   ]);
 
   const toggleHandler = (value) => () => {
@@ -80,16 +84,67 @@ export default function MHCTest() {
     } else {
       dispatch(appActions.submitMHC({}));
       dispatch(appActions.submitMHC(MHCdata));
+      const depressionSeverity = Math.max(
+        MHCdata[0].jawaban,
+        MHCdata[1].jawaban
+      );
+      const anxietySeverity = Math.max(
+        MHCdata[2].jawaban,
+        MHCdata[3].jawaban,
+        MHCdata[4].jawaban
+      );
+      const OCDSeverity = Math.max(MHCdata[5].jawaban, MHCdata[6].jawaban);
+      const sleepDisorderSeverity = MHCdata[7].jawaban;
+
+
+
+      // Insert Header
+      axios
+        .post(
+          "https://localhost:7184/api/MHCheck/InsertMHCheckHeader?username=" +
+            login.username
+        )
+        .then((responseHeader) => {
+          // Insert MD
+          axios
+            .post("https://localhost:7184/api/MHCheck/InsertMHCheckMD", {
+              headerID: responseHeader.data.headerID,
+              dprSeverity: depressionSeverity,
+              anxSeverity: anxietySeverity,
+              ocdSeverity: OCDSeverity,
+              sdSeverity: sleepDisorderSeverity,
+            })
+            .then((responseMD) => {
+              console.log(responseMD.data);
+              // Insert Detail
+              axios.post(
+                "https://localhost:7184/api/MHCheck/InsertMHCheckDetail?headerID=" +
+                  responseMD.data,
+                {
+                  MHCdata: MHCdata,
+                }
+              );
+            });
+        });
+
       router.push("Result");
     }
   };
 
+  const prevHandler = () => {
+    const get = MHCdata[currentQuestion - 1].jawaban;
+    console.log(get);
+    setcurrentQuestion(currentQuestion - 1);
+    setisAnswered(false);
+    setSelectedIndex(get);
+  };
+
   useEffect(() => {
-    // console.log(selectedIndex);
+    // console.log(selectedIndex.score);
   }, [selectedIndex]);
 
   useEffect(() => {
-    console.log(MHCdata);
+    // console.log(MHCdata);
   }, [MHCdata]);
 
   useEffect(() => {
@@ -139,8 +194,8 @@ export default function MHCTest() {
                 }}
                 className={montserrat.className}
               >
-                Selama 2 Minggu terakhir, seberapa sering Anda terganggu
-                oleh masalah berikut?
+                Selama 2 Minggu terakhir, seberapa sering Anda terganggu oleh
+                masalah berikut?
                 {isLoaded && (
                   <Box sx={{ position: "relative", float: "right" }}>
                     <CircularProgress
@@ -258,36 +313,42 @@ export default function MHCTest() {
                   ))}
               </List>
             </div>
+            {currentQuestion > 0 && (
+              <Button
+                sx={{
+                  "&:hover": {
+                    backgroundColor: "#FFAACF",
+                    color: "white",
+                  },
+                }}
+                onClick={() => prevHandler()}
+              >
+                <ArrowBack sx={{ color: "black" }} />
+              </Button>
+            )}
 
             {isAnswered && (
-              <motion.button
-                animate={{}}
-                whileHover={{ scale: 1.0 }}
-                whileTap={{ scale: 0.9 }}
-                style={{
-                  borderRadius: 5,
-                  padding: 10,
-                  paddingLeft: 30,
-                  paddingRight: 30,
-                  fontSize: 20,
-                  border: "0px ",
-                  backgroundColor: "#FFAACF",
-                }}
-                transition={{
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 10,
-                  bounce: 5,
-                  ease: "easeInOut",
+              <Button
+                sx={{
+                  textTransform: "none",
+                  "&:hover": {
+                    backgroundColor: "#FFAACF",
+                    color: "white",
+                  },
                 }}
                 onClick={() => nextHandler()}
               >
                 {currentQuestion + 1 == MHCQuestions.length ? (
-                  <Typography>End Test</Typography>
+                  <Typography
+                    className={montserrat.className}
+                    sx={{ color: "black" }}
+                  >
+                    End Test
+                  </Typography>
                 ) : (
-                  <Typography>Next</Typography>
+                  <ArrowForward sx={{ color: "black" }} />
                 )}
-              </motion.button>
+              </Button>
             )}
           </div>
         </motion.div>

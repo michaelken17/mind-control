@@ -38,6 +38,7 @@ import { Montserrat, Open_Sans } from "next/font/google";
 import { useRouter } from "next/router";
 import { loginActions } from "@/redux/slices/loginSlice";
 import Swal from "sweetalert2";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 // const montserratBold = Montserrat({ subsets: ["latin"], weight: "500"});
 // const montserrat = Montserrat({ subsets: ["latin"], weight: "400", });
 
@@ -106,15 +107,16 @@ const HtmlTooltip = styled(({ className, ...props }) => (
 
 export default function Navbar() {
   const [isLoaded, setIsLoad] = useState(false);
-  const [MHP, setMHP] = useState(40);
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
-  const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openAvatar = Boolean(anchorEl);
   const dispatch = useDispatch();
   const router = useRouter();
   const [showTooltip, setShowTooltip] = useState(false);
+  const [isDoneMHC, setisDoneMHC] = useState(false);
+  const [isDoneMIT, setisDoneMIT] = useState(false);
+  const axios = require("axios");
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -123,7 +125,6 @@ export default function Navbar() {
     setAnchorEl(null);
     setOpen;
   };
-
   const handleLogout = () => {
     dispatch(loginActions.logout());
 
@@ -155,6 +156,7 @@ export default function Navbar() {
     setOpen(false);
   };
 
+  const MHCData = useSelector((x) => x.persistedReducer.app.MHCdata);
   const login = useSelector((state) => state.persistedReducer.login);
   const mentalIllnessData = useSelector(
     (x) => x.persistedReducer.app.mentalIllnessData
@@ -163,6 +165,17 @@ export default function Navbar() {
   React.useEffect(() => {
     setIsLoad(true);
     console.log(login);
+    console.log(MHCData);
+
+    if (login.username == "") {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Mohon mengisi semua data!",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    }
   }, []);
 
   return (
@@ -232,36 +245,64 @@ export default function Navbar() {
             </Typography>
 
             {/* Nav bar options*/}
-
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {/* {pages.map((page) =>
-              {/* {pages.map((page) =>
-                page.title == "Mental Illness Test"  &&
-                login?.authorized !== false ? (
-                  // MENTAL ILLNESS DROPDOWN MENU
-                  <Box key={page.title}>
-                    <HtmlTooltip
-                      interactive="true"
-                      open={showTooltip}
-                      onOpen={() => setShowTooltip(true)}
-                      onClose={() => setShowTooltip(false)}
-                      title={
-                        <Typography>
-                          {mentalIllnessData.map((item) => {
-                            return (
-                              <MenuItem
-                                key={item.title}
-                                className={montserrat.className}
-                                sx={{ padding: "10px", fontSize: "15px" }}
-                              >
-                                <Link href={item.link}>{item.title}</Link>
-                              </MenuItem>
-                            );
-                          })}
-                        </Typography>
-                      }
-                    >
-                      <Link href={page.path}>
+              {isLoaded &&
+                pages.map((page) =>
+                  page.title == "Mental Illness Test" &&
+                  login?.authorized !== false &&
+                  login.isDoneMHC == "True" ? (
+                    // MENTAL ILLNESS DROPDOWN MENU
+                    <Box key={page.title}>
+                      <HtmlTooltip
+                        interactive="true"
+                        open={showTooltip}
+                        onOpen={() => setShowTooltip(true)}
+                        onClose={() => setShowTooltip(false)}
+                        title={
+                          <Typography>
+                            {MHCData.map((item, index) => {
+                              if (item.severity >= 2)
+                                return (
+                                  <MenuItem
+                                    key={item.title}
+                                    className={montserrat.className}
+                                    sx={{ padding: "10px", fontSize: "15px" }}
+                                  >
+                                    <Link href={item.link}>{item.title}</Link>
+                                  </MenuItem>
+                                );
+                            })}
+                          </Typography>
+                        }
+                      >
+                        <Link href={page.path}>
+                          <Button
+                            sx={{
+                              mx: 2,
+                              py: 4,
+                              color: "#42493A",
+                              display: "block",
+                              borderBottom: "4px solid white",
+                              "&:hover": {
+                                color: "gray",
+                                backgroundColor: "white",
+                                borderBottom: "4px solid #FFAACF",
+                              },
+                              fontSize: 15,
+                              textTransform: "none",
+                            }}
+                            className={montserratBold.className}
+                          >
+                            {page.title}
+                          </Button>
+                        </Link>
+                      </HtmlTooltip>
+                    </Box>
+                  ) : page.title == "Mental Health Check" &&
+                    login?.authorized == true &&
+                    login.isDoneMHC == "True" ? (
+                    <Box key={page.title}>
+                      <Link href={page.path} legacyBehavior passHref>
                         <Button
                           sx={{
                             mx: 2,
@@ -282,41 +323,41 @@ export default function Navbar() {
                           {page.title}
                         </Button>
                       </Link>
-                    </HtmlTooltip>
-                  </Box>
-                ) : login?.authorized !== false ? (
-                  <Box key={page.title}>
-                    <Link href={page.path} legacyBehavior passHref>
-                      <Button
-                        sx={{
-                          mx: 2,
-                          py: 4,
-                          color: "#42493A",
-                          display: "block",
-                          borderBottom: "4px solid white",
-                          "&:hover": {
-                            color: "gray",
-                            backgroundColor: "white",
-                            borderBottom: "4px solid #FFAACF",
-                          },
-                          fontSize: 15,
-                          textTransform: "none",
-                        }}
-                        className={montserratBold.className}
-                      >
-                        {page.title}
-                      </Button>
-                    </Link>
-                  </Box>
-                ) : (
-                  <Box></Box>
-                )
-              )} */}
+                    </Box>
+                  ) : page.title == "Daily Health Chec" &&
+                    login?.authorized !== false ? (
+                    <Box key={page.title}>
+                      <Link href={page.path} legacyBehavior passHref>
+                        <Button
+                          sx={{
+                            mx: 2,
+                            py: 4,
+                            color: "#42493A",
+                            display: "block",
+                            borderBottom: "4px solid white",
+                            "&:hover": {
+                              color: "gray",
+                              backgroundColor: "white",
+                              borderBottom: "4px solid #FFAACF",
+                            },
+                            fontSize: 15,
+                            textTransform: "none",
+                          }}
+                          className={montserratBold.className}
+                        >
+                          {page.title}
+                        </Button>
+                      </Link>
+                    </Box>
+                  ) : (
+                    <Box key={page.title}></Box>
+                  )
+                )}
             </Box>
 
             {/* Mental Health Bar */}
             {isLoaded &&
-              login?.authorized != false &&
+              login?.authorized == true &&
               login?.consultant == false && (
                 <HtmlTooltip
                   sx={{
@@ -327,7 +368,7 @@ export default function Navbar() {
                   title={
                     <Box>
                       <Typography className={montserrat.className}>
-                        Mental Health Points: 0
+                        Mental Health Points: {login?.MHpoints}
                       </Typography>
 
                       <Typography
@@ -340,7 +381,7 @@ export default function Navbar() {
                           Daily Health Check
                         </b>{" "}
                         yang dilakukan secara <b>berturut</b> akan menambahkan
-                        poin.
+                        10 poin.
                         <br />
                         <br />
                         Saat poin mencapai 100, Anda akan mendapatkan sesi
@@ -363,20 +404,35 @@ export default function Navbar() {
                       },
                     }}
                   >
-                    <LineProgressBar
-                      rounded={36}
-                      height={20}
-                      width={300}
-                      percent={0}
-                      transition={{ easing: "linear" }}
-                      progressColor="linear-gradient(to right, #FF6962, #FF7974, #FF8986, #FF9997, #FFA9A9)"
+                    <FavoriteIcon
+                      sx={{
+                        color: "red",
+                        marginRight: "10px",
+                        marginTop: "17px",
+                      }}
                     />
+                    <Box sx={{ marginTop: "0px" }}>
+                      <Typography
+                        sx={{ color: "black", fontSize: "13px" }}
+                        className={montserrat.className}
+                      >
+                        Mental Health Bar
+                      </Typography>
+                      <LineProgressBar
+                        rounded={36}
+                        height={20}
+                        width={300}
+                        percent={login?.MHpoints}
+                        transition={{ easing: "linear" }}
+                        progressColor="linear-gradient(to right, #FF6962, #FF7974, #FF8986, #FF9997, #FFA9A9)"
+                      />
+                    </Box>
                   </Box>
                 </HtmlTooltip>
               )}
 
             {/* Profile Avatar */}
-            {isLoaded && login?.authorized != false && (
+            {isLoaded && login?.authorized == true && (
               <Box sx={{ ml: "30px" }}>
                 <IconButton
                   id="basic-button"
@@ -400,16 +456,16 @@ export default function Navbar() {
                       fontWeight: "bold",
                     }}
                   >
-                    Michael Ken
+                    {login.fullname}
                   </Typography>
-                  <MenuItem onClick={handleMyAccount}>
+                  {/* <MenuItem onClick={handleMyAccount}>
                     <Typography
                       className={montserrat.className}
                       sx={{ textAlign: "center" }}
                     >
                       My Account
                     </Typography>
-                  </MenuItem>
+                  </MenuItem> */}
                   <MenuItem onClick={handleLogout}>
                     <Typography
                       className={montserrat.className}
@@ -470,36 +526,80 @@ export default function Navbar() {
         </DrawerHeader>
         <Divider />
 
-        <Box
-          sx={{
-            marginTop: "10px",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <LineProgressBar
-            rounded={36}
-            height={20}
-            width={210}
-            percent={40}
-            transition={{ easing: "linear" }}
-            progressColor="linear-gradient(to right, #F38181 , #FCE38A,#D6F7AD, #95E1D3 )"
-          />
-        </Box>
-        <Typography
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            fontSize: "13px",
-            paddingY: "5px",
-          }}
-          className={montserrat.className}
-        >
-          Mental Health Point
-        </Typography>
+        {isLoaded &&
+          login?.authorized != false &&
+          login?.consultant == false && (
+            <Box
+              sx={{
+                py: "10px",
+                alignContent: "center",
+                margin: "0 auto",
+                textAlign: "center",
+                display: {
+                  lg: "flex",
+                },
+              }}
+            >
+              <Typography
+                className={montserrat.className}
+                sx={{ fontSize: "15px" }}
+              >
+                Mental Health Points: {login?.MHpoints}
+              </Typography>
+              <HtmlTooltip
+                sx={{
+                  [`& .${tooltipClasses.tooltip}`]: {
+                    maxWidth: 200,
+                  },
+                }}
+                title={
+                  <Box>
+                    <Typography className={montserrat.className}>
+                      Mental Health Points: {login?.MHpoints}
+                    </Typography>
+
+                    <Typography
+                      className={montserrat.className}
+                      sx={{ fontSize: "13px" }}
+                    >
+                      <br />
+                      Setiap{" "}
+                      <b style={{ color: "black" }}>Daily Health Check</b> yang
+                      dilakukan secara <b>berturut</b> akan menambahkan poin.
+                      <br />
+                      <br />
+                      Saat poin mencapai 100, Anda akan mendapatkan sesi
+                      konsultasi <b style={{ color: "red" }}>GRATIS</b> <br />
+                      <br />
+                      Poin akan menjadi 0 lagi ketika sudah mengklaim konsultasi
+                      gratis atau <i>streak</i> Daily Health Check berakhir
+                    </Typography>
+                  </Box>
+                }
+              >
+                <Box
+                  sx={{
+                    display: {
+                      lg: "flex",
+                    },
+                  }}
+                >
+                  <LineProgressBar
+                    rounded={36}
+                    height={20}
+                    width={220}
+                    percent={login?.MHpoints}
+                    transition={{ easing: "linear" }}
+                    progressColor="linear-gradient(to right, #FF6962, #FF7974, #FF8986, #FF9997, #FFA9A9)"
+                  />
+                </Box>
+              </HtmlTooltip>
+            </Box>
+          )}
+
         <Divider />
 
-        <List>
+        {/* <List>
           {pages.map((text) => (
             <ListItem key={text.title} disablePadding>
               <ListItemButton sx={{ padding: "12px" }}>
@@ -511,7 +611,7 @@ export default function Navbar() {
               </ListItemButton>
             </ListItem>
           ))}
-        </List>
+        </List> */}
       </Drawer>
       <Main open={open}>
         <DrawerHeader />

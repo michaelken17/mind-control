@@ -5,27 +5,34 @@ const loginSlice = createSlice({
   initialState: {
     authorized: false,
     username: null,
+    fullname: null,
     isLoggedOut: null,
     email: null,
-    consultant:false,
-    consultant:false,
+    userid: 0,
+    consultant: false,
+    MHpoints : 0,
+    isDoneMHC: "false"
   },
   reducers: {
     login: (state, action) => {
-        state.authorized = true;
-        state.isLoggedOut = null;
-        state.user = action.payload.username;
-        state.email = action.payload.email;
-        state.pass = action.payload.password;
-        state.consultant = action.payload.consultant;
+      state.authorized = true;
+      state.isLoggedOut = null;
+      state.username = action.payload.username;
+      state.fullname = action.payload.fullname;
+      state.email = action.payload.email;
+      state.pass = action.payload.password;
+      state.MHpoints = action.payload.MHpoints;
+      state.consultant = action.payload.consultant;
+      state.userid = action.payload.userid;
+      state.isDoneMHC = action.payload.isDoneMHC;
     },
     logout: (state, action) => {
-        state.authorized= false;
-        state.user= null;
-        state.isLoggedOut= true;
+      state.authorized = false;
+      state.username = null;
+      state.isLoggedOut = true;
     },
   },
 });
 
-export const loginActions  = loginSlice.actions;
+export const loginActions = loginSlice.actions;
 export default loginSlice.reducer;

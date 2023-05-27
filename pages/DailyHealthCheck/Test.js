@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   ButtonGroup,
+  Checkbox,
   CircularProgress,
   Container,
   FormControlLabel,
@@ -11,8 +12,10 @@ import {
   List,
   ListItem,
   ListItemButton,
+  ListItemIcon,
   ListItemText,
   Radio,
+  TextField,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
@@ -29,7 +32,14 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
+import {
+  montserrat,
+  glacial,
+  cooperHewitt,
+  montserratExtraBold,
+  montserratBold,
+  montserratLight,
+} from "../../public/fonts";
 import { depressionSeverity } from "../ShortFormConversionTable";
 import { rekomendasiDepression } from "../RekomendasiKegiatan";
 import CircleIcon from "@mui/icons-material/Circle";
@@ -42,7 +52,11 @@ import {
   faFaceSmile,
   faFaceFrown,
 } from "@fortawesome/free-solid-svg-icons";
-
+import * as React from "react";
+import Divider from "@mui/material/Divider";
+import Paper from "@mui/material/Paper";
+import { styled } from "@mui/material/styles";
+// import { bannerCheckboxStylesHook } from '@mui-treasury/styles/checkbox/banner';
 const theme = createTheme({
   typography: {
     fontFamily: montserrat,
@@ -55,41 +69,84 @@ const theme = createTheme({
   },
 });
 
+const emosiArr = [
+  {
+    perasaan: "Buruk",
+    emosi: ["Marah", "Gelisah", "Stres", "Cemas", "Takut", "Khawatir"],
+  },
+  {
+    perasaan: "Kurang",
+    emosi: ["Kecewa", "Sedih", "Lelah", "Jijik", "Bosan", "Pesimis"],
+  },
+  {
+    perasaan: "Biasa",
+    emosi: ["Bosan", "Datar", "Santai", "Puas", "Bingung"],
+  },
+  {
+    perasaan: "Lumayan",
+    emosi: [
+      "Termotivasi",
+      "Bahagia",
+      "Gembira",
+      "Bangga",
+      "Optimis",
+      "Bersemangat",
+    ],
+  },
+  {
+    perasaan: "Baik",
+    emosi: ["Rileks", "Penuh Kasih", "Tenang", "Damai", "Bersyukur", "Puas"],
+  },
+];
+
 export default function DHCTest() {
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
-  const [alignment, setAlignment] = useState("biasa");
+  const [perasaan, setPerasaan] = useState(0);
+  const [emosi, setEmosi] = useState("");
+  const [checked, setChecked] = React.useState([0]);
 
-  const handleChange = (event, newAlignment) => {
-    setAlignment(newAlignment);
+  const handleChange = (event, perasaan) => {
+    setPerasaan(perasaan - 1);
+    console.log(perasaan);
   };
-
+  const handleEmosi = (event, emosi) => {
+    setEmosi(emosi);
+  };
   const depressionSolutions = useSelector(
     (x) => x.persistedReducer.app.depressionSolutions
   );
+  const handleToggle = (value) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
+  };
   useEffect(() => {
     setIsLoaded(true);
+    console.log(emosiArr.map((x) => x.emosi));
   }, []);
 
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="lg" sx={{}}>
         {isLoaded && (
-          <div
-            style={{
-              padding: 10,
-              fontSize: 20,
-              borderRadius: 10,
-              height: "100%",
-              border: "0px solid",
-              borderColor: "black",
-              textAlign: "center",
-              justifyItems: "center",
+          <Box
+            sx={{
+              padding: "10px",
+              fontSize: "20px",
             }}
           >
             <Typography
               className={cooperHewitt.className}
               sx={{
+                textAlign: "center",
                 color: "#393939",
                 fontSize: {
                   lg: "50px",
@@ -102,153 +159,289 @@ export default function DHCTest() {
               PEMERIKSAAN KESEHATAN MENTAL HARIAN
             </Typography>
 
-            <div
-              style={{
-                background: "white",
-                padding: "20px",
-                borderRadius: 10,
-                // overflow: "auto",
-              }}
+            {/* Mood Checker */}
+            <Typography
+              sx={{ fontSize: { xs: "15px", xl: "19px" }, mt: "20px" }}
+              className={montserratExtraBold.className}
             >
-              <div style={{ overflow: "auto" }}>
-                {/* LIST SOLUSI */}
-                <Grid container spacing={1} columns={16}>
-                  <Grid item lg={8} md={8} sm={8}>
-                    <Typography
-                      sx={{
-                        fontSize: {
-                          lg: "17px",
-                          md: "15px",
-                          sm: "15px",
-                          xs: "13px",
-                        },
-                        color: "black",
-                        textAlign: "left",
-                      }}
-                      className={montserrat.className}
-                    >
-                      <ToggleButtonGroup
-                        onChange={handleChange}
-                        value={alignment}
-                        exclusive
-                        sx={{
-                          selected: {
-                            "&&": {
-                              backgroundColor: "green",
-                              color: theme.palette.secondary.main,
-                            },
-                          },
-                        }}
-                      >
-                        <ToggleButton
-                          className={montserrat.className}
-                          value="buruk"
-                          sx={{
-                            textTransform: "none",
-                            color: "black",
-                            p: "20px",
-                          }}
-                        >
-                          <Grid>
-                            <FontAwesomeIcon
-                              icon={faFaceAngry}
-                              style={{ fontSize: "40px", color: "#EB5353" }}
-                            />
-                            <Typography>Buruk</Typography>
-                          </Grid>
-                        </ToggleButton>
-                        <ToggleButton
-                          className={montserrat.className}
-                          sx={{
-                            textTransform: "none",
-                            color: "black",
-                            p: "20px",
-                          }}
-                          value="kurang"
-                        >
-                          <Grid>
-                            <FontAwesomeIcon
-                              icon={faFaceFrown}
-                              style={{ fontSize: "40px", color: "#ffa700" }}
-                            />
-                            <Typography>Kurang</Typography>
-                          </Grid>
-                        </ToggleButton>
-                        <ToggleButton
-                          className={montserrat.className}
-                          sx={{
-                            textTransform: "none",
-                            color: "black",
-                            p: "20px",
-                          }}
-                          value="biasa"
-                        >
-                          <Grid>
-                            <FontAwesomeIcon
-                              icon={faFaceMeh}
-                              style={{ fontSize: "40px", color: "#fff400" }}
-                            />
-                            <Typography>Biasa</Typography>
-                          </Grid>
-                        </ToggleButton>
-                        <ToggleButton
-                          className={montserrat.className}
-                          sx={{
-                            textTransform: "none",
-                            color: "black",
-                            p: "20px",
-                          }}
-                          value="lumayan"
-                        >
-                          <Grid>
-                            <FontAwesomeIcon
-                              icon={faFaceSmile}
-                              style={{ fontSize: "40px", color: "#b0cdff" }}
-                            />
-                            <Typography>Lumayan</Typography>
-                          </Grid>
-                        </ToggleButton>
-                        <ToggleButton
-                          className={montserrat.className}
-                          sx={{
-                            textTransform: "none",
-                            color: "black",
-                            p: "20px",
-                          }}
-                          value="baik"
-                        >
-                          <Grid>
-                            <FontAwesomeIcon
-                              icon={faFaceGrinBeam}
-                              style={{ fontSize: "40px", color: "#59CE8F" }}
-                            />
-                            <Typography>Baik</Typography>
-                          </Grid>
-                        </ToggleButton>
-                      </ToggleButtonGroup>
-                    </Typography>
-                  </Grid>
-                </Grid>
-                {/* Button submit */}
-                <motion.div style={{ textAlign: "left" }}>
-                  <button
-                    style={{
-                      borderRadius: 10,
-                      padding: "15px",
-                      paddingLeft: "30px",
-                      paddingRight: "30px",
-                      marginTop: "20px",
-                      fontSize: "20px",
-                      border: "0px ",
-                      backgroundColor: "#FFAACF",
-                    }}
+              Bagaimana perasaan Anda hari ini?
+            </Typography>
+            <Typography
+              sx={{ fontSize: { xs: "13px", xl: "15px" } }}
+              className={montserratLight.className}
+            >
+              Dalam skala 1 sampai 5, bagaimana perasaan saat ini?
+            </Typography>
+
+            {/* Mood picker */}
+            <Grid container spacing={1} columns={16}>
+              <Grid item lg={8} md={8} sm={8}>
+                <Typography
+                  sx={{
+                    fontSize: {
+                      lg: "17px",
+                      md: "15px",
+                      sm: "15px",
+                      xs: "13px",
+                    },
+                    color: "black",
+                    textAlign: "left",
+                  }}
+                  className={montserrat.className}
+                >
+                  <ToggleButtonGroup
+                    onChange={handleChange}
+                    value={(perasaan + 1).toString()}
+                    exclusive
+                    sx={{}}
                   >
-                    <Link href="/">Submit</Link>
-                  </button>
-                </motion.div>
-              </div>
-            </div>
-          </div>
+                    <ToggleButton
+                      className={montserrat.className}
+                      value="1"
+                      sx={{
+                        textTransform: "none",
+                        color: "black",
+                        px: "30px",
+                      }}
+                    >
+                      <Grid>
+                        <FontAwesomeIcon
+                          icon={faFaceAngry}
+                          style={{ fontSize: "40px", color: "#EB5353" }}
+                        />
+                        <Typography>Buruk</Typography>
+                      </Grid>
+                    </ToggleButton>
+
+                    <ToggleButton
+                      className={montserrat.className}
+                      sx={{
+                        textTransform: "none",
+                        color: "black",
+                        px: "30px",
+                      }}
+                      value="2"
+                    >
+                      <Grid>
+                        <FontAwesomeIcon
+                          icon={faFaceFrown}
+                          style={{ fontSize: "40px", color: "#ffa700" }}
+                        />
+                        <Typography>Kurang</Typography>
+                      </Grid>
+                    </ToggleButton>
+
+                    <ToggleButton
+                      className={montserrat.className}
+                      sx={{
+                        textTransform: "none",
+                        color: "black",
+                        px: "30px",
+                      }}
+                      value="3"
+                    >
+                      <Grid>
+                        <FontAwesomeIcon
+                          icon={faFaceMeh}
+                          style={{ fontSize: "40px", color: "#fff400" }}
+                        />
+                        <Typography>Biasa</Typography>
+                      </Grid>
+                    </ToggleButton>
+
+                    <ToggleButton
+                      className={montserrat.className}
+                      sx={{
+                        textTransform: "none",
+                        color: "black",
+                        px: "20px",
+                      }}
+                      value="4"
+                    >
+                      <Grid>
+                        <FontAwesomeIcon
+                          icon={faFaceSmile}
+                          style={{ fontSize: "40px", color: "#b0cdff" }}
+                        />
+                        <Typography>Lumayan</Typography>
+                      </Grid>
+                    </ToggleButton>
+
+                    <ToggleButton
+                      className={montserrat.className}
+                      sx={{
+                        textTransform: "none",
+                        color: "black",
+                        px: "30px",
+                      }}
+                      value="5"
+                    >
+                      <Grid>
+                        <FontAwesomeIcon
+                          icon={faFaceGrinBeam}
+                          style={{ fontSize: "40px", color: "#59CE8F" }}
+                        />
+                        <Typography>Baik</Typography>
+                      </Grid>
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+                </Typography>
+              </Grid>
+            </Grid>
+
+            {/* Emosi Picker */}
+            <Typography
+              sx={{
+                mt: "30px",
+                mb: "10px",
+                fontSize: { xs: "15px", xl: "19px" },
+              }}
+              className={montserratExtraBold.className}
+            >
+              Apa emosi yang anda rasakan?
+            </Typography>
+
+            <Box>
+              <ToggleButtonGroup
+                size="medium"
+                value={emosi}
+                exclusive
+                onChange={handleEmosi}
+              >
+                {emosiArr[perasaan].emosi.map((value, index) => {
+                  return (
+                    <ToggleButton
+                      sx={{
+                        textTransform: "none",
+                        px: { xs: "6px", xl: "17px" },
+                        fontSize: { xs: "13px", xl: "14px" },
+                      }}
+                      value={value}
+                      className={montserratBold.className}
+                    >
+                      {value}
+                    </ToggleButton>
+                  );
+                })}
+              </ToggleButtonGroup>
+            </Box>
+
+            {/* Jurnal */}
+            <Typography
+              sx={{
+                fontSize: { xs: "15px", xl: "19px" },
+                mt: "20px",
+                mb: "10px",
+              }}
+              className={montserratExtraBold.className}
+            >
+              Apakah anda ingin bercerita?
+            </Typography>
+
+            <Grid cpntainer column={3}>
+              <Grid item>
+                <TextField
+                  sx={{
+                    fontWeight: "bold",
+                    fontSize: "20px",
+                    color: "purple",
+                    width: { xs: "100%", xl: "50%", sm: "80%", md: "70%" },
+                  }}
+                  label={
+                    <Typography
+                      sx={{ fontSize: { xs: "13px", xl: "15px" } }}
+                      className={montserratLight.className}
+                    >
+                      Tulislah di sini...
+                    </Typography>
+                  }
+                  multiline
+                  rows={10}
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item>
+                <Typography
+                  sx={{ fontSize: { xs: "15px", xl: "19px" }, mt: "20px" }}
+                  className={montserratExtraBold.className}
+                >
+                  Dari beberapa kegiatan dibawah ini, manakah yang sudah di
+                  lakukan?
+                </Typography>
+                <Typography
+                  sx={{ fontSize: { xs: "13px", xl: "15px" } }}
+                  className={montserratLight.className}
+                >
+                  Dalam skala 1 sampai 5, bagaimana perasaan saat ini?
+                </Typography>
+                <List
+                  sx={{
+                    width: "100%",
+                    maxWidth: 360,
+                    bgcolor: "background.paper",
+                  }}
+                >
+                  {[0, 1, 2, 3].map((value) => {
+                    return (
+                      <ListItem
+                        sx={{
+                          width: "100%",
+                        }}
+                        key={value}
+                        // secondaryAction={
+
+                        // }
+                        disablePadding
+                      >
+                        <ListItemButton
+                          role={undefined}
+                          onClick={handleToggle(value)}
+                          dense
+                        >
+                          <ListItemIcon>
+                            <Checkbox
+                              sx={{
+                                "&.Mui-checked": {
+                                  color: "#FFAACF",
+                                },
+                              }}
+                              checked={checked.indexOf(value) !== -1}
+                              tabIndex={-1}
+                              disableRipple
+                            />
+                          </ListItemIcon>
+                          <ListItemText primary={`Line item ${value + 1}`} />
+                        </ListItemButton>
+                      </ListItem>
+                    );
+                  })}
+                </List>
+              </Grid>
+              <Grid item>
+                {/* Button submit */}
+                <Button
+                  sx={{
+                    borderRadius: "10px",
+                    padding: "10px",
+                    paddingLeft: "30px",
+                    textTransform: "none",
+                    paddingRight: "30px",
+                    marginTop: "20px",
+                    color: "white",
+                    fontSize: "17px",
+                    backgroundColor: "#FFAACF",
+                    "&:hover": {
+                      color: "white",
+                      backgroundColor: "#EA8FEA",
+                    },
+                  }}
+                  className={montserrat.className}
+                >
+                  <Link href="/">Submit</Link>
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
         )}
       </Container>
     </ThemeProvider>

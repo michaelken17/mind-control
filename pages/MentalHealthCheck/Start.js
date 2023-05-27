@@ -9,6 +9,9 @@ import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
 import styles from "styles/Quiz.module.css";
 import Link from "next/link";
 import ErrorIcon from "@mui/icons-material/Error";
+import { useRouter } from "next/router";
+import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
 
 const theme = createTheme({
   typography: {
@@ -21,6 +24,34 @@ const theme = createTheme({
 
 export default function MentalHealthCheck() {
   const [readMore, setReadMore] = React.useState(false);
+  const router = useRouter();
+  const login = useSelector((state) => state.persistedReducer.login);
+
+  const mhcStartHandler = () => {
+    const newRecord = true;
+
+    if (login.isDoneMHC == "False") {
+      router.push("Panduan");
+    } else {
+      Swal.fire({
+        icon:"warning",
+        title: "Anda sudah pernah melakukan tes ini!",
+        text:"Memulai ulang tes akan mengreset data!",
+        showDenyButton: true,
+        //   showCancelButton: true,
+        background: "white",
+        confirmButtonText: `<h2 color:"black">Tes ulang</h2>`,
+        confirmButtonColor: "#FFAACF",
+        denyButtonColor: "#EA8FEA",
+        denyButtonText: `<h2 color:"black">Cancel</h2>`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          router.push("Panduan");
+        }
+      });
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -43,7 +74,11 @@ export default function MentalHealthCheck() {
           ></img>
           <div style={{ marginTop: "15px" }}>
             <Typography
-              sx={{ fontSize: {xs:"16px", md:"19px", lg:"22px"}, color: "black", textAlign: "center" }}
+              sx={{
+                fontSize: { xs: "16px", md: "19px", lg: "22px" },
+                color: "black",
+                textAlign: "center",
+              }}
               className={glacial.className}
             >
               Mental Health Check membantu anda untuk mengetahui kondisi
@@ -51,7 +86,7 @@ export default function MentalHealthCheck() {
               penyakit mental yang di derita.
             </Typography>
             {readMore && (
-              <div style={{ marginTop: "10px", display:"flex" }} >
+              <div style={{ marginTop: "10px", display: "flex" }}>
                 <ErrorIcon
                   fontSize="15px"
                   sx={{ marginTop: "5px", marginRight: "5px", color: "orange" }}
@@ -95,39 +130,38 @@ export default function MentalHealthCheck() {
           </div>
 
           <motion.div style={{ textAlign: "center" }}>
-            <Link href="Panduan">
-              <motion.button
-                className={styles.button}
-                whileHover={{ scale: 1.1 }}
-                style={{
-                  borderRadius: 10,
-                  padding: 20,
-                  marginTop: 30,
-                  marginBottom: 30,
-                  fontSize: 20,
-                  border: "0px ",
+            <motion.button
+              className={styles.button}
+              whileHover={{ scale: 1.1 }}
+              style={{
+                borderRadius: 10,
+                padding: 20,
+                marginTop: 30,
+                marginBottom: 30,
+                fontSize: 20,
+                border: "0px ",
+              }}
+              transition={{
+                duration: 1,
+                type: "spring",
+                stiffness: 300,
+                damping: 20,
+                bounce: 1,
+              }}
+              whileTap={{ scale: 0.9 }}
+              onClick={mhcStartHandler}
+            >
+              <Typography
+                sx={{
+                  fontSize: "20px",
+                  color: "white",
+                  textAlign: "center",
                 }}
-                transition={{
-                  duration: 1,
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 20,
-                  bounce: 1,
-                }}
-                whileTap={{ scale: 0.9 }}
+                className={glacial.className}
               >
-                <Typography
-                  sx={{
-                    fontSize: "20px",
-                    color: "white",
-                    textAlign: "center",
-                  }}
-                  className={glacial.className}
-                >
-                  Take Your Mental Health Check
-                </Typography>
-              </motion.button>
-            </Link>
+                Take Your Mental Health Check
+              </Typography>
+            </motion.button>
           </motion.div>
         </Container>
       </motion.div>
