@@ -265,7 +265,7 @@ import {
               </Button>
             </motion.div>
           </Box>
-          <Link href="SignUpConsultant">
+          <Link href="SignUpConsultant" legacyBehavior>
             <Typography
               sx={{
                 mt: 1,

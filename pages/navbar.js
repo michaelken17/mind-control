@@ -33,19 +33,20 @@ import {
   montserrat,
 } from "../public/fonts";
 import { AnimatedLineProgressBar, LineProgressBar } from "@frogress/line";
-import { MenuItem } from "@mui/material";
+import { Grid, MenuItem } from "@mui/material";
 import { Montserrat, Open_Sans } from "next/font/google";
 import { useRouter } from "next/router";
 import { loginActions } from "@/redux/slices/loginSlice";
 import Swal from "sweetalert2";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-// const montserratBold = Montserrat({ subsets: ["latin"], weight: "500"});
-// const montserrat = Montserrat({ subsets: ["latin"], weight: "400", });
+import { isDoneActions } from "@/redux/slices/isDoneSlice";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 const pages = [
   { title: "Mental Health Check", path: "/MentalHealthCheck/Start" },
   { title: "Daily Health Check", path: "/DailyHealthCheck/Start" },
   { title: "Mental Illness Test", path: "/MentalIllnessTest/Home  " },
+  { title: "Konsultasi Online", path: "/KonsultasiOnline/Home  " },
 ];
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -107,15 +108,14 @@ const HtmlTooltip = styled(({ className, ...props }) => (
 
 export default function Navbar() {
   const [isLoaded, setIsLoad] = useState(false);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const theme = useTheme();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const openAvatar = Boolean(anchorEl);
   const dispatch = useDispatch();
   const router = useRouter();
   const [showTooltip, setShowTooltip] = useState(false);
-  const [isDoneMHC, setisDoneMHC] = useState(false);
-  const [isDoneMIT, setisDoneMIT] = useState(false);
+  const [showTooltipKO, setShowTooltipKO] = useState(false);
   const axios = require("axios");
 
   const handleClick = (event) => {
@@ -127,7 +127,16 @@ export default function Navbar() {
   };
   const handleLogout = () => {
     dispatch(loginActions.logout());
-
+    dispatch(
+      isDoneActions.isDone({
+        isDoneMHC: false,
+        isDoneDpr: false,
+        isDoneAnx: false,
+        isDoneOcd: false,
+        isDoneSd: false,
+        isDoneDHC: false,
+      })
+    );
     const Toast = Swal.mixin({
       toast: true,
       position: "top-end",
@@ -145,10 +154,6 @@ export default function Navbar() {
     setAnchorEl(null);
     setOpen;
   };
-  const handleMyAccount = () => {
-    setAnchorEl(null);
-    setOpen;
-  };
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -158,6 +163,7 @@ export default function Navbar() {
 
   const MHCData = useSelector((x) => x.persistedReducer.app.MHCdata);
   const login = useSelector((state) => state.persistedReducer.login);
+  const isDone = useSelector((state) => state.persistedReducer.isDone);
   const mentalIllnessData = useSelector(
     (x) => x.persistedReducer.app.mentalIllnessData
   );
@@ -166,7 +172,8 @@ export default function Navbar() {
     setIsLoad(true);
     console.log(login);
     console.log(MHCData);
-
+    console.log(isDone);
+    console.log(window.location.pathname);
     if (login.username == "") {
       Swal.fire({
         icon: "error",
@@ -250,7 +257,7 @@ export default function Navbar() {
                 pages.map((page) =>
                   page.title == "Mental Illness Test" &&
                   login?.authorized !== false &&
-                  login.isDoneMHC == "True" ? (
+                  isDone.isDoneMHC == true ? (
                     // MENTAL ILLNESS DROPDOWN MENU
                     <Box key={page.title}>
                       <HtmlTooltip
@@ -275,14 +282,18 @@ export default function Navbar() {
                           </Typography>
                         }
                       >
-                        <Link href={page.path}>
+                        <Link href={page.path} legacyBehavior>
                           <Button
                             sx={{
                               mx: 2,
                               py: 4,
                               color: "#42493A",
                               display: "block",
-                              borderBottom: "4px solid white",
+                              borderBottom: window.location.pathname.includes(
+                                "MentalIllness"
+                              )
+                                ? "4px solid #FFAACF"
+                                : "4px solid white",
                               "&:hover": {
                                 color: "gray",
                                 backgroundColor: "white",
@@ -293,14 +304,22 @@ export default function Navbar() {
                             }}
                             className={montserratBold.className}
                           >
-                            {page.title}
+                            <Grid container columns={12}>
+                              <Grid item xl={11}>
+                                {page.title}
+                              </Grid>
+                              <Grid item xl={1}>
+                                <ArrowDropDownIcon sx={{ mt: 0 }} />
+                              </Grid>
+                            </Grid>
                           </Button>
                         </Link>
                       </HtmlTooltip>
                     </Box>
-                  ) : page.title == "Mental Health Check" &&
+                  ) : // MENTAL HEALTH CHECK
+                  page.title == "Mental Health Check" &&
                     login?.authorized == true &&
-                    login.isDoneMHC == "True" ? (
+                    isDone.isDoneMHC == true ? (
                     <Box key={page.title}>
                       <Link href={page.path} legacyBehavior passHref>
                         <Button
@@ -309,7 +328,12 @@ export default function Navbar() {
                             py: 4,
                             color: "#42493A",
                             display: "block",
-                            borderBottom: "4px solid white",
+                            // background:"gray"
+                            borderBottom: window.location.pathname.includes(
+                              "MentalHealthCheck"
+                            )
+                              ? "4px solid #FFAACF"
+                              : "4px solid white",
                             "&:hover": {
                               color: "gray",
                               backgroundColor: "white",
@@ -324,8 +348,10 @@ export default function Navbar() {
                         </Button>
                       </Link>
                     </Box>
-                  ) : page.title == "Daily Health Chec" &&
-                    login?.authorized !== false ? (
+                  ) : // DAILY HEALTH CHECK
+                  page.title == "Daily Health Check" &&
+                    login?.authorized !== false &&
+                    isDone.isDoneMHC == true ? (
                     <Box key={page.title}>
                       <Link href={page.path} legacyBehavior passHref>
                         <Button
@@ -334,7 +360,11 @@ export default function Navbar() {
                             py: 4,
                             color: "#42493A",
                             display: "block",
-                            borderBottom: "4px solid white",
+                            borderBottom: window.location.pathname.includes(
+                              "DailyHealthCheck"
+                            )
+                              ? "4px solid #FFAACF"
+                              : "4px solid white",
                             "&:hover": {
                               color: "gray",
                               backgroundColor: "white",
@@ -348,6 +378,73 @@ export default function Navbar() {
                           {page.title}
                         </Button>
                       </Link>
+                    </Box>
+                  ) : // KONSULTASI ONLINE
+                  page.title == "Konsultasi Online" &&
+                    login?.authorized !== false &&
+                    isDone.isDoneMHC == true ? (
+                    <Box key={page.title}>
+                      <HtmlTooltip
+                        interactive="true"
+                        open={showTooltipKO}
+                        onOpen={() => setShowTooltipKO(true)}
+                        onClose={() => setShowTooltipKO(false)}
+                        title={
+                          <Box>
+                            <Typography>
+                              <MenuItem
+                                className={montserrat.className}
+                                sx={{ padding: "10px", fontSize: "15px" }}
+                              >
+                                <Link href={"DaftarPsikolog"} legacyBehavior>
+                                  Daftar Psikolog
+                                </Link>
+                              </MenuItem>
+                            </Typography>
+                            <Typography>
+                              <MenuItem
+                                className={montserrat.className}
+                                sx={{ padding: "10px", fontSize: "15px" }}
+                              >
+                                <Link href={"Konsultasi"} legacyBehavior>Konsultasi</Link>
+                              </MenuItem>
+                            </Typography>
+                          </Box>
+                        }
+                      >
+                        <Link href={page.path} legacyBehavior>
+                          <Button
+                            sx={{
+                              mx: 2,
+                              py: 4,
+                              color: "#42493A",
+                              display: "block",
+                              borderBottom: window.location.pathname.includes(
+                                "KonsultasiOnline"
+                              )
+                                ? "4px solid #FFAACF"
+                                : "4px solid white",
+                              "&:hover": {
+                                color: "gray",
+                                backgroundColor: "white",
+                                borderBottom: "4px solid #FFAACF",
+                              },
+                              fontSize: 15,
+                              textTransform: "none",
+                            }}
+                            className={montserratBold.className}
+                          >
+                            <Grid container columns={12}>
+                              <Grid item xl={11}>
+                                {page.title}
+                              </Grid>
+                              <Grid item xl={1}>
+                                <ArrowDropDownIcon sx={{ mt: 0 }} />
+                              </Grid>
+                            </Grid>
+                          </Button>
+                        </Link>
+                      </HtmlTooltip>
                     </Box>
                   ) : (
                     <Box key={page.title}></Box>

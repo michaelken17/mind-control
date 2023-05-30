@@ -23,7 +23,9 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import Link from "next/link";
 import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
-import appSlice, { appActions, MHCData } from "@/redux/slices/appSlice";
+import { appActions } from "@/redux/slices/appSlice";
+import { isDoneActions } from "@/redux/slices/isDoneSlice";
+import Breadcrumbs from "nextjs-breadcrumbs";
 
 const SigninPage = () => {
   const usernameRef = useRef();
@@ -139,23 +141,29 @@ const SigninPage = () => {
                             ];
                             dispatch(appActions.MHCData(MentalIllnessList));
                           });
+
+                        dispatch(
+                          isDoneActions.isDone({
+                            isDoneMHC: true,
+                            isDoneDpr: false,
+                            isDoneAnx: false,
+                            isDoneOcd: false,
+                            isDoneSd: false,
+                            isDoneDHC: false,
+                          })
+                        );
                       }
 
                       dispatch(
                         loginActions.login({
-                          username: username,
+                          isDoneMHC: respcheckMHC.data,
                           email: resp.data[0].email,
                           fullname: resp.data[0].fullName,
                           MHpoints: resp.data[0].healthPoint,
                           password: password,
                           consultant: false,
                           userid: resp.data[0].userId,
-                          isDoneMHC: respcheckMHC.data,
-                          // isDoneDpr: isDoneDpr,
-                          // isDoneAnx: isDoneAnx,
-                          // isDoneOcd: isDoneOcd,
-                          // isDoneSd: isDoneSd,
-                          // isDoneDHC: isDoneDHC,
+                          username: username,
                         })
                       );
 
@@ -165,10 +173,6 @@ const SigninPage = () => {
                         showConfirmButton: false,
                         timer: 2000,
                         timerProgressBar: false,
-                        // didOpen: (toast) => {
-                        //   toast.addEventListener("mouseenter", Swal.stopTimer);
-                        //   toast.addEventListener("mouseleave", Swal.resumeTimer);
-                        // },
                       });
 
                       Toast.fire({
@@ -225,6 +229,7 @@ const SigninPage = () => {
 
   return (
     <Grid xs={12} sm={12} md={7} lg={6} xl={7} item={true}>
+
       <Box
         sx={{
           padding: "20px",
@@ -393,7 +398,7 @@ const SigninPage = () => {
             </Button>
           </motion.div>
         </Box>
-        <Link href="Login/SignUpPage">
+        <Link href="Login/SignUpPage" legacyBehavior>
           <Typography
             sx={{
               mt: 1,
@@ -406,7 +411,7 @@ const SigninPage = () => {
           </Typography>
         </Link>
 
-        <Link href="Login/LoginConsultant">
+        <Link href="Login/LoginConsultant" legacyBehavior>
           <Typography
             sx={{
               mt: 1,

@@ -338,7 +338,7 @@ export default function DHCTest() {
               Apakah anda ingin bercerita?
             </Typography>
 
-            <Grid cpntainer column={3}>
+            <Grid>
               <Grid item>
                 <TextField
                   sx={{
@@ -376,18 +376,17 @@ export default function DHCTest() {
                 </Typography>
                 <List
                   sx={{
-                    width: "100%",
-                    maxWidth: 360,
-                    bgcolor: "background.paper",
+                    width: { xs: "100%", xl: "50%", sm: "80%", md: "70%" },
+                    // maxWidth: 360,
                   }}
                 >
-                  {[0, 1, 2, 3].map((value) => {
+                  {depressionSolutions.map((value) => {
                     return (
                       <ListItem
                         sx={{
                           width: "100%",
                         }}
-                        key={value}
+                        key={value.solution}
                         // secondaryAction={
 
                         // }
@@ -410,7 +409,7 @@ export default function DHCTest() {
                               disableRipple
                             />
                           </ListItemIcon>
-                          <ListItemText primary={`Line item ${value + 1}`} />
+                          <ListItemText primary={value.solution} />
                         </ListItemButton>
                       </ListItem>
                     );
@@ -437,7 +436,7 @@ export default function DHCTest() {
                   }}
                   className={montserrat.className}
                 >
-                  <Link href="/">Submit</Link>
+                  <Link href="/" legacyBehavior>Submit</Link>
                 </Button>
               </Grid>
             </Grid>

@@ -271,9 +271,9 @@ import {
                   onClick={() => nextHandler()}
                 >
                   {currentQuestion + 1 == OCDQuestions.length ? (
-                    <a>End Test</a>
+                    <Typography>End Test</Typography>
                   ) : (
-                    <a>Next</a>
+                    <Typography>Next</Typography>
                   )}
                 </motion.button>
               )}

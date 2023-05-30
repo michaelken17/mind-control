@@ -12,6 +12,7 @@ import ErrorIcon from "@mui/icons-material/Error";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
+import { isDoneActions } from "@/redux/slices/isDoneSlice";
 
 const theme = createTheme({
   typography: {
@@ -26,11 +27,12 @@ export default function MentalHealthCheck() {
   const [readMore, setReadMore] = React.useState(false);
   const router = useRouter();
   const login = useSelector((state) => state.persistedReducer.login);
+  const isDone = useSelector((state) => state.persistedReducer.isDone);
 
   const mhcStartHandler = () => {
     const newRecord = true;
 
-    if (login.isDoneMHC == "False") {
+    if (isDone.isDoneMHC == false) {
       router.push("Panduan");
     } else {
       Swal.fire({
@@ -83,7 +85,7 @@ export default function MentalHealthCheck() {
             >
               Mental Health Check membantu anda untuk mengetahui kondisi
               kesehatan mental pribadi dan mengidentifikasi tingkat keparahan
-              penyakit mental yang di derita.
+              penyakit mental yang diderita.
             </Typography>
             {readMore && (
               <div style={{ marginTop: "10px", display: "flex" }}>

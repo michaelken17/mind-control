@@ -24,7 +24,6 @@ const loginSlice = createSlice({
       state.MHpoints = action.payload.MHpoints;
       state.consultant = action.payload.consultant;
       state.userid = action.payload.userid;
-      state.isDoneMHC = action.payload.isDoneMHC;
     },
     logout: (state, action) => {
       state.authorized = false;

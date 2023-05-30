@@ -328,7 +328,7 @@ export default function ResultDepression() {
                   {/* Button for konsultasi online */}
                   {depressionSeverity(rawScore) > 1 && (
                     <motion.div style={{ textAlign: "center" }}>
-                      <Link href="../../KonsultasiOnline/Start">
+                      <Link href="../../KonsultasiOnline/Start" legacyBehavior>
                         <Button
                           sx={{
                             textTransform: "none",
@@ -360,7 +360,7 @@ export default function ResultDepression() {
                     </motion.div>
                   )}
                   <motion.div style={{ textAlign: "center" }}>
-                    <Link href="../../DailyHealthCheck/Start">
+                    <Link href="../../DailyHealthCheck/Start" legacyBehavior>
                       <Button
                         sx={{
                           textTransform: "none",

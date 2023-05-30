@@ -280,9 +280,9 @@ export default function Test() {
                 onClick={() => nextHandler()}
               >
                 {currentQuestion + 1 == anxietyQuestions.length ? (
-                  <a>End Test</a>
+                  <Typography>End Test</Typography>
                 ) : (
-                  <a>Next</a>
+                  <Typography>Next</Typography>
                 )}
               </motion.button>
             )}

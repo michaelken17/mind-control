@@ -113,7 +113,7 @@ export default function DailyHealthCheck() {
               }}
               whileTap={{ scale: 0.9 }}
             >
-              <Link href="RekomendasiKegiatan">
+              <Link href="RekomendasiKegiatan" legacyBehavior>
                 Lihat Rekomendasi Kegiatan Hari Ini
               </Link>
             </motion.button>
@@ -141,7 +141,7 @@ export default function DailyHealthCheck() {
                   backgroundColor: "#FF4E9B",
                 }}
               >
-                <Link href="Test">Lakukan Daily Health Check Hari ini!</Link>
+                <Link href="Test" legacyBehavior>Lakukan Daily Health Check Hari ini!</Link>
               </button>
             </Badge>
           </motion.div>

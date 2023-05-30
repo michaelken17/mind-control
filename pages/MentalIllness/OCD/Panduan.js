@@ -305,7 +305,7 @@ export default function PanduanOCD() {
               }}
               onClick={startHandler}
             >
-              <Link href="">Mulai Test</Link>
+              <Link href="" legacyBehavior>Mulai Test</Link>
             </motion.button>
           </div>
         </motion.div>

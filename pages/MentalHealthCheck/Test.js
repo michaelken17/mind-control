@@ -29,6 +29,8 @@ import ArrowBack from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForward from "@mui/icons-material/ArrowForwardIos";
 import axios from "axios";
 import { loginActions } from "@/redux/slices/loginSlice";
+import { isDoneActions } from "@/redux/slices/isDoneSlice";
+import { ConstructionOutlined } from "@mui/icons-material";
 
 const theme = createTheme({
   typography: {
@@ -74,6 +76,70 @@ export default function MHCTest() {
 
     x.jawaban = value.score;
     setMHCdata(updateData);
+
+    if (currentQuestion + 1 != MHCQuestions.length) {
+      setTimeout(() => {
+        setcurrentQuestion(currentQuestion + 1);
+        setisAnswered(false);
+        setSelectedIndex(0);
+      }, 500);
+    } else {
+      dispatch(appActions.submitMHC({}));
+      dispatch(appActions.submitMHC(MHCdata));
+      const depressionSeverity = Math.max(
+        MHCdata[0].jawaban,
+        MHCdata[1].jawaban
+      );
+      const anxietySeverity = Math.max(
+        MHCdata[2].jawaban,
+        MHCdata[3].jawaban,
+        MHCdata[4].jawaban
+      );
+      const OCDSeverity = Math.max(MHCdata[5].jawaban, MHCdata[6].jawaban);
+      const sleepDisorderSeverity = MHCdata[7].jawaban;
+
+      dispatch(
+        isDoneActions.isDone({
+          isDoneMHC: true,
+          isDoneDpr: false,
+          isDoneAnx: false,
+          isDoneOcd: false,
+          isDoneSd: false,
+          isDoneDHC: false,
+        })
+      );
+
+      // Insert Header
+      axios
+        .post(
+          "https://localhost:7184/api/MHCheck/InsertMHCheckHeader?username=" +
+            login.username
+        )
+        .then((responseHeader) => {
+          // Insert MD
+          axios
+            .post("https://localhost:7184/api/MHCheck/InsertMHCheckMD", {
+              headerID: responseHeader.data.headerID,
+              dprSeverity: depressionSeverity,
+              anxSeverity: anxietySeverity,
+              ocdSeverity: OCDSeverity,
+              sdSeverity: sleepDisorderSeverity,
+            })
+            .then((responseMD) => {
+              console.log(responseMD.data);
+              // Insert Detail
+              axios.post(
+                "https://localhost:7184/api/MHCheck/InsertMHCheckDetail?headerID=" +
+                  responseMD.data,
+                {
+                  MHCdata: MHCdata,
+                }
+              );
+            });
+        });
+
+      router.push("Result");
+    }
   };
 
   const nextHandler = () => {
@@ -96,7 +162,16 @@ export default function MHCTest() {
       const OCDSeverity = Math.max(MHCdata[5].jawaban, MHCdata[6].jawaban);
       const sleepDisorderSeverity = MHCdata[7].jawaban;
 
-
+      dispatch(
+        isDoneActions.isDone({
+          isDoneMHC: true,
+          isDoneDpr: false,
+          isDoneAnx: false,
+          isDoneOcd: false,
+          isDoneSd: false,
+          isDoneDHC: false,
+        })
+      );
 
       // Insert Header
       axios
@@ -149,8 +224,7 @@ export default function MHCTest() {
 
   useEffect(() => {
     setIsLoaded(true);
-    // console.log(MHCChoices);
-    // console.log(MHCQuestions);
+    console.log(login);
   }, []);
 
   return (
@@ -206,7 +280,7 @@ export default function MHCTest() {
                             theme.palette.mode === "light" ? 200 : 800
                           ],
                       }}
-                      size={40}
+                      size={50}
                       thickness={4}
                       value={100}
                     />
@@ -222,7 +296,7 @@ export default function MHCTest() {
                         },
                       }}
                       value={currentQuestion * 14}
-                      size={40}
+                      size={50}
                       thickness={4}
                     />
                     <Box
@@ -241,6 +315,7 @@ export default function MHCTest() {
                         variant="caption"
                         component="div"
                         color="text.secondary"
+                        sx={{fontSize:"15px"}}
                       >
                         {currentQuestion + 1}/{MHCQuestions.length}
                       </Typography>
@@ -326,7 +401,7 @@ export default function MHCTest() {
                 <ArrowBack sx={{ color: "black" }} />
               </Button>
             )}
-
+{/* 
             {isAnswered && (
               <Button
                 sx={{
@@ -349,7 +424,7 @@ export default function MHCTest() {
                   <ArrowForward sx={{ color: "black" }} />
                 )}
               </Button>
-            )}
+            )} */}
           </div>
         </motion.div>
       </Container>

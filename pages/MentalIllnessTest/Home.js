@@ -120,7 +120,7 @@ export default function MentalIllnessTest() {
                     sm={2}
                     sx={{ justifyItems: "center" }}
                   >
-                    <Link href={item.link} key={item.img}>
+                    <Link href={item.link} key={item.img} legacyBehavior>
                       <motion.div
                         whileHover={{ scale: 1.01 }}
                         style={{

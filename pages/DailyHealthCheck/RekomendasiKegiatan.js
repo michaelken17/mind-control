@@ -205,7 +205,7 @@ export default function RekomendasiKegiatan() {
                       backgroundColor: "#FF4E9B",
                     }}
                   >
-                    <Link href="Test">Lakukan Daily Health Check Hari ini!</Link>
+                    <Link href="Test" legacyBehavior>Lakukan Daily Health Check Hari ini!</Link>
                   </button>
                 </motion.div>
               </div>
