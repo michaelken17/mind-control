@@ -42,6 +42,7 @@ import { montserratBold, montserrat, openSans } from "../../public/fonts";
 import { current } from "@reduxjs/toolkit";
 import CircleIcon from "@mui/icons-material/Circle";
 import appSlice, { appActions, MHCData } from "@/redux/slices/appSlice";
+import ErrorIcon from "@mui/icons-material/Error";
 
 const theme = createTheme({
   typography: {
@@ -314,6 +315,11 @@ export default function MHCResult() {
     router.push("/MentalIllnessTest/Home");
   };
 
+  const koBtn = (event) => {
+    event.preventDefault();
+    router.push("/KonsultasiOnline/Home");
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="lg" sx={{ background: "" }}>
@@ -411,6 +417,36 @@ export default function MHCResult() {
                         }}
                         className={openSans.className}
                       >
+                        <Grid container columns={2}>
+                          <Grid item>
+                            <ErrorIcon
+                              sx={{
+                                fontSize: "20px",
+                                marginTop: "1px",
+                                marginRight: "5px",
+                                color: "orange",
+                              }}
+                            />
+                          </Grid>
+                          <Grid item>
+                            <Typography sx={{ mt: "0px" }}>
+                              Hasil ini bukan ditujukan untuk memberi diagnosis
+                              tapi hanya untuk memantau keadaan anda sekarang.
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          // paddingX: "100px",
+                          marginTop: "10px",
+                          fontSize: "16px",
+                          color: "black",
+                          textAlign: "justify",
+                        }}
+                        className={openSans.className}
+                      >
                         Berdasarkan hasil screening, kondisi kesehatan mental
                         anda <b>kurang baik.</b> Hasil tes menunjukkan bahwa
                         anda memiliki gejala penyakit mental yang sudah mencapai
@@ -437,38 +473,80 @@ export default function MHCResult() {
                         </Grid>
                       </Grid>
 
-                      <Typography
-                        sx={{
-                          // paddingX: "100px",
-                          marginTop: "10px",
-                          fontSize: "16px",
-                          color: "black",
-                          textAlign: "justify",
-                        }}
-                        className={openSans.className}
-                      >
-                        Berikut adalah rekomendasi tes yang dapat dilakukan
-                        selanjutnya untuk menentukan tingkat keparahan penyakit
-                        mental tersebut secara spesifik:
-                      </Typography>
-                      <Button
-                        className={styles.testbutton}
-                        sx={{
-                          marginTop: "10px",
-                          borderRadius: "10px",
-                          fontSize: "20px",
-                          px: "50px",
-                          py: "12px",
-                          border: "0px ",
-                          textTransform: "none",
-                          color: "white",
-                        }}
-                        onClick={mentalIllnessBtn}
-                      >
-                        <Typography className={montserrat.className}>
-                          Mental Illness Test
-                        </Typography>
-                      </Button>
+                      <Grid container columns={2} spacing={5}>
+                        <Grid item xl={1}>
+                          <Typography
+                            sx={{
+                              // paddingX: "100px",
+                              marginTop: "10px",
+                              fontSize: "16px",
+                              color: "black",
+                              textAlign: "justify",
+                            }}
+                            className={openSans.className}
+                          >
+                            Berikut adalah rekomendasi tes yang dapat dilakukan
+                            selanjutnya untuk menentukan tingkat keparahan
+                            penyakit mental tersebut secara spesifik:
+                          </Typography>
+                          <Button
+                            className={styles.testbutton}
+                            sx={{
+                              marginTop: "30px",
+                              borderRadius: "10px",
+                              fontSize: "20px",
+                              px: "50px",
+                              py: "12px",
+                              border: "0px ",
+                              textTransform: "none",
+                              color: "white",
+                            }}
+                            onClick={mentalIllnessBtn}
+                          >
+                            <Typography className={montserrat.className}>
+                              Mental Illness Test
+                            </Typography>
+                          </Button>
+                        </Grid>
+                        <Grid item xl={1}>
+                          <Typography
+                            sx={{
+                              // paddingX: "100px",
+                              marginTop: "10px",
+                              fontSize: "16px",
+                              color: "black",
+                              textAlign: "justify",
+                            }}
+                            className={openSans.className}
+                          >
+                            Anda dapat melakukan konsultasi online bersama
+                            psikolog. Anda akan mendapatkan konsultasi{" "}
+                            <b style={{ color: "red" }}>KONSULTASI GRATIS </b>{" "}
+                            <b>
+                              ketika telah mengerjakan Daily Health Check selama
+                              5 hari berturut
+                            </b>
+                          </Typography>
+                          <Button
+                            className={styles.testbutton}
+                            sx={{
+                              marginTop: "10px",
+                              borderRadius: "10px",
+                              fontSize: "20px",
+                              px: "50px",
+                              py: "12px",
+                              border: "0px ",
+                              textTransform: "none",
+                              color: "white",
+                            }}
+                            onClick={koBtn}
+                          >
+                            <Typography className={montserrat.className}>
+                              Konsultasi Online
+                            </Typography>
+                          </Button>
+                        </Grid>
+                      </Grid>
                     </Box>
                   ) : (
                     <Typography

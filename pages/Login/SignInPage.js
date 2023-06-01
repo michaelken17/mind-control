@@ -398,7 +398,7 @@ const SigninPage = () => {
             </Button>
           </motion.div>
         </Box>
-        <Link href="Login/SignUpPage" legacyBehavior>
+        <Link  legacyBehavior href="Login/SignUpPage" >
           <Typography
             sx={{
               mt: 1,
@@ -411,7 +411,7 @@ const SigninPage = () => {
           </Typography>
         </Link>
 
-        <Link href="Login/LoginConsultant" legacyBehavior>
+        <Link legacyBehavior href="Login/LoginConsultant" >
           <Typography
             sx={{
               mt: 1,

@@ -41,6 +41,9 @@ import Swal from "sweetalert2";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { isDoneActions } from "@/redux/slices/isDoneSlice";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import Breadcrumbs from "nextjs-breadcrumbs";
+import Fade from "@mui/material/Fade";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 
 const pages = [
   { title: "Mental Health Check", path: "/MentalHealthCheck/Start" },
@@ -116,7 +119,7 @@ export default function Navbar() {
   const router = useRouter();
   const [showTooltip, setShowTooltip] = useState(false);
   const [showTooltipKO, setShowTooltipKO] = useState(false);
-  const axios = require("axios");
+  const [showTooltipDHC, setShowTooltipDHC] = useState(false);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -170,10 +173,10 @@ export default function Navbar() {
 
   React.useEffect(() => {
     setIsLoad(true);
-    console.log(login);
-    console.log(MHCData);
-    console.log(isDone);
-    console.log(window.location.pathname);
+    // console.log(login);
+    // console.log(MHCData);
+    // console.log(isDone);
+    // console.log(window.location.pathname);
     if (login.username == "") {
       Swal.fire({
         icon: "error",
@@ -184,6 +187,10 @@ export default function Navbar() {
       });
     }
   }, []);
+
+  React.useEffect(() => {
+    console.log(showTooltipKO);
+  }, [showTooltipKO]);
 
   return (
     <div>
@@ -199,13 +206,17 @@ export default function Navbar() {
                 textDecoration: "none",
               }}
             >
-              <Link href="/Home">
-                <img
+              <Link legacyBehavior href="/Home">
+                <Box
+                  component="img"
+                  sx={{
+                    width: "160px",
+                    height: "80px",
+                    alt: "Mind Control",
+                    margin: "20px",
+                  }}
+                  alt=""
                   src="/image/MCIcon.png"
-                  width="160"
-                  height="80"
-                  alt="Mind Control"
-                  style={{ margin: 15 }}
                 />
               </Link>
             </Typography>
@@ -240,7 +251,7 @@ export default function Navbar() {
                 textDecoration: "none",
               }}
             >
-              <Link href="/home">
+              <Link legacyBehavior href="/Home">
                 <img
                   src="/image/MCIcon.png"
                   width="160"
@@ -265,6 +276,8 @@ export default function Navbar() {
                         open={showTooltip}
                         onOpen={() => setShowTooltip(true)}
                         onClose={() => setShowTooltip(false)}
+                        TransitionComponent={Fade}
+                        TransitionProps={{ timeout: 300 }}
                         title={
                           <Typography>
                             {MHCData.map((item, index) => {
@@ -273,16 +286,22 @@ export default function Navbar() {
                                   <MenuItem
                                     key={item.title}
                                     className={montserrat.className}
-                                    sx={{ padding: "10px", fontSize: "15px" }}
+                                    sx={{
+                                      padding: "10px",
+                                      fontSize: "15px",
+                                      px: "30px",
+                                    }}
                                   >
-                                    <Link href={item.link}>{item.title}</Link>
+                                    <Link legacyBehavior href={item.link}>
+                                      {item.title}
+                                    </Link>
                                   </MenuItem>
                                 );
                             })}
                           </Typography>
                         }
                       >
-                        <Link href={page.path} legacyBehavior>
+                        <Link href={page.path}>
                           <Button
                             sx={{
                               mx: 2,
@@ -309,7 +328,11 @@ export default function Navbar() {
                                 {page.title}
                               </Grid>
                               <Grid item xl={1}>
-                                <ArrowDropDownIcon sx={{ mt: 0 }} />
+                                {showTooltip ? (
+                                  <ArrowDropUpIcon sx={{ mt: 0 }} />
+                                ) : (
+                                  <ArrowDropDownIcon sx={{ mt: 0 }} />
+                                )}
                               </Grid>
                             </Grid>
                           </Button>
@@ -321,7 +344,7 @@ export default function Navbar() {
                     login?.authorized == true &&
                     isDone.isDoneMHC == true ? (
                     <Box key={page.title}>
-                      <Link href={page.path} legacyBehavior passHref>
+                      <Link legacyBehavior href={page.path}>
                         <Button
                           sx={{
                             mx: 2,
@@ -353,31 +376,81 @@ export default function Navbar() {
                     login?.authorized !== false &&
                     isDone.isDoneMHC == true ? (
                     <Box key={page.title}>
-                      <Link href={page.path} legacyBehavior passHref>
-                        <Button
-                          sx={{
-                            mx: 2,
-                            py: 4,
-                            color: "#42493A",
-                            display: "block",
-                            borderBottom: window.location.pathname.includes(
-                              "DailyHealthCheck"
-                            )
-                              ? "4px solid #FFAACF"
-                              : "4px solid white",
-                            "&:hover": {
-                              color: "gray",
-                              backgroundColor: "white",
-                              borderBottom: "4px solid #FFAACF",
-                            },
-                            fontSize: 15,
-                            textTransform: "none",
-                          }}
-                          className={montserratBold.className}
-                        >
-                          {page.title}
-                        </Button>
-                      </Link>
+                      <HtmlTooltip
+                        interactive="true"
+                        open={showTooltipDHC}
+                        onOpen={() => setShowTooltipDHC(true)}
+                        onClose={() => setShowTooltipDHC(false)}
+                        TransitionComponent={Fade}
+                        TransitionProps={{ timeout: 300 }}
+                        title={
+                          <Box>
+                            <Typography>
+                              <MenuItem
+                                className={montserrat.className}
+                                sx={{ padding: "10px", fontSize: "15px" }}
+                              >
+                                <Link
+                                  legacyBehavior
+                                  href={"/DailyHealthCheck/RekomendasiKegiatan"}
+                                >
+                                  Rekomendasi Kegiatan
+                                </Link>
+                              </MenuItem>
+                            </Typography>
+                            <Typography>
+                              <MenuItem
+                                className={montserrat.className}
+                                sx={{ padding: "10px", fontSize: "15px" }}
+                              >
+                                <Link
+                                  legacyBehavior
+                                  href={"/DailyHealthCheck/Test"}
+                                >
+                                  Daily Health Test
+                                </Link>
+                              </MenuItem>
+                            </Typography>
+                          </Box>
+                        }
+                      >
+                        <Link href={page.path}>
+                          <Button
+                            sx={{
+                              mx: 2,
+                              py: 4,
+                              color: "#42493A",
+                              display: "block",
+                              borderBottom: window.location.pathname.includes(
+                                "DailyHealthCheck"
+                              )
+                                ? "4px solid #FFAACF"
+                                : "4px solid white",
+                              "&:hover": {
+                                color: "gray",
+                                backgroundColor: "white",
+                                borderBottom: "4px solid #FFAACF",
+                              },
+                              fontSize: 15,
+                              textTransform: "none",
+                            }}
+                            className={montserratBold.className}
+                          >
+                            <Grid container columns={12}>
+                              <Grid item xl={11}>
+                                {page.title}
+                              </Grid>
+                              <Grid item xl={1}>
+                                {showTooltipDHC ? (
+                                  <ArrowDropUpIcon sx={{ mt: 0 }} />
+                                ) : (
+                                  <ArrowDropDownIcon sx={{ mt: 0 }} />
+                                )}
+                              </Grid>
+                            </Grid>
+                          </Button>
+                        </Link>
+                      </HtmlTooltip>
                     </Box>
                   ) : // KONSULTASI ONLINE
                   page.title == "Konsultasi Online" &&
@@ -389,6 +462,8 @@ export default function Navbar() {
                         open={showTooltipKO}
                         onOpen={() => setShowTooltipKO(true)}
                         onClose={() => setShowTooltipKO(false)}
+                        TransitionComponent={Fade}
+                        TransitionProps={{ timeout: 300 }}
                         title={
                           <Box>
                             <Typography>
@@ -396,8 +471,11 @@ export default function Navbar() {
                                 className={montserrat.className}
                                 sx={{ padding: "10px", fontSize: "15px" }}
                               >
-                                <Link href={"DaftarPsikolog"} legacyBehavior>
-                                  Daftar Psikolog
+                                <Link
+                                  legacyBehavior
+                                  href={"/KonsultasiOnline/PemesananKonsultasi"}
+                                >
+                                  Pemesanan Konsultasi
                                 </Link>
                               </MenuItem>
                             </Typography>
@@ -406,13 +484,18 @@ export default function Navbar() {
                                 className={montserrat.className}
                                 sx={{ padding: "10px", fontSize: "15px" }}
                               >
-                                <Link href={"Konsultasi"} legacyBehavior>Konsultasi</Link>
+                                <Link
+                                  legacyBehavior
+                                  href={"/KonsultasiOnline/Konsultasi"}
+                                >
+                                  Konsultasi
+                                </Link>
                               </MenuItem>
                             </Typography>
                           </Box>
                         }
                       >
-                        <Link href={page.path} legacyBehavior>
+                        <Link href={page.path}>
                           <Button
                             sx={{
                               mx: 2,
@@ -439,7 +522,11 @@ export default function Navbar() {
                                 {page.title}
                               </Grid>
                               <Grid item xl={1}>
-                                <ArrowDropDownIcon sx={{ mt: 0 }} />
+                                {showTooltipKO ? (
+                                  <ArrowDropUpIcon sx={{ mt: 0 }} />
+                                ) : (
+                                  <ArrowDropDownIcon sx={{ mt: 0 }} />
+                                )}
                               </Grid>
                             </Grid>
                           </Button>
@@ -462,6 +549,8 @@ export default function Navbar() {
                       maxWidth: 400,
                     },
                   }}
+                  TransitionComponent={Fade}
+                  TransitionProps={{ timeout: 400 }}
                   title={
                     <Box>
                       <Typography className={montserrat.className}>
@@ -472,13 +561,10 @@ export default function Navbar() {
                         className={montserrat.className}
                         sx={{ fontSize: "13px" }}
                       >
-                        <br />
-                        Setiap{" "}
                         <b style={{ color: "black" }}>
-                          Daily Health Check
-                        </b>{" "}
-                        yang dilakukan secara <b>berturut</b> akan menambahkan
-                        10 poin.
+                          Setiap Daily Health Check yang dilakukan secara
+                          berturut akan menambahkan 20 poin.
+                        </b>
                         <br />
                         <br />
                         Saat poin mencapai 100, Anda akan mendapatkan sesi
@@ -493,6 +579,7 @@ export default function Navbar() {
                 >
                   <Box
                     sx={{
+                      marginBottom: "14px",
                       display: {
                         xs: "none",
                         sm: "none",
@@ -508,7 +595,7 @@ export default function Navbar() {
                         marginTop: "17px",
                       }}
                     />
-                    <Box sx={{ marginTop: "0px" }}>
+                    <Box sx={{ marginTop: "0px  " }}>
                       <Typography
                         sx={{ color: "black", fontSize: "13px" }}
                         className={montserrat.className}
@@ -577,7 +664,7 @@ export default function Navbar() {
 
             {/* Login Button */}
             {isLoaded && login?.authorized == false && (
-              <Link href="/Login" legacyBehavior passHref>
+              <Link legacyBehavior href="/Login">
                 <Button
                   variant="outlined"
                   sx={{
@@ -695,24 +782,13 @@ export default function Navbar() {
           )}
 
         <Divider />
-
-        {/* <List>
-          {pages.map((text) => (
-            <ListItem key={text.title} disablePadding>
-              <ListItemButton sx={{ padding: "12px" }}>
-                <Link href={text.path}>
-                  <Typography className={montserrat.className}>
-                    {text.title}
-                  </Typography>
-                </Link>
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List> */}
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
       </Main>
+
+      {/* BreadCrumbs */}
+      {/* <Breadcrumbs omitRootLabel containerStyle={{}} /> */}
     </div>
   );
 }

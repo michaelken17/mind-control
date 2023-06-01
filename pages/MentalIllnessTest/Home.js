@@ -40,7 +40,6 @@ export default function MentalIllnessTest() {
   const axios = require("axios");
 
   React.useEffect(() => {
-  
     setIsLoaded(true);
     console.log(MHCData);
   }, []);
@@ -113,6 +112,7 @@ export default function MentalIllnessTest() {
               if (item.severity >= 2)
                 return (
                   <Grid
+                  key={item.img}
                     item
                     xl={1}
                     xs={4}
@@ -120,7 +120,7 @@ export default function MentalIllnessTest() {
                     sm={2}
                     sx={{ justifyItems: "center" }}
                   >
-                    <Link href={item.link} key={item.img} legacyBehavior>
+                    <Link legacyBehavior href={item.link} key={item.img}>
                       <motion.div
                         whileHover={{ scale: 1.01 }}
                         style={{

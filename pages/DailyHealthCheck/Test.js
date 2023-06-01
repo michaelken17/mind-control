@@ -436,7 +436,9 @@ export default function DHCTest() {
                   }}
                   className={montserrat.className}
                 >
-                  <Link href="/" legacyBehavior>Submit</Link>
+                  <Link legacyBehavior href="/">
+                    Submit
+                  </Link>
                 </Button>
               </Grid>
             </Grid>

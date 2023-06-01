@@ -120,7 +120,7 @@ export default function KonsultasiOnlineHome() {
             sm={2}
             sx={{ justifyItems: "center", textAlign: "center" }}
           >
-            <Link href="DaftarPsikolog" legacyBehavior>
+            <Link legacyBehavior href="PemesananKonsultasi">
               <ImageListItem
                 sx={{
                   borderRadius: "20px",
@@ -150,7 +150,7 @@ export default function KonsultasiOnlineHome() {
                   className={glacial.className}
                   title={
                     <Typography sx={{ fontSize: "20px" }}>
-                      Rekomendasi Psikolog Klinis
+                      Pemesanan Konsultasi Online
                     </Typography>
                   }
                 />
@@ -183,9 +183,7 @@ export default function KonsultasiOnlineHome() {
                   width: { xs: 300, sm: 300, md: 400, lg: 300 },
                 }}
               >
-                <ChatIcon
-                  sx={{ marginTop: "50px", fontSize: "100px" }}
-                />
+                <ChatIcon sx={{ marginTop: "50px", fontSize: "100px" }} />
               </Box>
               <ImageListItemBar
                 sx={{

@@ -269,7 +269,7 @@ export default function MHCTest() {
                 className={montserrat.className}
               >
                 Selama 2 Minggu terakhir, seberapa sering Anda terganggu oleh
-                masalah berikut?
+                masalah berikut?{" "}
                 {isLoaded && (
                   <Box sx={{ position: "relative", float: "right" }}>
                     <CircularProgress
@@ -315,7 +315,7 @@ export default function MHCTest() {
                         variant="caption"
                         component="div"
                         color="text.secondary"
-                        sx={{fontSize:"15px"}}
+                        sx={{ fontSize: "15px" }}
                       >
                         {currentQuestion + 1}/{MHCQuestions.length}
                       </Typography>
@@ -323,6 +323,7 @@ export default function MHCTest() {
                   </Box>
                 )}
               </Typography>
+
               <Typography
                 sx={{
                   fontSize: "20px",
@@ -401,7 +402,7 @@ export default function MHCTest() {
                 <ArrowBack sx={{ color: "black" }} />
               </Button>
             )}
-{/* 
+            {/* 
             {isAnswered && (
               <Button
                 sx={{

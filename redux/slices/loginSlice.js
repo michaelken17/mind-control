@@ -10,8 +10,8 @@ const loginSlice = createSlice({
     email: null,
     userid: 0,
     consultant: false,
-    MHpoints : 0,
-    isDoneMHC: "false"
+    MHpoints: 0,
+    isDoneMHC: "false",
   },
   reducers: {
     login: (state, action) => {

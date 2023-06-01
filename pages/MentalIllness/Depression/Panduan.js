@@ -302,7 +302,7 @@ export default function PanduanDepression() {
               }}
               onClick={startHandler}
             >
-              <Link href="" legacyBehavior>Mulai Test</Link>
+              <Link legacyBehavior href="" >Mulai Test</Link>
             </motion.button>
           </div>
         </motion.div>

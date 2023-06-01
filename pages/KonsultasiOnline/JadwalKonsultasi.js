@@ -41,7 +41,7 @@ import { container, item } from "/animation";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
-import { forwardRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   montserrat,
   glacial,
@@ -59,9 +59,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 
-const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 const theme = createTheme({
   typography: {
     fontFamily: montserrat,
@@ -126,7 +123,7 @@ export default function JadwalKonsultasi() {
       "Sabtu",
     ],
   });
-  const handleClose = () => {
+  const handlePesan = () => {
     setOpen(false);
   };
 
@@ -383,7 +380,7 @@ export default function JadwalKonsultasi() {
                   },
                   margin: "0 auto",
                 }}
-                onClick={handleClose}
+                onClick={handlePesan}
                 autoFocus
               >
                 Pesan

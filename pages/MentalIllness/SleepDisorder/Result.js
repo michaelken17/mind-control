@@ -202,7 +202,7 @@ export default function ResultSleepDisorder() {
                 </div>
                 {/* Button for daily health check */}
                 <motion.div style={{ textAlign: "center" }}>
-                  <Link href="../../DailyHealthCheck/Start" legacyBehavior>
+                  <Link legacyBehavior href="../../DailyHealthCheck/Start">
                     <button
                       style={{
                         borderRadius: 10,

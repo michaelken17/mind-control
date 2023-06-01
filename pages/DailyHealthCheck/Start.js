@@ -16,6 +16,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { glacial, montserrat } from "../../public/fonts";
 import styles from "styles/Quiz.module.css";
 import Link from "next/link";
+import { Circle } from "@mui/icons-material";
 
 const theme = createTheme({
   typography: {
@@ -71,6 +72,7 @@ export default function DailyHealthCheck() {
               className={montserrat.className}
             >
               <ListItem sx={{ marginTop: "10px" }}>
+                <Circle sx={{ marginRight: "10px", fontSize: "8px" }} />
                 <ListItemText
                   primary="Daily Health Check sebaiknya dilakukan tiap hari selama minimal
                     3 minggu untuk memonitor kesehatan mental diri sendiri. Dengan
@@ -78,12 +80,14 @@ export default function DailyHealthCheck() {
                 />
               </ListItem>
               <ListItem sx={{ marginTop: "10px" }}>
+                <Circle sx={{ marginRight: "10px", fontSize: "8px" }} />
                 <ListItemText
                   primary="Kuesioner berisi pertanyaan mengenai bagaimana hari anda dan
                     perasaan anda selama seharian ini"
                 />
               </ListItem>
               <ListItem sx={{ marginTop: "10px" }}>
+                <Circle sx={{ marginRight: "10px", fontSize: "8px" }} />
                 <ListItemText
                   primary="Isilah kuesioner di akhir hari (cth: saat sebelum tidur) untuk
                     merefleksikan mengenai hari yang telah anda jalani"
@@ -113,7 +117,7 @@ export default function DailyHealthCheck() {
               }}
               whileTap={{ scale: 0.9 }}
             >
-              <Link href="RekomendasiKegiatan" legacyBehavior>
+              <Link legacyBehavior href="RekomendasiKegiatan">
                 Lihat Rekomendasi Kegiatan Hari Ini
               </Link>
             </motion.button>
@@ -141,7 +145,9 @@ export default function DailyHealthCheck() {
                   backgroundColor: "#FF4E9B",
                 }}
               >
-                <Link href="Test" legacyBehavior>Lakukan Daily Health Check Hari ini!</Link>
+                <Link legacyBehavior href="Test">
+                  Lakukan Daily Health Check Hari ini!
+                </Link>
               </button>
             </Badge>
           </motion.div>

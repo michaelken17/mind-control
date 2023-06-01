@@ -53,13 +53,7 @@ import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
 import Slide from "@mui/material/Slide";
 import dayjs from "dayjs";
 // import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 
-const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 const theme = createTheme({
   typography: {
     fontFamily: montserrat,
@@ -90,13 +84,9 @@ export default function DaftarPsikolog() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [open, setOpen] = useState(false);
   const theme = useTheme();
-  //   const fullScreen = useMediaQuery(theme.breakpoints.down("xl"));
   const [datePicked, setdatePicked] = useState(dayjs());
-  const handleClickOpen = () => {
+  const handleScheduleBtn = () => {
     setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
   };
   useEffect(() => {
     setIsLoaded(true);
@@ -195,7 +185,12 @@ export default function DaftarPsikolog() {
                     }
                     action={
                       <Box sx={{ display: "flex" }}>
-                        <Typography sx={{ marginRight: "5px" }}>5.0</Typography>
+                        <Typography
+                          sx={{ marginRight: "5px" }}
+                          className={montserratBold.className}
+                        >
+                          5.0
+                        </Typography>
                         <FavoriteIcon sx={{ color: "#FFAACF" }} />
                       </Box>
                     }
@@ -263,7 +258,7 @@ export default function DaftarPsikolog() {
                     >
                       Rp. 50.000,00
                     </Typography>
-                    <Link href="JadwalKonsultasi" legacyBehavior>
+                    <Link legacyBehavior href="JadwalKonsultasi">
                       <Button
                         sx={{
                           textTransform: "none",
@@ -274,11 +269,12 @@ export default function DaftarPsikolog() {
                             backgroundColor: "#EA8FEA",
                           },
                         }}
-                        onClick={handleClickOpen}
+                        onClick={handleScheduleBtn}
                       >
                         <Typography
                           className={montserratBold.className}
                           sx={{ fontSize: "14px", px: "10px" }}
+                          href={"JadwalKonsultasi"}
                         >
                           Jadwalkan
                         </Typography>
