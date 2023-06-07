@@ -44,6 +44,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Breadcrumbs from "nextjs-breadcrumbs";
 import Fade from "@mui/material/Fade";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import HistoryIcon from '@mui/icons-material/History';
 
 const pages = [
   { title: "Mental Health Check", path: "/MentalHealthCheck/Start" },
@@ -173,9 +174,9 @@ export default function Navbar() {
 
   React.useEffect(() => {
     setIsLoad(true);
-    // console.log(login);
-    // console.log(MHCData);
-    // console.log(isDone);
+    console.log(login);
+    console.log(MHCData);
+    console.log(isDone);
     // console.log(window.location.pathname);
     if (login.username == "") {
       Swal.fire({
@@ -214,6 +215,7 @@ export default function Navbar() {
                     height: "80px",
                     alt: "Mind Control",
                     margin: "20px",
+                    cursor:"pointer"
                   }}
                   alt=""
                   src="/image/MCIcon.png"
@@ -249,15 +251,17 @@ export default function Navbar() {
                 fontWeight: 700,
                 color: "inherit",
                 textDecoration: "none",
+                cursor: "pointer",
+                zIndex:"5"
               }}
             >
-              <Link legacyBehavior href="/Home">
+              <Link legacyBehavior href="/Home" sx={{cursor: "pointer",}}>
                 <img
                   src="/image/MCIcon.png"
                   width="160"
                   height="80"
                   alt="Mind Control"
-                  style={{ margin: 15 }}
+                  style={{ margin: 15 }} 
                 />
               </Link>
             </Typography>
@@ -486,9 +490,9 @@ export default function Navbar() {
                               >
                                 <Link
                                   legacyBehavior
-                                  href={"/KonsultasiOnline/Konsultasi"}
+                                  href={"/KonsultasiOnline/ListKonsultasi"}
                                 >
-                                  Konsultasi
+                                  Jadwal Konsultasi
                                 </Link>
                               </MenuItem>
                             </Typography>
@@ -562,7 +566,7 @@ export default function Navbar() {
                         sx={{ fontSize: "13px" }}
                       >
                         <b style={{ color: "black" }}>
-                          Setiap Daily Health Check yang dilakukan secara
+                          Setiap Daily Health Test yang dilakukan secara
                           berturut akan menambahkan 20 poin.
                         </b>
                         <br />
@@ -571,7 +575,7 @@ export default function Navbar() {
                         konsultasi <b style={{ color: "red" }}>GRATIS</b> <br />
                         <br />
                         Poin akan menjadi 0 lagi ketika sudah mengklaim
-                        konsultasi gratis atau <i>streak</i> Daily Health Check
+                        konsultasi gratis atau <i>streak</i> Daily Health Test
                         berakhir
                       </Typography>
                     </Box>
@@ -642,14 +646,14 @@ export default function Navbar() {
                   >
                     {login.fullname}
                   </Typography>
-                  {/* <MenuItem onClick={handleMyAccount}>
+                  <MenuItem>
                     <Typography
                       className={montserrat.className}
                       sx={{ textAlign: "center" }}
                     >
-                      My Account
+                      Transaction History
                     </Typography>
-                  </MenuItem> */}
+                  </MenuItem>
                   <MenuItem onClick={handleLogout}>
                     <Typography
                       className={montserrat.className}
@@ -658,6 +662,7 @@ export default function Navbar() {
                       Logout
                     </Typography>
                   </MenuItem>
+                 
                 </Menu>
               </Box>
             )}

@@ -65,35 +65,29 @@ const theme = createTheme({
     fontFamily: montserrat,
   },
 });
-const tomorrow = dayjs().add(1, "day");
-const maxDate = dayjs().add(5, "day");
-
-var timeAvailable = [
-  "09:00",
-  "10:00",
-  "11:00",
-  "12:00",
-  "13:00",
-  "19:00",
-  "20:00",
-];
 
 // Daftar Psikolog
-export default function DaftarPsikolog() {
+export default function DaftarPsikolog({ handleScheduleBtn }) {
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
-  const [open, setOpen] = useState(false);
+
   const theme = useTheme();
   const [datePicked, setdatePicked] = useState(dayjs());
-  const handleScheduleBtn = () => {
-    setOpen(true);
-  };
+  const [consultantData, setconsultantData] = useState([]);
+  const axios = require("axios");
+
   useEffect(() => {
-    setIsLoaded(true);
+    axios
+      .get("https://localhost:7184/api/Consultant/GetAllConsultantData")
+      .then((resp) => {
+        setconsultantData(resp.data);
+        setIsLoaded(true);
+      });
   }, []);
+
   useEffect(() => {
-    console.log(datePicked.format("dddd, DD MMMM"));
-  }, [datePicked]);
+    console.log(consultantData);
+  }, [consultantData]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -101,11 +95,12 @@ export default function DaftarPsikolog() {
         {isLoaded && (
           <motion.div
             style={{
-              padding: "0px",
+              // padding: "10px",
               borderRadius: 10,
               fontSize: 20,
               height: "100%",
-              //   border: "10px solid",
+              marginTop: "15px",
+              //  border: "1px solid",
               textAlign: "center",
               justifyItems: "center",
               color: "black",
@@ -127,162 +122,174 @@ export default function DaftarPsikolog() {
               }}
             >
               {/* Rekomendasi Psikolog */}
-              <Typography
-                sx={{
-                  fontSize: { xl: "30px", xs: "25px" },
-                  color: "black",
-                  textAlign: "left",
-                }}
-                className={montserratExtraBold.className}
-              >
-                Rekomendasi Psikolog
-              </Typography>
-
-              <Typography
-                sx={{
-                  fontSize: {
-                    lg: "17px",
-                    md: "15px",
-                    sm: "15px",
-                    xs: "13px",
-                  },
-                  color: "black",
-                  textAlign: "left",
-                  mb: 2,
-                }}
-                className={montserrat.className}
-              >
-                Berikut adalah daftar psikolog yang tersedia.
-              </Typography>
-
-              <Box
-                sx={{
-                  display: "flex",
-                  textAlign: "center",
-                  justifyContent: "left",
-                  marginTop: "30px",
-                }}
-              >
-                <Card
+              <Box>
+                <Typography
                   sx={{
-                    width: { xl: "60%", xs: "100%" },
-                    textAlign: "left",
-                    borderRadius: "10px",
+                    fontSize: { xl: "19px", md: "19px", xs: "17px" },
+                    color: "black",
+                    textAlign: "center",
                   }}
-                  raised
+                  className={montserratExtraBold.className}
                 >
-                  <CardHeader
-                    sx={{ padding: "20px" }}
-                    avatar={
-                      <Avatar sx={{ bgcolor: "#FFAACF" }}>
+                  Rekomendasi Psikolog
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: {
+                      lg: "17px",
+                      md: "15px",
+                      sm: "15px",
+                      xs: "13px",
+                    },
+                    color: "black",
+                    textAlign: "center",
+                    mb: 2,
+                  }}
+                  className={montserrat.className}
+                >
+                  Berikut adalah daftar psikolog yang tersedia.
+                </Typography>
+              </Box>
+
+              {consultantData.map((val) => {
+                return (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      textAlign: "center",
+                      justifyContent: "center",
+                      marginTop: "30px",
+                    }}
+                    key={val.consultantID}
+                  >
+                    <Card
+                      sx={{
+                        width: { xl: "70%", xs: "100%", md: "80%" },
+                        textAlign: "left",
+                        borderRadius: "10px",
+                      }}
+                      raised
+                    >
+                      <CardHeader
+                        sx={{ padding: "20px" }}
+                        avatar={
+                          <Avatar sx={{ bgcolor: "#FFAACF" }}>
+                            <Typography
+                              className={montserratExtraBold.className}
+                              sx={{ fontSize: "20px" }}
+                            >
+                              {val.fullName.charAt(0)}
+                            </Typography>
+                          </Avatar>
+                        }
+                        action={
+                          <Box sx={{ display: "flex" }}>
+                            <Typography
+                              sx={{ marginRight: "5px" }}
+                              className={montserratBold.className}
+                            >
+                              {val.rating.toFixed(1)}
+                            </Typography>
+                            <FavoriteIcon sx={{ color: "#FFAACF" }} />
+                          </Box>
+                        }
+                        title={
+                          <Typography className={montserratExtraBold.className}>
+                            {val.fullName}, {val.gelar}
+                          </Typography>
+                        }
+                        subheader={
+                          <Typography
+                            className={montserratLight.className}
+                            sx={{ fontSize: "14px" }}
+                          >
+                            {val.pendidikan}
+                          </Typography>
+                        }
+                      />
+                      <Divider />
+                      <CardContent sx={{ pt: "10px", pb: "0px" }}>
+                        <Typography
+                          className={montserratBold.className}
+                          sx={{ fontSize: "16px", mb: "5px" }}
+                        >
+                          {val.spesialisasi}
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            paddingLeft: "5px",
+                            // bgcolor: "rgba(0,0,0,0.5)",
+                            width: "130px",
+                            borderRadius: "5px",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <Grid container columns={8} sx={{ padding: 0 }}>
+                            <Grid item xl={1} sx={{ pt: "5px" }}>
+                              <WorkHistoryIcon
+                                sx={{
+                                  fontSize: "22px",
+                                  color: "black",
+                                }}
+                              />
+                            </Grid>
+
+                            <Grid item xl={6} sx={{ paddingLeft: "5px" }}>
+                              <Typography
+                                className={montserratBold.className}
+                                sx={{
+                                  pt: "6px",
+                                  fontSize: "14px",
+                                  color: "black",
+                                  textAlign: "center",
+                                }}
+                              >
+                                {val.pengalaman}
+                              </Typography>
+                            </Grid>
+                          </Grid>
+                        </Box>
+                      </CardContent>
+                      <CardActions
+                        sx={{
+                          justifyContent: "space-between",
+                          pl: "16px",
+                          pt: "0px",
+                        }}
+                      >
                         <Typography
                           className={montserratExtraBold.className}
-                          sx={{ fontSize: "20px" }}
+                          sx={{ fontSize: "16px" }}
                         >
-                          J
+                          Rp. {val.harga.toLocaleString("id")},00
                         </Typography>
-                      </Avatar>
-                    }
-                    action={
-                      <Box sx={{ display: "flex" }}>
-                        <Typography
-                          sx={{ marginRight: "5px" }}
-                          className={montserratBold.className}
-                        >
-                          5.0
-                        </Typography>
-                        <FavoriteIcon sx={{ color: "#FFAACF" }} />
-                      </Box>
-                    }
-                    title={
-                      <Typography className={montserratExtraBold.className}>
-                        Jennie Kim, M.Psi, Psikolog
-                      </Typography>
-                    }
-                    subheader={
-                      <Typography
-                        className={montserratLight.className}
-                        sx={{ fontSize: "14px" }}
-                      >
-                        Psikolog Klinis
-                      </Typography>
-                    }
-                  />
-                  <Divider />
-                  <CardContent sx={{ pt: "10px", pb: "0px" }}>
-                    <Typography
-                      className={montserratBold.className}
-                      sx={{ fontSize: "16px", mb: "5px" }}
-                    >
-                      Gangguan Mood, Depresi, Trauma
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        mb: "5px",
-                        bgcolor: "rgba(0,0,0,0.5)",
-                        p: "5px",
-                        width: "100px",
-                        borderRadius: "5px",
-                      }}
-                    >
-                      <WorkHistoryIcon
-                        sx={{
-                          marginRight: "10px",
-                          fontSize: "22px",
-                          color: "white",
-                        }}
-                      />
-                      <Typography
-                        className={montserratBold.className}
-                        sx={{
-                          marginTop: "1px",
-                          fontSize: "14px",
-                          color: "white",
-                        }}
-                      >
-                        5 Tahun
-                      </Typography>
-                    </Box>
-                  </CardContent>
-                  <CardActions
-                    sx={{
-                      justifyContent: "space-between",
-                      pl: "16px",
-                      pt: "0px",
-                    }}
-                  >
-                    <Typography
-                      className={montserratExtraBold.className}
-                      sx={{ fontSize: "16px" }}
-                    >
-                      Rp. 50.000,00
-                    </Typography>
-                    <Link legacyBehavior href="JadwalKonsultasi">
-                      <Button
-                        sx={{
-                          textTransform: "none",
-                          color: "white",
-                          backgroundColor: "#FFAACF",
-                          "&:hover": {
+                        {/* <Link legacyBehavior href="JadwalKonsultasi"> */}
+                        <Button
+                          sx={{
+                            textTransform: "none",
                             color: "white",
-                            backgroundColor: "#EA8FEA",
-                          },
-                        }}
-                        onClick={handleScheduleBtn}
-                      >
-                        <Typography
-                          className={montserratBold.className}
-                          sx={{ fontSize: "14px", px: "10px" }}
-                          href={"JadwalKonsultasi"}
+                            backgroundColor: "#FFAACF",
+                            "&:hover": {
+                              color: "white",
+                              backgroundColor: "#EA8FEA",
+                            },
+                          }}
+                          onClick={(event) => handleScheduleBtn(val)}
                         >
-                          Jadwalkan
-                        </Typography>
-                      </Button>
-                    </Link>
-                  </CardActions>
-                </Card>
-              </Box>
+                          <Typography
+                            className={montserratBold.className}
+                            sx={{ fontSize: "14px", px: "10px" }}
+                          >
+                            Jadwalkan
+                          </Typography>
+                        </Button>
+                        {/* </Link> */}
+                      </CardActions>
+                    </Card>
+                  </Box>
+                );
+              })}
             </Box>
           </motion.div>
         )}

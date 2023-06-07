@@ -40,7 +40,7 @@ import Link from "next/link";
 import { container, item } from "/animation";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import {
   montserrat,
@@ -54,10 +54,10 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
 import Slide from "@mui/material/Slide";
 import dayjs from "dayjs";
-// import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import { consultantActions } from "@/redux/slices/consultantSlice";
 
 const theme = createTheme({
   typography: {
@@ -75,25 +75,19 @@ const theme = createTheme({
 const maxDate = dayjs().add(5, "day");
 const today = dayjs().format("YYYY-MM-DD");
 
-var timeAvailable = [
-  "09:00",
-  "10:00",
-  "11:00",
-  "12:00",
-  "13:00",
-  "19:00",
-  "20:00",
-];
-
 // Daftar Psikolog
-export default function JadwalKonsultasi() {
+export default function JadwalKonsultasi(val) {
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
   const [open, setOpen] = useState(false);
   const theme = useTheme();
-  //   const fullScreen = useMediaQuery(theme.breakpoints.down("xl"));
   const [datePicked, setdatePicked] = useState(dayjs());
   const [timePicked, settimePicked] = useState("");
+  const [availability, setAvailability] = useState([]);
+  const [timeAvailable, settimeAvailable] = useState([]);
+  const [dateTime, setdateTime] = useState("");
+  const axios = require("axios");
+  const dispatch = useDispatch();
   var updateLocale = require("dayjs/plugin/updateLocale");
   dayjs.extend(updateLocale);
   dayjs.updateLocale("en", {
@@ -113,41 +107,69 @@ export default function JadwalKonsultasi() {
     ],
   });
   dayjs.updateLocale("en", {
-    weekdays: [
-      "Minggu",
-      "Senin",
-      "Selasa",
-      "Rabu",
-      "Kamis",
-      "Jumat",
-      "Sabtu",
-    ],
+    weekdays: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
   });
-  const handlePesan = () => {
-    setOpen(false);
+
+  const timePickerHandler = (event, next) => {
+    settimePicked(next);
+    setdateTime(datePicked.format("dddd, DD MMMM") + " " + timePicked);
   };
 
   useEffect(() => {
     setIsLoaded(true);
+    axios
+      .get(
+        "https://localhost:7184/api/Consultant/GetConsultantAvailability?ConsultantID=" +
+          val.consultantData.consultantID
+      )
+      .then((resp) => {
+        setAvailability(resp.data);
+      });
+
+    settimeAvailable;
   }, []);
+
+  useEffect(() => {
+    // console.log(
+    //   availability
+    //     .filter((x) => x.hariPertemuan === datePicked.format("dddd"))
+    //     .map(({ hariPertemuan, jamPertemuan }) => {
+    //       return { hariPertemuan, jamPertemuan };
+    //     })
+    // );
+    console.log(timeAvailable.length);
+  }, [timeAvailable]);
 
   useEffect(() => {
     // console.log("Time: " + dayjs().format("HH:mm:ss"));
     // console.log(datePicked.format("dddd, DD MMMM"));
     settimePicked("");
+    settimeAvailable(
+      availability
+        .filter((x) => x.hariPertemuan === datePicked.format("dddd"))
+        .map(({ hariPertemuan, jamPertemuan }) => {
+          return { hariPertemuan, jamPertemuan };
+        })
+    );
   }, [datePicked]);
 
-  const timePickerHandler = (event, next) => {
-    settimePicked(next);
-    // console.log(next);
-    console.log(
-      dayjs(datePicked.format("YYYY-MM-DD") + " " + next).diff(
-        dayjs(),
-        "minutes"
-      )
+  useEffect(() => {
+    setdateTime(datePicked.format("dddd, DD MMMM") + " " + timePicked);
+  }, [timePicked]);
+
+  useEffect(() => {
+    console.log(datePicked.format("dddd, DD MMMM"));
+    console.log(timePicked);
+    dispatch(consultantActions.dateTime({}));
+    dispatch(
+      consultantActions.dateTime({
+        date: datePicked.format("dddd, DD MMMM"),
+        time: timePicked,
+        datetime: datePicked.format("YYYY-MM-DD") +"T"+timePicked
+      })
     );
-    // console.log(dayjs().diff(dayjs(today + " " + next), "minutes"));
-  };
+    console.log(datePicked.format("YYYY-MM-DD") +"T"+timePicked)
+  }, [dateTime]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -175,216 +197,230 @@ export default function JadwalKonsultasi() {
             <Box
               sx={{
                 background: "white",
-                padding: "20px",
+                py: "20px",
               }}
             >
               <Box sx={{ textAlign: "left" }}>
+                <Box>
+                  <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                    <Typography
+                      className={montserratExtraBold.className}
+                      sx={{ fontSize: "20px" }}
+                    >
+                      {val.consultantData.fullName}, {val.consultantData.gelar}
+                    </Typography>
+                    {/* <Box sx={{ flex: "1 1 auto" }} /> */}
+                    <Typography
+                      className={montserratLight.className}
+                      sx={{ fontSize: "20px", ml: "20px" }}
+                    >
+                      <Grid container>
+                        <Grid sx={{ mt: "0px" }}>
+                          {val.consultantData.rating.toFixed(1)}
+                        </Grid>
+                        <Grid>
+                          <FavoriteIcon
+                            sx={{ mt: "3px", ml: "3px", color: "#FFAACF" }}
+                          />
+                        </Grid>
+                      </Grid>
+                    </Typography>
+                  </Box>
+                </Box>
+
                 <Typography
-                  className={montserratExtraBold.className}
-                  sx={{ fontSize: "20px" }}
+                  className={montserrat.className}
+                  sx={{ fontSize: "17px" }}
                 >
-                  Jennie Kim, M.Psi, Psikolog
+                  {val.consultantData.pendidikan}
+                </Typography>
+                <Typography
+                  className={montserrat.className}
+                  sx={{ fontSize: "17px", mt: "10px" }}
+                >
+                  Spesialisasi : {val.consultantData.spesialisasi}
                 </Typography>
                 <Typography
                   className={montserrat.className}
                   sx={{ fontSize: "17px" }}
                 >
-                  Psikolog Klinis
+                  Pengalaman : {val.consultantData.pengalaman}
                 </Typography>
                 <Typography
                   className={montserratExtraBold.className}
-                  sx={{ fontSize: "17px", color: "black" }}
+                  sx={{ fontSize: "17px", color: "black", mt: "10px" }}
                 >
-                  Rp. 50.000,00
+                  Rp. {val.consultantData.harga.toLocaleString("id")},00
                 </Typography>
               </Box>
-
-              <Grid container columns={2} maxWidth={800}>
-                <Grid
-                  item
-                  xl={1}
-                  md={1}
-                  sx={{
-                    justifyContent: "left",
-                    marginLeft: { xl: "-60px", md: "-65px", sm: "-20px" },
-                  }}
-                >
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DateCalendar
-                      className={montserratBold.className}
-                      showDaysOutsideCurrentMonth
-                      minDate={dayjs()}
-                      maxDate={maxDate}
-                      value={datePicked}
-                      onChange={(x) => setdatePicked(x)}
-                      views={["day"]}
-                      sx={{
-                        fontFamily: montserrat.className,
-                        "&.MuiDayCalendar-header": {
-                          padding: "0px",
-                        },
-                        "& .MuiPickersCalendarHeader-label": {
-                          fontSize: "17px",
-                        },
-
-                        "& .MuiPickersDay-root": {
-                          "&:hover": {
-                            bgcolor: "rgba(0,0,0,0.05)",
-                            color: "black",
-                            fontWeight: "bold",
-                          },
-                          "&:focus": {
-                            bgcolor: "#FFAACF",
-                            color: "black",
-                            fontWeight: "bold",
-                          },
-                          "&.Mui-selected": {
-                            bgcolor: "#FFAACF",
-                            color: "black",
-                            fontWeight: "bold",
-                            "&:hover": {
-                              bgcolor: "rgba(255, 170, 207, 0.5)",
-                              color: "black",
-                              fontWeight: "bold",
-                            },
-                            "&:focused": {
-                              bgcolor: "#FFAACF",
-                              color: "black",
-                              fontWeight: "bold",
-                            },
-                          },
-                        },
-                        ".css-qa7bje-MuiButtonBase-root-MuiPickersDay-root:focus.Mui-selected":
-                          {
-                            "&:focus": {
-                              bgcolor: "#FFAACF",
-                              color: "black",
-                              fontWeight: "bold",
-                            },
-                            "&:hover": {
-                              bgcolor: "rgba(255, 170, 207, 0.5)",
-                              color: "black",
-                              fontWeight: "bold",
-                            },
-                          },
-                        ".css-1jsy6pn-MuiButtonBase-root-MuiPickersDay-root:focus.Mui-selected":
-                          {
-                            border: "1px solid black",
-
-                            "&:focus": {
-                              bgcolor: "#FFAACF",
-                              color: "black",
-                              fontWeight: "bold",
-                              border: "1px solid black",
-                            },
-                            "&:hover": {
-                              bgcolor: "rgba(255, 170, 207, 0.5)",
-                              color: "black",
-                            },
-                          },
-                      }}
-                    />
-                  </LocalizationProvider>
-                </Grid>
-
-                <Grid item xl={1} md={1}>
+              <Box
+                sx={{
+                  display: "flex",
+                  textAlign: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <Grid container columns={10} maxWidth={500}>
                   <Grid
-                    container
-                    columns={2}
-                    sx={{ mt: "18px", justifyContent: "left" }}
+                    item
+                    xl={7}
+                    md={7}
+                    sx={{
+                      justifyContent: "left",
+                      marginLeft: { xl: "-60px", md: "-65px", sm: "-20px" },
+                    }}
                   >
-                    <Typography
-                      className={montserrat.className}
-                      sx={{ width: "100%", textAlign: "left" }}
-                    >
-                      {datePicked.format("dddd, DD MMMM") + " " + timePicked} 
-                    </Typography>
-                    <ToggleButtonGroup
-                      orientation="vertical"
-                      value={timePicked}
-                      onChange={timePickerHandler}
-                      exclusive
-                    >
-                      {timeAvailable.map((x) => {
-                        if (
-                          dayjs(datePicked.format("YYYY-MM-DD") + " " + x).diff(
-                            dayjs(),
-                            "minutes"
-                          ) > 30
-                        )
-                          return (
-                            //   <Grid
-                            //     item
-                            //     xl={2}
-                            //     key={x}
-                            //     sx={{
-                            //       mt: "0px",
-                            //       justifyContent: { xl: "left", xs: "center" },
-                            //       textAlign: { xl: "left", xs: "center" },
-                            //     }}
-                            //   >
-                            <ToggleButton
-                              key={x}
-                              value={x}
-                              className={montserrat.className}
-                              sx={{
-                                borderRadius: 0,
-                                textTransform: "none",
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DateCalendar
+                        className={montserratBold.className}
+                        showDaysOutsideCurrentMonth
+                        minDate={dayjs()}
+                        maxDate={maxDate}
+                        value={datePicked}
+                        onChange={(x) => setdatePicked(x)}
+                        views={["day"]}
+                        sx={{
+                          fontFamily: montserrat.className,
+                          "&.MuiDayCalendar-header": {
+                            padding: "0px",
+                          },
+                          "& .MuiPickersCalendarHeader-label": {
+                            fontSize: "17px",
+                          },
+
+                          "& .MuiPickersDay-root": {
+                            "&:hover": {
+                              bgcolor: "rgba(0,0,0,0.05)",
+                              color: "black",
+                              fontWeight: "bold",
+                            },
+                            "&:focus": {
+                              bgcolor: "#FFAACF",
+                              color: "black",
+                              fontWeight: "bold",
+                            },
+                            "&.Mui-selected": {
+                              bgcolor: "#FFAACF",
+                              color: "black",
+                              fontWeight: "bold",
+                              "&:hover": {
+                                bgcolor: "rgba(255, 170, 207, 0.5)",
                                 color: "black",
-                                // color: "white",
+                                fontWeight: "bold",
+                              },
+                              "&:focused": {
                                 bgcolor: "#FFAACF",
-                                py: "8px",
-                                my: "9px",
-                                width: "180px",
-                                // border: "1px solid black",
-                                "&:hover": {
-                                  // color: "#5A5A5A",
-                                  // backgroundColor: "#EA8FEA",
-                                  backgroundColor: "rgba(255, 170, 207, 0.6)",
-                                },
-                                "&.Mui-selected": {
-                                  backgroundColor: "rgba(234, 143, 234)",
-                                  "&:hover": {
-                                    // color: "#5A5A5A",
-                                    // backgroundColor: "#EA8FEA",
-                                    backgroundColor: "rgba(234, 143, 234, 0.6)",
-                                  },
-                                },
-                              }}
-                            >
-                              {x}
-                            </ToggleButton>
-                            //   </Grid>
-                          );
-                      })}
-                    </ToggleButtonGroup>
+                                color: "black",
+                                fontWeight: "bold",
+                              },
+                            },
+                          },
+                          ".css-qa7bje-MuiButtonBase-root-MuiPickersDay-root:focus.Mui-selected":
+                            {
+                              "&:focus": {
+                                bgcolor: "#FFAACF",
+                                color: "black",
+                                fontWeight: "bold",
+                              },
+                              "&:hover": {
+                                bgcolor: "rgba(255, 170, 207, 0.5)",
+                                color: "black",
+                                fontWeight: "bold",
+                              },
+                            },
+                          ".css-1jsy6pn-MuiButtonBase-root-MuiPickersDay-root:focus.Mui-selected":
+                            {
+                              border: "1px solid black",
+
+                              "&:focus": {
+                                bgcolor: "#FFAACF",
+                                color: "black",
+                                fontWeight: "bold",
+                                border: "1px solid black",
+                              },
+                              "&:hover": {
+                                bgcolor: "rgba(255, 170, 207, 0.5)",
+                                color: "black",
+                              },
+                            },
+                        }}
+                      />
+                    </LocalizationProvider>
+                  </Grid>
+
+                  <Grid item xl={4} md={4}>
+                    <Grid
+                      container
+                      columns={2}
+                      sx={{ mt: "18px", justifyContent: "left" }}
+                    >
+                      <Typography
+                        className={montserrat.className}
+                        sx={{ width: "100%", textAlign: "left" }}
+                      >
+                        {datePicked.format("dddd, DD MMMM") + " " + timePicked}
+                      </Typography>
+                      {timeAvailable.length != 0 ? (
+                        <ToggleButtonGroup
+                          orientation="vertical"
+                          value={timePicked}
+                          onChange={timePickerHandler}
+                          exclusive
+                        >
+                          {timeAvailable.map((x) => {
+                            if (
+                              dayjs(
+                                datePicked.format("YYYY-MM-DD") +
+                                  " " +
+                                  x.jamPertemuan
+                              ).diff(dayjs(), "minutes") > 30
+                            )
+                              return (
+                                <ToggleButton
+                                  key={x.jamPertemuan}
+                                  value={x.jamPertemuan}
+                                  className={montserrat.className}
+                                  sx={{
+                                    borderRadius: 0,
+                                    textTransform: "none",
+                                    color: "black",
+
+                                    bgcolor: "#FFAACF",
+                                    py: "8px",
+                                    my: "9px",
+                                    width: "180px",
+
+                                    "&:hover": {
+                                      backgroundColor:
+                                        "rgba(255, 170, 207, 0.6)",
+                                    },
+                                    "&.Mui-selected": {
+                                      backgroundColor: "rgba(234, 143, 234)",
+                                      "&:hover": {
+                                        backgroundColor:
+                                          "rgba(234, 143, 234, 0.6)",
+                                      },
+                                    },
+                                  }}
+                                >
+                                  {x.jamPertemuan}
+                                </ToggleButton>
+                                //   </Grid>
+                              );
+                          })}
+                        </ToggleButtonGroup>
+                      ) : (
+                        <Typography
+                          className={montserratExtraBold.className}
+                          sx={{ width: "100%", textAlign: "left", fontSize:"15px", my:"15px"}}
+                          >
+                          Jadwal tidak tersedia, mohon mencari hari lain
+                        </Typography>
+                      )}
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-            </Box>
-            <Box sx={{ textAlign: "left", px: "20px" }}>
-              <Button
-                className={montserrat.className}
-                sx={{
-                  textTransform: "none",
-                  color: "black",
-                  // color: "white",
-                  bgcolor: "#FFAACF",
-                  margin: "10px",
-                  px: "20px",
-                  // border: "1px solid black",
-                  "&:hover": {
-                    // color: "#5A5A5A",
-                    // backgroundColor: "#EA8FEA",
-                    backgroundColor: "rgba(255, 170, 207, 0.4)",
-                  },
-                  margin: "0 auto",
-                }}
-                onClick={handlePesan}
-                autoFocus
-              >
-                Pesan
-              </Button>
+              </Box>
             </Box>
           </motion.div>
         )}

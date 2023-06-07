@@ -58,8 +58,10 @@ const theme = createTheme({
 export default function RekomendasiKegiatan() {
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
-  const [value, setValue] = useState("1");
+  const [value, setValue] = useState("Sleep Disorder");
+
   const MHCData = useSelector((x) => x.persistedReducer.app.MHCdata);
+  const datePicked = useSelector((x) => x.persistedReducer.consultant.dateTime);
   const depressionSolutions = useSelector(
     (x) => x.persistedReducer.app.depressionSolutions
   );
@@ -75,8 +77,18 @@ export default function RekomendasiKegiatan() {
 
   useEffect(() => {
     setIsLoaded(true);
-    console.log(MHCData);
+    console.log(MHCData.length);
+ 
+    for (var i = 0; i < MHCData.length; i++) {
+      if (MHCData[i].severity > 2) {
+        setValue(MHCData[i].title);
+        break;
+      }
+    }
   }, []);
+  useEffect(() => {
+    console.log(value);
+  }, [value]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -127,7 +139,7 @@ export default function RekomendasiKegiatan() {
                     >
                       <TabList
                         TabIndicatorProps={{
-                          style: {
+                          sx: {
                             backgroundColor: "black",
                           },
                         }}
@@ -139,8 +151,9 @@ export default function RekomendasiKegiatan() {
                           if (val.severity >= 2)
                             return (
                               <Tab
+                                key={val.title}
                                 label={val.title}
-                                value={(index + 1).toString()}
+                                value={val.title}
                                 className={montserrat.className}
                                 sx={{
                                   textTransform: "none",
@@ -153,7 +166,7 @@ export default function RekomendasiKegiatan() {
                         })}
                       </TabList>
                     </Box>
-                    <TabPanel value="1">
+                    <TabPanel value={"Depression"}>
                       <Box>
                         <Grid container spacing={1} columns={16}>
                           {depressionSolutions.map((x, index) => (
@@ -199,7 +212,7 @@ export default function RekomendasiKegiatan() {
                         </Grid>
                       </Box>
                     </TabPanel>
-                    <TabPanel value="2">
+                    <TabPanel value={"Anxiety"}>
                       <Box>
                         <Grid container spacing={1} columns={16}>
                           {anxietySolutions.map((x, index) => (
@@ -245,7 +258,7 @@ export default function RekomendasiKegiatan() {
                         </Grid>
                       </Box>
                     </TabPanel>
-                    <TabPanel value="3">
+                    <TabPanel value={"OCD"}>
                       <Box>
                         <Grid container spacing={1} columns={16}>
                           {OCDSolutions.map((x, index) => (
@@ -291,7 +304,7 @@ export default function RekomendasiKegiatan() {
                         </Grid>
                       </Box>
                     </TabPanel>
-                    <TabPanel value="4">
+                    <TabPanel value={"Sleep Disorder"}>
                       <Box>
                         <Grid container spacing={1} columns={16}>
                           {SDSolutions.map((x, index) => (

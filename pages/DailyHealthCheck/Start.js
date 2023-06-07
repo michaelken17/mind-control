@@ -96,31 +96,23 @@ export default function DailyHealthCheck() {
             </List>
           </div>
           <motion.div style={{ textAlign: "center", padding: 20 }}>
-            <motion.button
-              className={styles.buttonDaily}
-              whileHover={{ scale: 1.1 }}
-              style={{
-                borderRadius: 10,
-                padding: 20,
-                marginTop: 30,
-                marginLeft: "20px",
-                marginRight: "20px",
-                fontSize: 20,
-                border: "0px ",
-              }}
-              transition={{
-                duration: 1,
-                type: "spring",
-                stiffness: 300,
-                damping: 20,
-                bounce: 1,
-              }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <Link legacyBehavior href="RekomendasiKegiatan">
+            <Link legacyBehavior href="RekomendasiKegiatan">
+              <Button
+                className={styles.buttonDaily}
+                sx={{
+                  borderRadius: "10px",
+                  padding: "16px",
+                  // marginTop: "10px",
+                  marginLeft: "20px",
+                  marginRight: "20px",
+                  fontSize: "19px",
+                  border: "0px ", textTransform:"none", color:"white"
+                }}
+    
+              >
                 Lihat Rekomendasi Kegiatan Hari Ini
-              </Link>
-            </motion.button>
+              </Button>
+            </Link>
 
             <Badge
               badgeContent={"!"}

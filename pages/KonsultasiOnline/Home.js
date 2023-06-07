@@ -166,38 +166,41 @@ export default function KonsultasiOnlineHome() {
             sm={2}
             sx={{ justifyItems: "center", textAlign: "center" }}
           >
-            <ImageListItem
-              sx={{
-                borderRadius: "20px",
-                margin: "0 auto",
-                backgroundColor: "rgba(255, 255, 255, 0.4)",
-                // height: { xs: 250, sm: 220, md: 220, lg: 270 },
-                width: { xs: 300, sm: 300, md: 400, lg: 300 },
-              }}
-            >
-              <Box
+            {" "}
+            <Link legacyBehavior href="ListKonsultasi">
+              <ImageListItem
                 sx={{
                   borderRadius: "20px",
-                  color: "black",
-                  height: { xs: 250, sm: 250, md: 300, lg: 250 },
+                  margin: "0 auto",
+                  backgroundColor: "rgba(255, 255, 255, 0.4)",
+                  // height: { xs: 250, sm: 220, md: 220, lg: 270 },
                   width: { xs: 300, sm: 300, md: 400, lg: 300 },
                 }}
               >
-                <ChatIcon sx={{ marginTop: "50px", fontSize: "100px" }} />
-              </Box>
-              <ImageListItemBar
-                sx={{
-                  borderBottomLeftRadius: "20px",
-                  borderBottomRightRadius: "20px",
-                }}
-                className={glacial.className}
-                title={
-                  <Typography sx={{ fontSize: "20px" }}>
-                    Konsultasi Online
-                  </Typography>
-                }
-              />
-            </ImageListItem>
+                <Box
+                  sx={{
+                    borderRadius: "20px",
+                    color: "black",
+                    height: { xs: 250, sm: 250, md: 300, lg: 250 },
+                    width: { xs: 300, sm: 300, md: 400, lg: 300 },
+                  }}
+                >
+                  <ChatIcon sx={{ marginTop: "50px", fontSize: "100px" }} />
+                </Box>
+                <ImageListItemBar
+                  sx={{
+                    borderBottomLeftRadius: "20px",
+                    borderBottomRightRadius: "20px",
+                  }}
+                  className={glacial.className}
+                  title={
+                    <Typography sx={{ fontSize: "20px" }}>
+                      List Konsultasi
+                    </Typography>
+                  }
+                />
+              </ImageListItem>
+            </Link>
           </Grid>
         </Grid>
       </Box>

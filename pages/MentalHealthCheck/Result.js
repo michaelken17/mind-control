@@ -310,8 +310,8 @@ export default function MHCResult() {
 
   const mentalIllnessBtn = (event) => {
     event.preventDefault();
-    dispatch(appActions.MHCData({}));
-    dispatch(appActions.MHCData(MentalIllnessList));
+    // dispatch(appActions.MHCData({}));
+    // dispatch(appActions.MHCData(MentalIllnessList));
     router.push("/MentalIllnessTest/Home");
   };
 

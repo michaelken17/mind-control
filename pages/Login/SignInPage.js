@@ -405,6 +405,7 @@ const SigninPage = () => {
               fontSize: 13,
               textDecoration: "underline",
               color: "gray",
+              cursor: "pointer"
             }}
           >
             Sign Up

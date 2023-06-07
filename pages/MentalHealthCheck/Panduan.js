@@ -281,7 +281,7 @@ export default function PanduanMentalHealthTest() {
                 paddingLeft: 50,
                 paddingRight: 50,
                 fontSize: 20,
-                border: "0px ",
+                border: "0px ",cursor:"pointer",
               }}
               onClick={startHandler}
               transition={{

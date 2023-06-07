@@ -72,10 +72,10 @@ export default function MentalIllnessTest() {
               }}
               className={glacial.className}
             >
-              Mental Illness Test akan membantu memberikan solusi dan
-              rekomendasi untuk meningkatkan kesehatan mental dan juga membantu
-              menentukan apakah harus mencari bantuan dari psikolog untuk
-              mengatasi masalah kesehatan mental.
+              Mental Illness Test membantu anda untuk mengetahui tingkat
+              keparahan penyakit mental yang diderita secara spesifik dan juga
+              membantu menentukan apakah harus mencari bantuan dari psikolog
+              untuk mengatasi masalah kesehatan mental.
             </Typography>
           </div>
         </Container>
@@ -112,7 +112,7 @@ export default function MentalIllnessTest() {
               if (item.severity >= 2)
                 return (
                   <Grid
-                  key={item.img}
+                    key={item.img}
                     item
                     xl={1}
                     xs={4}
@@ -128,6 +128,7 @@ export default function MentalIllnessTest() {
                           justifyContent: "center",
                           justifyItems: "center",
                           textAlign: "center",
+                          cursor: "pointer",
                         }}
                         transition={{
                           duration: 5,

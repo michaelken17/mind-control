@@ -117,9 +117,12 @@ export default function MentalHealthCheck() {
               sx={{
                 color: "gray",
                 textAlign: "center",
+                cursor:"pointer",
                 fontSize: "15px",
                 marginTop: "12px",
+                textDecoration:"underline"
               }}
+              
               onClick={() => {
                 if (readMore == true) setReadMore(false);
                 else setReadMore(true);
@@ -141,7 +144,7 @@ export default function MentalHealthCheck() {
                 marginTop: 30,
                 marginBottom: 30,
                 fontSize: 20,
-                border: "0px ",
+                border: "0px ",cursor:"pointer",
               }}
               transition={{
                 duration: 1,

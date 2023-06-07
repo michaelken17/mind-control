@@ -54,6 +54,7 @@ export default function MHCTest() {
   const [currentQuestion, setcurrentQuestion] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(1);
   const login = useSelector((state) => state.persistedReducer.login);
+  const isDone = useSelector((state) => state.persistedReducer.isDone);
   const dispatch = useDispatch();
 
   const [MHCdata, setMHCdata] = useState([
@@ -67,7 +68,7 @@ export default function MHCTest() {
     { no: 8, jawaban: 0 },
   ]);
 
-  const toggleHandler = (value) => () => {
+  const toggleHandler = (value) => async () => {
     setSelectedIndex(value);
     setisAnswered(true);
 
@@ -86,6 +87,7 @@ export default function MHCTest() {
     } else {
       dispatch(appActions.submitMHC({}));
       dispatch(appActions.submitMHC(MHCdata));
+
       const depressionSeverity = Math.max(
         MHCdata[0].jawaban,
         MHCdata[1].jawaban
@@ -98,6 +100,40 @@ export default function MHCTest() {
       const OCDSeverity = Math.max(MHCdata[5].jawaban, MHCdata[6].jawaban);
       const sleepDisorderSeverity = MHCdata[7].jawaban;
 
+      const MentalIllnessList = [
+        {
+          img: "/image/Mental Illness Illustration/4.png",
+          title: "Depression",
+          author: "Gangguan Depresi",
+          link: "/MentalIllness/Depression/Panduan",
+          severity: depressionSeverity,
+        },
+        {
+          img: "/image/Mental Illness Illustration/1.png",
+          title: "Anxiety",
+          author: "Gangguan Kecemasan",
+          link: "/MentalIllness/Anxiety/Panduan",
+          severity: anxietySeverity,
+        },
+        {
+          img: "/image/Mental Illness Illustration/3.png",
+          title: "OCD",
+          author: "Obsessive-Compulsive Disorder",
+          link: "/MentalIllness/OCD/Panduan",
+          severity: OCDSeverity,
+        },
+        {
+          img: "/image/Mental Illness Illustration/5.png",
+          title: "Sleep Disorder",
+          author: "Gangguan Tidur",
+          link: "/MentalIllness/SleepDisorder/Panduan",
+          severity: sleepDisorderSeverity,
+        },
+      ];
+
+      dispatch(appActions.MHCData({}));
+      dispatch(appActions.MHCData(MentalIllnessList));
+
       dispatch(
         isDoneActions.isDone({
           isDoneMHC: true,
@@ -109,15 +145,25 @@ export default function MHCTest() {
         })
       );
 
+      if (isDone.isDoneMHC == true) {
+        await axios
+          .put(
+            " https://localhost:7184/api/MHCheck/UpdateMHCheckHeader?userId=" +
+              login.userid
+          )
+          .then((respUpdate) => {
+            console.log(respUpdate);
+          });
+      }
       // Insert Header
-      axios
+      await axios
         .post(
           "https://localhost:7184/api/MHCheck/InsertMHCheckHeader?username=" +
             login.username
         )
-        .then((responseHeader) => {
+        .then(async (responseHeader) => {
           // Insert MD
-          axios
+          await axios
             .post("https://localhost:7184/api/MHCheck/InsertMHCheckMD", {
               headerID: responseHeader.data.headerID,
               dprSeverity: depressionSeverity,
@@ -125,10 +171,10 @@ export default function MHCTest() {
               ocdSeverity: OCDSeverity,
               sdSeverity: sleepDisorderSeverity,
             })
-            .then((responseMD) => {
+            .then(async (responseMD) => {
               console.log(responseMD.data);
               // Insert Detail
-              axios.post(
+              await axios.post(
                 "https://localhost:7184/api/MHCheck/InsertMHCheckDetail?headerID=" +
                   responseMD.data,
                 {
