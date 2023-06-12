@@ -2,6 +2,7 @@ import * as React from "react";
 
 import {
   Badge,
+  Box,
   Button,
   Container,
   List,
@@ -17,6 +18,7 @@ import { glacial, montserrat } from "../../public/fonts";
 import styles from "styles/Quiz.module.css";
 import Link from "next/link";
 import { Circle } from "@mui/icons-material";
+import Image from "next/image";
 
 const theme = createTheme({
   typography: {
@@ -42,12 +44,20 @@ export default function DailyHealthCheck() {
         style={{ marginTop: 20 }}
       >
         <Container component="main" maxWidth="md" sx={{}}>
-          <img
+          <Box
+            component="img"
+            sx={{
+              width: "90%",
+            }}
+            alt=""
+            src="/image/DailyHealthCheck.png"
+          />
+          {/* <Image
             src="/image/DailyHealthCheck.png"
             style={{
               width: "90%",
             }}
-          ></img>
+          /> */}
           <div style={{ marginTop: "15px" }}>
             <Typography
               sx={{
@@ -106,9 +116,10 @@ export default function DailyHealthCheck() {
                   marginLeft: "20px",
                   marginRight: "20px",
                   fontSize: "19px",
-                  border: "0px ", textTransform:"none", color:"white"
+                  border: "0px ",
+                  textTransform: "none",
+                  color: "white",
                 }}
-    
               >
                 Lihat Rekomendasi Kegiatan Hari Ini
               </Button>
@@ -123,24 +134,26 @@ export default function DailyHealthCheck() {
                   width: "25px",
                   backgroundColor: "#FFA842",
                   marginRight: { xs: "20px" },
+                  cursor: "pointer",
                 },
               }}
             >
-              <button
-                style={{
-                  borderRadius: 10,
-                  padding: 20,
-                  marginLeft: "20px",
-                  marginRight: "20px",
-                  fontSize: 20,
-                  border: "0px ",
-                  backgroundColor: "#FF4E9B",
-                }}
-              >
-                <Link legacyBehavior href="Test">
+              <Link legacyBehavior href="Test" sx={{ cursor: "pointer" }}>
+                <button
+                  style={{
+                    borderRadius: 10,
+                    padding: 20,
+                    marginLeft: "20px",
+                    marginRight: "20px",
+                    fontSize: 20,
+                    border: "0px ",
+                    backgroundColor: "#FF4E9B",
+                    cursor: "pointer",
+                  }}
+                >
                   Lakukan Daily Health Check Hari ini!
-                </Link>
-              </button>
+                </button>
+              </Link>
             </Badge>
           </motion.div>
         </Container>

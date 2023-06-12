@@ -19,6 +19,7 @@ import {
 import localFont from "next/font/local";
 import Link from "next/link";
 import { useSelector } from "react-redux";
+import Image from "next/image";
 
 const theme = createTheme({
   typography: {
@@ -58,12 +59,20 @@ export default function MentalIllnessTest() {
         style={{ marginTop: 20, marginBottom: "20px" }}
       >
         <Container component="main" maxWidth="md" sx={{ textAlign: "center" }}>
-          <img
+          <Box
+            component="img"
+            sx={{
+              width: "100%",
+            }}
+            alt=""
+            src="/image/MentalIllnessTest.png"
+          />
+          {/* <Image
             src="/image/MentalIllnessTest.png"
             style={{
               width: "100%",
             }}
-          ></img>
+          /> */}
           <div style={{ marginTop: "15px" }}>
             <Typography
               sx={{

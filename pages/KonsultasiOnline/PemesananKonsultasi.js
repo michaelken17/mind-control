@@ -212,11 +212,12 @@ export default function PemesananKonsultasi() {
                   }}
                   className={montserratExtraBold.className}
                 >
-                  Anda sudah memiliki jadwal konsultasi. 
-                  <br/>
-                  Hanya satu booking konsultasi diperbolehkan secara bersamaan. 
-                  <br/>
-                  Selesaikan konsultasi yang sudah terjadwalkan, lalu kembali ke halaman ini lagi.
+                  Anda sudah memiliki jadwal konsultasi.
+                  <br />
+                  Hanya satu bookingan konsultasi diperbolehkan secara bersamaan.
+                  <br />
+                  Selesaikan konsultasi yang sudah terjadwalkan, lalu kembali ke
+                  halaman ini lagi.
                 </Typography>
                 {/* <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                   <Box sx={{ flex: "1 1 auto" }} />

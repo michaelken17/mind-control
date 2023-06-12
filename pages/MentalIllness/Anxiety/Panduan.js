@@ -1,4 +1,4 @@
-import { Button, Container, List, ListItem, Typography } from "@mui/material";
+import { Button, Container, List, ListItem, Typography, Box } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { motion } from "framer-motion";
@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
 import ErrorIcon from "@mui/icons-material/Error";
+import Image from "next/image";
 
 const theme = createTheme({
   typography: {
@@ -96,11 +97,20 @@ export default function Panduan() {
                 textAlign: "center",
               }}
             >
-              <img
+              <Box
+                component="img"
+                sx={{
+                  width: "70%",
+                  borderRadius: 10,
+                }}
+                alt=""
+                src="/image/Mental Illness Illustration/anxiety2.jpg"
+              />
+              {/* <Image
                 src="/image/Mental Illness Illustration/anxiety2.jpg"
                 width="70%"
                 style={{ borderRadius: 10 }}
-              />
+              /> */}
 
               <a
                 href="http://www.freepik.com"
@@ -273,9 +283,10 @@ export default function Panduan() {
               >
                 Tes skrining ini ditujukan untuk usia{" "}
                 <b style={{ color: "black" }}>18 tahun ke atas</b>. Tes di
-                adaptasi dari buku DSM-5-TR: {" "}
+                adaptasi dari buku DSM-5-TR:{" "}
                 <i>
-                LEVEL 2—Anxiety—Adult (PROMIS Emotional Distress—Anxiety—Short Form)
+                  LEVEL 2—Anxiety—Adult (PROMIS Emotional Distress—Anxiety—Short
+                  Form)
                 </i>
               </Typography>
             </div>
@@ -301,7 +312,9 @@ export default function Panduan() {
               }}
               onClick={startHandler}
             >
-              <Link legacyBehavior href="" >Mulai Test</Link>
+              <Link legacyBehavior href="">
+                Mulai Test
+              </Link>
             </motion.button>
           </div>
         </motion.div>

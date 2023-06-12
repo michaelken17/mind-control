@@ -67,6 +67,7 @@ export default function Pembayaran(val) {
   const [isLoaded, setIsLoaded] = useState(false);
   const theme = useTheme();
   const [consultantData, setconsultantData] = useState([]);
+  const [hasFreeConsultation, sethasFreeConsultation] = useState(false);
   const axios = require("axios");
   const datePicked = useSelector((x) => x.persistedReducer.consultant.date);
   const timePicked = useSelector((x) => x.persistedReducer.consultant.time);
@@ -75,14 +76,26 @@ export default function Pembayaran(val) {
   const [tipePembayaran, settipePembayaran] = useState("GoPay");
   const consultant = useSelector((x) => x.persistedReducer.consultant);
   const login = useSelector((state) => state.persistedReducer.login);
-  
+
   useEffect(() => {
     setIsLoaded(true);
-    console.log(val.consultantData);
+
+    axios
+      .get(
+        "https://localhost:7184/api/Users/GetData?Username=" + login.username
+      )
+      .then((resp) => {
+        console.log(resp.data);
+        if (resp.data[0].freeConsultation > 0) {
+          sethasFreeConsultation(true);
+        }
+      });
   }, []);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    if (newValue == "E-Money") settipePembayaran("GoPay");
+    else settipePembayaran(newValue);
     console.log("change");
   };
 
@@ -106,23 +119,36 @@ export default function Pembayaran(val) {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        console.log(login)
-        console.log(consultant)
-        console.log(datePicked)
-        console.log(timePicked)
-        console.log(dateTime)
+        console.log(login);
+        console.log(consultant);
+        console.log(datePicked);
+        console.log(timePicked);
+        console.log(dateTime);
+        console.log(tipePembayaran)
+
+        if (tipePembayaran == "Konsultasi Gratis") {
+          axios
+            .put(
+              "https://localhost:7184/api/Consultant/UpdateFreeConsultation?UserID=" +
+                login.userid +
+                "&opr=reset"
+            )
+            .then((resp) => {
+              console.log("KONSULTASI GRATIS");
+            });
+        }
 
         axios
-        .post("https://localhost:7184/api/Consultant/InsertListPatientData", {
-          consultantID: consultant.consultantID,
-          userID: login.userid,
-          tipePembayaran: tipePembayaran,
-          harga: val.consultantData.harga,
-          tanggalPertemuan: dateTime,
-        })
-        .then((resp) => {
-          console.log(resp)
-        })
+          .post("https://localhost:7184/api/Consultant/InsertListPatientData", {
+            consultantID: consultant.consultantID,
+            userID: login.userid,
+            tipePembayaran: tipePembayaran,
+            harga: val.consultantData.harga,
+            tanggalPertemuan: dateTime,
+          })
+          .then((resp) => {
+            console.log(resp);
+          });
 
         Swal.fire({
           icon: "success",
@@ -145,9 +171,16 @@ export default function Pembayaran(val) {
     console.log(event.target.value);
   };
 
+  // useEffect(() => {
+  //   console.log(consultantData);
+  // }, [consultantData]);
+
   useEffect(() => {
-    console.log(consultantData);
-  }, [consultantData]);
+    if (hasFreeConsultation == true) {
+      setValue("Konsultasi Gratis");
+      settipePembayaran("Konsultasi Gratis")
+    }
+  }, [hasFreeConsultation]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -322,6 +355,19 @@ export default function Pembayaran(val) {
                             variant="scrollable"
                             allowScrollButtonsMobile={true}
                           >
+                            {hasFreeConsultation && (
+                              <Tab
+                                label="Konsultasi Gratis"
+                                value="Konsultasi Gratis"
+                                className={montserrat.className}
+                                sx={{
+                                  textTransform: "none",
+                                  "&.Mui-selected": {
+                                    color: "black",
+                                  },
+                                }}
+                              />
+                            )}
                             <Tab
                               label="E-Money"
                               value="E-Money"
@@ -332,7 +378,7 @@ export default function Pembayaran(val) {
                                   color: "black",
                                 },
                               }}
-                            />{" "}
+                            />
                             <Tab
                               label="Kartu Debit/Kredit"
                               value="Kartu Debit/Kredit"
@@ -392,6 +438,27 @@ export default function Pembayaran(val) {
                             </Typography>
                           </Box>
                         </TabPanel>
+                        {hasFreeConsultation && (
+                          <TabPanel value={"Konsultasi Gratis"}>
+                            <Box>
+                              <Typography
+                                sx={{
+                                  fontSize: {
+                                    lg: "17px",
+                                    md: "15px",
+                                    sm: "15px",
+                                    xs: "13px",
+                                  },
+                                  color: "black",
+                                  textAlign: "center",
+                                }}
+                                className={montserrat.className}
+                              >
+                                Konsultasi Gratis
+                              </Typography>
+                            </Box>
+                          </TabPanel>
+                        )}
                       </TabContext>
                     </Box>
                   </CardContent>

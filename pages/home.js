@@ -69,12 +69,9 @@ export default function Home() {
       exit={{ opacity: 0 }}
     >
       {/* MindControl Logo */}
-      <div>
+      <Box>
         <Container>
-          <div>
-            {/* <div style={{ alignContent: "center", textAlign: "center" }}>
-              <img src="/image/MCFullLogo.png" alt="bg" width="50%"></img>
-            </div> */}
+          <Box>
             <Box
               component="img"
               sx={{
@@ -84,7 +81,7 @@ export default function Home() {
               alt="bg"
               src="/image/MCFullLogo.png"
             />
-            <div style={{ marginTop: "1px" }}>
+            <Box style={{ marginTop: "1px" }}>
               <Typography
                 sx={{
                   fontSize: { xs: "19px", md: "20px", xl: "20px" },
@@ -92,12 +89,12 @@ export default function Home() {
                 }}
                 className={glacial.className}
               >
-                it's okay not to be okay.
+                {"it's okay not to be okay."}
               </Typography>
-            </div>
-          </div>
+            </Box>
+          </Box>
         </Container>
-      </div>
+      </Box>
 
       {/* Mental Health Check */}
       <Container>

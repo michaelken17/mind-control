@@ -78,14 +78,14 @@ export default function RekomendasiKegiatan() {
   useEffect(() => {
     setIsLoaded(true);
     console.log(MHCData.length);
- 
+
     for (var i = 0; i < MHCData.length; i++) {
       if (MHCData[i].severity > 2) {
         setValue(MHCData[i].title);
         break;
       }
     }
-  }, []);
+  }, [MHCData]);
   useEffect(() => {
     console.log(value);
   }, [value]);
@@ -381,27 +381,28 @@ export default function RekomendasiKegiatan() {
                   </Typography>
                 </Box>
                 {/* Button for daily health check */}
-                <motion.div style={{ textAlign: "center" }}>
-                  <button
-                    style={{
-                      borderRadius: 10,
-                      padding: "15px",
-                      marginLeft: "20px",
-                      marginRight: "20px",
-                      fontSize: "20px",
-                      border: "0px ",
-                      backgroundColor: "#FF4E9B",
-                    }}
-                  >
-                    <Link href="Test">
+                <motion.div style={{ textAlign: "left" }}>
+                  <Link href="Test">
+                    <button
+                      style={{
+                        borderRadius: 10,
+                        padding: "15px",
+                        marginLeft: "20px",
+                        marginRight: "20px",
+                        fontSize: "20px",
+                        border: "0px ",
+                        backgroundColor: "#FF4E9B",
+                        cursor: "pointer",
+                      }}
+                    >
                       <Typography
                         sx={{ fontSize: { xs: "14px", xl: "18px" } }}
                         className={montserratBold.className}
                       >
                         Lakukan Daily Health Check Hari ini!
-                      </Typography>{" "}
-                    </Link>
-                  </button>
+                      </Typography>
+                    </button>
+                  </Link>
                 </motion.div>
               </Box>
             </Box>

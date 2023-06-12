@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, Container, Typography } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { Montserrat } from "next/font/google";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import { isDoneActions } from "@/redux/slices/isDoneSlice";
+import Image from "next/image";
 
 const theme = createTheme({
   typography: {
@@ -23,7 +24,7 @@ const theme = createTheme({
   },
 });
 
-export default function MentalHealthCheck() {
+export default function MHCStart() {
   const [readMore, setReadMore] = React.useState(false);
   const router = useRouter();
   const login = useSelector((state) => state.persistedReducer.login);
@@ -36,9 +37,9 @@ export default function MentalHealthCheck() {
       router.push("Panduan");
     } else {
       Swal.fire({
-        icon:"warning",
+        icon: "warning",
         title: "Anda sudah pernah melakukan tes ini!",
-        text:"Memulai ulang tes akan mengreset data!",
+        text: "Memulai ulang tes akan mengreset data!",
         showDenyButton: true,
         //   showCancelButton: true,
         background: "white",
@@ -68,12 +69,20 @@ export default function MentalHealthCheck() {
         exit={{ opacity: 0, scale: 0.2 }}
       >
         <Container component="main" maxWidth="md" sx={{}}>
-          <img
+          <Box
+            component="img"
+            sx={{
+              width: "100%",
+            }}
+            alt=""
+            src="/image/MentalHealthCheck.png"
+          />
+          {/* <Image
             src="/image/MentalHealthCheck.png"
             style={{
               width: "100%",
             }}
-          ></img>
+          /> */}
           <div style={{ marginTop: "15px" }}>
             <Typography
               sx={{
@@ -117,12 +126,11 @@ export default function MentalHealthCheck() {
               sx={{
                 color: "gray",
                 textAlign: "center",
-                cursor:"pointer",
+                cursor: "pointer",
                 fontSize: "15px",
                 marginTop: "12px",
-                textDecoration:"underline"
+                textDecoration: "underline",
               }}
-              
               onClick={() => {
                 if (readMore == true) setReadMore(false);
                 else setReadMore(true);
@@ -144,7 +152,8 @@ export default function MentalHealthCheck() {
                 marginTop: 30,
                 marginBottom: 30,
                 fontSize: 20,
-                border: "0px ",cursor:"pointer",
+                border: "0px ",
+                cursor: "pointer",
               }}
               transition={{
                 duration: 1,
@@ -164,7 +173,7 @@ export default function MentalHealthCheck() {
                 }}
                 className={glacial.className}
               >
-                Take Your Mental Health Check
+                Lakukan Mental Health Check!
               </Typography>
             </motion.button>
           </motion.div>

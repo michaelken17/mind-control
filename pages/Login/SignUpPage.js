@@ -19,6 +19,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
+import Image from "next/image";
 
 const SignUpPage = () => {
   const usernameRef = useRef();
@@ -151,11 +152,20 @@ const SignUpPage = () => {
                   justifyContent: "center",
                 }}
               >
-                <img
+                <Box
+                  component="img"
+                  sx={{
+                    width: "100%",
+                    borderRadius: 10,
+                  }}
+                  alt=""
+                  src="/image/mcwebicon.png"
+                />
+                {/* <Image
                   src="/image/mcwebicon.png"
                   width="100%"
                   style={{ borderRadius: 10 }}
-                />
+                /> */}
               </Box>
               {/* LOGO END */}
 

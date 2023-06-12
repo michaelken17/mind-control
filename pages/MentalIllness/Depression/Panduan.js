@@ -1,4 +1,4 @@
-import { Button, Container, List, ListItem, Typography } from "@mui/material";
+import { Box, Button, Container, List, ListItem, Typography } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { motion } from "framer-motion";
@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
 import ErrorIcon from "@mui/icons-material/Error";
+import Image from "next/image";
 
 const theme = createTheme({
   typography: {
@@ -96,11 +97,20 @@ export default function PanduanDepression() {
                 textAlign: "center",
               }}
             >
-              <img
+              <Box
+                component="img"
+                sx={{
+                  width: "80%",
+                  borderRadius: 10,
+                }}
+                alt=""
+                src="/image/Mental Illness Illustration/depressionIll.jpg"
+              />
+              {/* <Image
                 src="/image/Mental Illness Illustration/depressionIll.jpg"
                 width="80%"
                 style={{ borderRadius: 10 }}
-              />
+              /> */}
 
               <a
                 href="http://www.freepik.com"
@@ -260,7 +270,7 @@ export default function PanduanDepression() {
             <div style={{ display: "flex" }}>
               <ErrorIcon
                 fontSize="15px"
-                sx={{ marginTop: "3px", marginRight: "5px", color:"orange"}}
+                sx={{ marginTop: "3px", marginRight: "5px", color: "orange" }}
               />
               <Typography
                 sx={{
@@ -272,7 +282,8 @@ export default function PanduanDepression() {
                 className={glacial.className}
               >
                 Tes skrining ini ditujukan untuk usia{" "}
-                <b style={{ color: "black" }}>18 tahun ke atas</b>. Tes di adaptasi dari buku DSM-5-TR:{" "}
+                <b style={{ color: "black" }}>18 tahun ke atas</b>. Tes di
+                adaptasi dari buku DSM-5-TR:{" "}
                 <i>
                   LEVEL 2—Depression—Adult (PROMIS Emotional
                   Distress—Depression—Short Form)
@@ -302,7 +313,9 @@ export default function PanduanDepression() {
               }}
               onClick={startHandler}
             >
-              <Link legacyBehavior href="" >Mulai Test</Link>
+              <Link legacyBehavior href="">
+                Mulai Test
+              </Link>
             </motion.button>
           </div>
         </motion.div>

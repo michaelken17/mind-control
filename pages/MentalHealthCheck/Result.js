@@ -89,6 +89,7 @@ export default function MHCResult() {
   const [isBad, setIsBad] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
+  const MHCData = useSelector((x) => x.persistedReducer.app.MHCdata);
 
   const MentalIllnessList = [
     {
@@ -96,28 +97,28 @@ export default function MHCResult() {
       title: "Depression",
       author: "Gangguan Depresi",
       link: "/MentalIllness/Depression/Panduan",
-      severity: depressionSeverity,
+      severity: MHCData[0].severity,
     },
     {
       img: "/image/Mental Illness Illustration/1.png",
       title: "Anxiety",
       author: "Gangguan Kecemasan",
       link: "/MentalIllness/Anxiety/Panduan",
-      severity: anxietySeverity,
+      severity: MHCData[0].severity,
     },
     {
       img: "/image/Mental Illness Illustration/3.png",
       title: "OCD",
       author: "Obsessive-Compulsive Disorder",
       link: "/MentalIllness/OCD/Panduan",
-      severity: OCDSeverity,
+      severity: MHCData[2].severity,
     },
     {
       img: "/image/Mental Illness Illustration/5.png",
       title: "Sleep Disorder",
       author: "Gangguan Tidur",
       link: "/MentalIllness/SleepDisorder/Panduan",
-      severity: sleepDisorderSeverity,
+      severity: MHCData[3].severity,
     },
   ];
 
@@ -127,10 +128,14 @@ export default function MHCResult() {
       {
         label: "Tingkat Keparahan",
         data: [
-          depressionSeverity,
-          anxietySeverity,
-          OCDSeverity,
-          sleepDisorderSeverity,
+          // depressionSeverity,
+          // anxietySeverity,
+          // OCDSeverity,
+          // sleepDisorderSeverity,
+          MHCData[0].severity,
+          MHCData[1].severity,
+          MHCData[2].severity,
+          MHCData[3].severity,
         ],
         backgroundColor: "rgba(0, 0, 0, 0.2)",
         borderColor: "black",
@@ -287,13 +292,12 @@ export default function MHCResult() {
 
   useEffect(() => {
     setIsLoaded(true);
-
     if (
       Math.max(
-        depressionSeverity,
-        anxietySeverity,
-        OCDSeverity,
-        sleepDisorderSeverity
+        MHCData[0].severity,
+        MHCData[1].severity,
+        MHCData[2].severity,
+        MHCData[3].severity
       ) >= 2
     ) {
       setIsBad(true);

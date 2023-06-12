@@ -100,12 +100,15 @@ export default function ListKonsultasi() {
       .then((resp) => {
         setlistPatientData(resp.data);
         setIsLoaded(true);
+        if (resp.data.status == "ongoing") {
+          setdoneConsult(true);
+        }
       });
-    console.log(today);
   }, []);
 
   useEffect(() => {
     setTimeDiff(today.diff(dayjs(listPatientData.tanggalPertemuan), "minute"));
+    console.log(listPatientData);
   }, [listPatientData]);
 
   const startMeetingHandler = () => {
@@ -127,7 +130,17 @@ export default function ListKonsultasi() {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         console.log("true");
-        setdoneConsult(true);
+
+        axios
+          .put(
+            "https://localhost:7184/api/Consultant/UpdateStatusListPatient?UserID=" +
+              login.userid +
+              "&status=ongoing"
+          )
+          .then((respUpdate) => {
+            console.log(respUpdate);
+            setdoneConsult(true);
+          });
       }
     });
   };
@@ -389,7 +402,7 @@ export default function ListKonsultasi() {
                           sx={{ fontSize: "16px" }}
                         >
                           Rp. {listPatientData.harga.toLocaleString("id")},00
-                          (Paid with {listPatientData.tipePembayaran})
+                          ({listPatientData.tipePembayaran})
                         </Typography>{" "}
                         {doneConsult == false ? (
                           <Button

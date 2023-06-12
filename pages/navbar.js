@@ -44,8 +44,9 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Breadcrumbs from "nextjs-breadcrumbs";
 import Fade from "@mui/material/Fade";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import HistoryIcon from '@mui/icons-material/History';
-
+import HistoryIcon from "@mui/icons-material/History";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { Logout } from "@mui/icons-material";
 const pages = [
   { title: "Mental Health Check", path: "/MentalHealthCheck/Start" },
   { title: "Daily Health Check", path: "/DailyHealthCheck/Start" },
@@ -119,8 +120,10 @@ export default function Navbar() {
   const dispatch = useDispatch();
   const router = useRouter();
   const [showTooltip, setShowTooltip] = useState(false);
+  const [showTooltipMHC, setShowTooltipMHC] = useState(false);
   const [showTooltipKO, setShowTooltipKO] = useState(false);
   const [showTooltipDHC, setShowTooltipDHC] = useState(false);
+  const axios = require("axios");
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -164,34 +167,43 @@ export default function Navbar() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const claimConsultationHandler = () => {
+    axios
+      .put(
+        "https://localhost:7184/api/Consultant/UpdateFreeConsultation?UserID=" +
+          login.userid +
+          "&opr=add"
+      )
+      .then((resp) => {
+        Swal.fire({
+          icon: "success",
+          title: "Konsultasi gratis telah di klaim!",
+          showDenyButton: false,
+          showConfirmButton: false,
+          timer: 3500,
+          timerProgressBar: true,
+        });
+        dispatch(
+          loginActions.login({
+            isDoneMHC: resp.data.data,
+            email: resp.data.email,
+            fullname: resp.data.fullName,
+            MHpoints: resp.data.healthPoint,
+            password: resp.data.password,
+            consultant: false,
+            userid: resp.data.userId,
+            username: resp.data.username,
+          })
+        );
+      });
+  };
 
   const MHCData = useSelector((x) => x.persistedReducer.app.MHCdata);
   const login = useSelector((state) => state.persistedReducer.login);
   const isDone = useSelector((state) => state.persistedReducer.isDone);
-  const mentalIllnessData = useSelector(
-    (x) => x.persistedReducer.app.mentalIllnessData
-  );
-
   React.useEffect(() => {
     setIsLoad(true);
-    console.log(login);
-    console.log(MHCData);
-    console.log(isDone);
-    // console.log(window.location.pathname);
-    if (login.username == "") {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Mohon mengisi semua data!",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-    }
   }, []);
-
-  React.useEffect(() => {
-    console.log(showTooltipKO);
-  }, [showTooltipKO]);
 
   return (
     <div>
@@ -215,7 +227,7 @@ export default function Navbar() {
                     height: "80px",
                     alt: "Mind Control",
                     margin: "20px",
-                    cursor:"pointer"
+                    cursor: "pointer",
                   }}
                   alt=""
                   src="/image/MCIcon.png"
@@ -252,16 +264,16 @@ export default function Navbar() {
                 color: "inherit",
                 textDecoration: "none",
                 cursor: "pointer",
-                zIndex:"5"
+                zIndex: "5",
               }}
             >
-              <Link legacyBehavior href="/Home" sx={{cursor: "pointer",}}>
-                <img
+              <Link legacyBehavior href="/Home" sx={{ cursor: "pointer" }}>
+                <Image
                   src="/image/MCIcon.png"
-                  width="160"
-                  height="80"
+                  width={160}
+                  height={80}
                   alt="Mind Control"
-                  style={{ margin: 15 }} 
+                  style={{ margin: 15 }}
                 />
               </Link>
             </Typography>
@@ -287,19 +299,22 @@ export default function Navbar() {
                             {MHCData.map((item, index) => {
                               if (item.severity >= 2)
                                 return (
-                                  <MenuItem
+                                  <Link
+                                    legacyBehavior
+                                    href={item.link}
                                     key={item.title}
-                                    className={montserrat.className}
-                                    sx={{
-                                      padding: "10px",
-                                      fontSize: "15px",
-                                      px: "30px",
-                                    }}
                                   >
-                                    <Link legacyBehavior href={item.link}>
+                                    <MenuItem
+                                      className={montserrat.className}
+                                      sx={{
+                                        padding: "10px",
+                                        fontSize: "15px",
+                                        px: "30px",
+                                      }}
+                                    >
                                       {item.title}
-                                    </Link>
-                                  </MenuItem>
+                                    </MenuItem>
+                                  </Link>
                                 );
                             })}
                           </Typography>
@@ -348,32 +363,67 @@ export default function Navbar() {
                     login?.authorized == true &&
                     isDone.isDoneMHC == true ? (
                     <Box key={page.title}>
-                      <Link legacyBehavior href={page.path}>
-                        <Button
-                          sx={{
-                            mx: 2,
-                            py: 4,
-                            color: "#42493A",
-                            display: "block",
-                            // background:"gray"
-                            borderBottom: window.location.pathname.includes(
-                              "MentalHealthCheck"
-                            )
-                              ? "4px solid #FFAACF"
-                              : "4px solid white",
-                            "&:hover": {
-                              color: "gray",
-                              backgroundColor: "white",
-                              borderBottom: "4px solid #FFAACF",
-                            },
-                            fontSize: 15,
-                            textTransform: "none",
-                          }}
-                          className={montserratBold.className}
-                        >
-                          {page.title}
-                        </Button>
-                      </Link>
+                      <HtmlTooltip
+                        interactive="true"
+                        open={showTooltipMHC}
+                        onOpen={() => setShowTooltipMHC(true)}
+                        onClose={() => setShowTooltipMHC(false)}
+                        TransitionComponent={Fade}
+                        TransitionProps={{ timeout: 300 }}
+                        title={
+                          <Link
+                            legacyBehavior
+                            href={"/MentalHealthCheck/Result"}
+                          >
+                            <Typography>
+                              <MenuItem
+                                className={montserrat.className}
+                                sx={{ px: "50px", fontSize: "15px" }}
+                              >
+                                Hasil Tes
+                              </MenuItem>
+                            </Typography>
+                          </Link>
+                        }
+                      >
+                        <Link href={page.path}>
+                          <Button
+                            sx={{
+                              mx: 2,
+                              py: 4,
+                              color: "#42493A",
+                              display: "block",
+                              // background:"gray"
+                              borderBottom: window.location.pathname.includes(
+                                "MentalHealthCheck"
+                              )
+                                ? "4px solid #FFAACF"
+                                : "4px solid white",
+                              "&:hover": {
+                                color: "gray",
+                                backgroundColor: "white",
+                                borderBottom: "4px solid #FFAACF",
+                              },
+                              fontSize: 15,
+                              textTransform: "none",
+                            }}
+                            className={montserratBold.className}
+                          >
+                            <Grid container columns={12}>
+                              <Grid item xl={11}>
+                                {page.title}
+                              </Grid>
+                              <Grid item xl={1}>
+                                {showTooltipKO ? (
+                                  <ArrowDropUpIcon sx={{ mt: 0 }} />
+                                ) : (
+                                  <ArrowDropDownIcon sx={{ mt: 0 }} />
+                                )}
+                              </Grid>
+                            </Grid>
+                          </Button>
+                        </Link>
+                      </HtmlTooltip>
                     </Box>
                   ) : // DAILY HEALTH CHECK
                   page.title == "Daily Health Check" &&
@@ -389,32 +439,32 @@ export default function Navbar() {
                         TransitionProps={{ timeout: 300 }}
                         title={
                           <Box>
-                            <Typography>
-                              <MenuItem
-                                className={montserrat.className}
-                                sx={{ padding: "10px", fontSize: "15px" }}
-                              >
-                                <Link
-                                  legacyBehavior
-                                  href={"/DailyHealthCheck/RekomendasiKegiatan"}
+                            <Link
+                              legacyBehavior
+                              href={"/DailyHealthCheck/RekomendasiKegiatan"}
+                            >
+                              <Typography>
+                                <MenuItem
+                                  className={montserrat.className}
+                                  sx={{ padding: "10px", fontSize: "15px" }}
                                 >
                                   Rekomendasi Kegiatan
-                                </Link>
-                              </MenuItem>
-                            </Typography>
-                            <Typography>
-                              <MenuItem
-                                className={montserrat.className}
-                                sx={{ padding: "10px", fontSize: "15px" }}
-                              >
-                                <Link
-                                  legacyBehavior
-                                  href={"/DailyHealthCheck/Test"}
+                                </MenuItem>
+                              </Typography>
+                            </Link>
+                            <Link
+                              legacyBehavior
+                              href={"/DailyHealthCheck/Test"}
+                            >
+                              <Typography>
+                                <MenuItem
+                                  className={montserrat.className}
+                                  sx={{ padding: "10px", fontSize: "15px" }}
                                 >
                                   Daily Health Test
-                                </Link>
-                              </MenuItem>
-                            </Typography>
+                                </MenuItem>
+                              </Typography>
+                            </Link>
                           </Box>
                         }
                       >
@@ -470,32 +520,32 @@ export default function Navbar() {
                         TransitionProps={{ timeout: 300 }}
                         title={
                           <Box>
-                            <Typography>
-                              <MenuItem
-                                className={montserrat.className}
-                                sx={{ padding: "10px", fontSize: "15px" }}
-                              >
-                                <Link
-                                  legacyBehavior
-                                  href={"/KonsultasiOnline/PemesananKonsultasi"}
+                            <Link
+                              legacyBehavior
+                              href={"/KonsultasiOnline/PemesananKonsultasi"}
+                            >
+                              <Typography>
+                                <MenuItem
+                                  className={montserrat.className}
+                                  sx={{ padding: "10px", fontSize: "15px" }}
                                 >
                                   Pemesanan Konsultasi
-                                </Link>
-                              </MenuItem>
-                            </Typography>
-                            <Typography>
-                              <MenuItem
-                                className={montserrat.className}
-                                sx={{ padding: "10px", fontSize: "15px" }}
-                              >
-                                <Link
-                                  legacyBehavior
-                                  href={"/KonsultasiOnline/ListKonsultasi"}
+                                </MenuItem>
+                              </Typography>
+                            </Link>
+                            <Link
+                              legacyBehavior
+                              href={"/KonsultasiOnline/ListKonsultasi"}
+                            >
+                              <Typography>
+                                <MenuItem
+                                  className={montserrat.className}
+                                  sx={{ padding: "10px", fontSize: "15px" }}
                                 >
                                   Jadwal Konsultasi
-                                </Link>
-                              </MenuItem>
-                            </Typography>
+                                </MenuItem>
+                              </Typography>
+                            </Link>
                           </Box>
                         }
                       >
@@ -561,23 +611,59 @@ export default function Navbar() {
                         Mental Health Points: {login?.MHpoints}
                       </Typography>
 
-                      <Typography
-                        className={montserrat.className}
-                        sx={{ fontSize: "13px" }}
-                      >
-                        <b style={{ color: "black" }}>
-                          Setiap Daily Health Test yang dilakukan secara
-                          berturut akan menambahkan 20 poin.
-                        </b>
-                        <br />
-                        <br />
-                        Saat poin mencapai 100, Anda akan mendapatkan sesi
-                        konsultasi <b style={{ color: "red" }}>GRATIS</b> <br />
-                        <br />
-                        Poin akan menjadi 0 lagi ketika sudah mengklaim
-                        konsultasi gratis atau <i>streak</i> Daily Health Test
-                        berakhir
-                      </Typography>
+                      {login?.MHpoints == 100 ? (
+                        <Box sx={{}}>
+                          <Typography
+                            className={montserrat.className}
+                            sx={{ fontSize: "13px" }}
+                          >
+                            <b style={{ color: "black" }}>
+                              Mental Health Points anda sudah mencapai 100!
+                            </b>
+                            <br />
+                            Silahkan mengklaim konsultasi gratis anda dibawah
+                            ini!
+                          </Typography>
+                          <Box sx={{ textAlign: "center", mt: "5px" }}>
+                            <Button
+                              className={montserrat.className}
+                              sx={{
+                                textTransform: "none",
+                                color: "white",
+                                bgcolor: "#3DB388",
+                                textAlign: "center",
+                                width: "100%",
+                                "&:hover": {
+                                  bgcolor: "#8AEC9F",
+                                  color: "black",
+                                },
+                              }}
+                              onClick={claimConsultationHandler}
+                            >
+                              Klaim Konsultasi Gratis
+                            </Button>
+                          </Box>
+                        </Box>
+                      ) : (
+                        <Typography
+                          className={montserrat.className}
+                          sx={{ fontSize: "13px" }}
+                        >
+                          <b style={{ color: "black" }}>
+                            Setiap Daily Health Test yang dilakukan secara
+                            berturut akan menambahkan 20 poin.
+                          </b>
+                          <br />
+                          <br />
+                          Saat poin mencapai 100, Anda akan mendapatkan sesi
+                          konsultasi <b style={{ color: "red" }}>GRATIS</b>{" "}
+                          <br />
+                          <br />
+                          Poin akan menjadi 0 lagi ketika sudah mengklaim
+                          konsultasi gratis atau <i>streak</i> Daily Health Test
+                          berakhir
+                        </Typography>
+                      )}
                     </Box>
                   }
                 >
@@ -606,14 +692,25 @@ export default function Navbar() {
                       >
                         Mental Health Bar
                       </Typography>
-                      <LineProgressBar
-                        rounded={36}
-                        height={20}
-                        width={300}
-                        percent={login?.MHpoints}
-                        transition={{ easing: "linear" }}
-                        progressColor="linear-gradient(to right, #FF6962, #FF7974, #FF8986, #FF9997, #FFA9A9)"
-                      />
+                      {login?.MHpoints == 100 ? (
+                        <LineProgressBar
+                          rounded={36}
+                          height={20}
+                          width={300}
+                          percent={login?.MHpoints}
+                          transition={{ easing: "linear" }}
+                          progressColor="linear-gradient(to left, #A3FFA6,#8AEC9F,#70D997,#57C690 )"
+                        />
+                      ) : (
+                        <LineProgressBar
+                          rounded={36}
+                          height={20}
+                          width={300}
+                          percent={login?.MHpoints}
+                          transition={{ easing: "linear" }}
+                          progressColor="linear-gradient(to right, #FF6962, #FF7974, #FF8986, #FF9997, #FFA9A9)"
+                        />
+                      )}
                     </Box>
                   </Box>
                 </HtmlTooltip>
@@ -646,15 +743,20 @@ export default function Navbar() {
                   >
                     {login.fullname}
                   </Typography>
-                  <MenuItem>
-                    <Typography
-                      className={montserrat.className}
-                      sx={{ textAlign: "center" }}
-                    >
-                      Transaction History
-                    </Typography>
-                  </MenuItem>
+                  <Link href="/TransactionHistory">
+                    <MenuItem>
+                      <HistoryIcon sx={{ fontSize: "18px", mr: "7px" }} />
+                      <Typography
+                        className={montserrat.className}
+                        sx={{ textAlign: "center" }}
+                      >
+                        Transaction History
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+
                   <MenuItem onClick={handleLogout}>
+                    <LogoutIcon sx={{ fontSize: "18px", mr: "7px" }} />
                     <Typography
                       className={montserrat.className}
                       sx={{ textAlign: "center" }}
@@ -662,7 +764,6 @@ export default function Navbar() {
                       Logout
                     </Typography>
                   </MenuItem>
-                 
                 </Menu>
               </Box>
             )}

@@ -26,8 +26,9 @@ import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
 import { appActions } from "@/redux/slices/appSlice";
 import { isDoneActions } from "@/redux/slices/isDoneSlice";
 import Breadcrumbs from "nextjs-breadcrumbs";
+import Image from "next/image";
 
-const SigninPage = () => {
+const SignInPage = () => {
   const usernameRef = useRef();
   const passwordRef = useRef();
   const dispatch = useDispatch();
@@ -46,7 +47,7 @@ const SigninPage = () => {
 
   const loginHandler = (event) => {
     event.preventDefault();
-
+    console.log("LOGIN BUTTOn")
     const username = usernameRef.current.value;
     const password = passwordRef.current.value;
 
@@ -182,25 +183,6 @@ const SigninPage = () => {
 
                       router.push("/Home");
                     });
-
-                  // Check if user has done MIT's
-                  // dispatch(
-                  //   loginActions.login({
-                  //     username: username,
-                  //     email: resp.data[0].email,
-                  //     fullname: resp.data[0].fullName,
-                  //     MHpoints: resp.data[0].healthPoint,
-                  //     password: password,
-                  //     consultant: false,
-                  //     userid: resp.data[0].userId,
-                  //     // isDoneMHC: isDoneMHC,
-                  //     // isDoneDpr: isDoneDpr,
-                  //     // isDoneAnx: isDoneAnx,
-                  //     // isDoneOcd: isDoneOcd,
-                  //     // isDoneSd: isDoneSd,
-                  //     // isDoneDHC: isDoneDHC,
-                  //   })
-                  // );
                 }
               });
           }
@@ -229,7 +211,6 @@ const SigninPage = () => {
 
   return (
     <Grid xs={12} sm={12} md={7} lg={6} xl={7} item={true}>
-
       <Box
         sx={{
           padding: "20px",
@@ -261,10 +242,15 @@ const SigninPage = () => {
                 justifyContent: "center",
               }}
             >
-              <img
+              <Box
+                component="img"
+                sx={{
+                  maxHeight: 150,
+                  maxWidth: 150,
+                  borderRadius: 10,
+                }}
+                alt=""
                 src="image/mcwebicon.png"
-                width="100%"
-                style={{ borderRadius: 10 }}
               />
             </Box>
             {/* LOGO END */}
@@ -398,21 +384,21 @@ const SigninPage = () => {
             </Button>
           </motion.div>
         </Box>
-        <Link  legacyBehavior href="Login/SignUpPage" >
+        <Link legacyBehavior href="Login/SignUpPage">
           <Typography
             sx={{
               mt: 1,
               fontSize: 13,
               textDecoration: "underline",
               color: "gray",
-              cursor: "pointer"
+              cursor: "pointer",
             }}
           >
             Sign Up
           </Typography>
         </Link>
 
-        <Link legacyBehavior href="Login/LoginConsultant" >
+        <Link legacyBehavior href="Login/LoginConsultant">
           <Typography
             sx={{
               mt: 1,
@@ -429,4 +415,4 @@ const SigninPage = () => {
   );
 };
 
-export default SigninPage;
+export default SignInPage;

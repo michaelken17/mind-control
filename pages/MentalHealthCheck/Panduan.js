@@ -1,5 +1,5 @@
 import { Montserrat } from "next/font/google";
-import { Button, Container, List, ListItem, Typography } from "@mui/material";
+import { Box, Button, Container, List, ListItem, Typography } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { motion } from "framer-motion";
@@ -15,6 +15,7 @@ import {
   cooperHewitt,
   openSans,
 } from "../../public/fonts";
+import Image from "next/image";
 const theme = createTheme({
   typography: {
     fontFamily: openSans,
@@ -27,7 +28,7 @@ const theme = createTheme({
   },
 });
 
-export default function PanduanMentalHealthTest() {
+export default function MHCPanduan() {
   const router = useRouter();
 
   const startHandler = (event) => {
@@ -98,11 +99,19 @@ export default function PanduanMentalHealthTest() {
                 textAlign: "center",
               }}
             >
-              <img
+              <Box
+                component="img"
+                sx={{
+                  width: "70%",borderRadius: 10
+                }}
+                alt=""
+                src="../image/mentalhealthillust.jpg"
+              />
+              {/* <Image
                 src="../image/mentalhealthillust.jpg"
                 width="70%"
                 style={{ borderRadius: 10 }}
-              />
+              /> */}
 
               <a
                 href="http://www.freepik.com"

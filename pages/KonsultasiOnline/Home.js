@@ -118,7 +118,11 @@ export default function KonsultasiOnlineHome() {
             xs={4}
             lg={1}
             sm={2}
-            sx={{ justifyItems: "center", textAlign: "center" }}
+            sx={{
+              justifyItems: "center",
+              textAlign: "center",
+              cursor: "pointer",
+            }}
           >
             <Link legacyBehavior href="PemesananKonsultasi">
               <ImageListItem
@@ -164,9 +168,12 @@ export default function KonsultasiOnlineHome() {
             xs={4}
             lg={1}
             sm={2}
-            sx={{ justifyItems: "center", textAlign: "center" }}
+            sx={{
+              justifyItems: "center",
+              textAlign: "center",
+              cursor: "pointer",
+            }}
           >
-            {" "}
             <Link legacyBehavior href="ListKonsultasi">
               <ImageListItem
                 sx={{
@@ -195,7 +202,7 @@ export default function KonsultasiOnlineHome() {
                   className={glacial.className}
                   title={
                     <Typography sx={{ fontSize: "20px" }}>
-                      List Konsultasi
+                      Jadwal Konsultasi
                     </Typography>
                   }
                 />
