@@ -54,7 +54,7 @@ function borderClassname(severity) {
   }
 }
 
-export default function ResultOCD() {
+export default function OCDResult() {
   const router = useRouter();
   const OCDAnswer = useSelector((x) => x.persistedReducer.app.OCDAns);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -140,7 +140,21 @@ export default function ResultOCD() {
                       textAlign: "center",
                     }}
                   >
-                    <img
+                    <Box
+                      component="img"
+                      sx={{
+                        width: "70%",
+                        borderRadius: 10,
+                      }}
+                      alt=""
+                      src={
+                        rekomendasiOCD[severity].severity ==
+                        "Tidak ada atau sedikit"
+                          ? "/image/Mental Illness Illustration/happy.jpg"
+                          : "/image/Mental Illness Illustration/confused.jpg"
+                      }
+                    />
+                    {/* <img
                       src={
                         rekomendasiOCD[severity].severity ==
                         "Tidak ada atau sedikit"
@@ -149,7 +163,7 @@ export default function ResultOCD() {
                       }
                       width="70%"
                       style={{ borderRadius: 10 }}
-                    />
+                    /> */}
 
                     <a
                       href="https://www.freepik.com/author/stories"

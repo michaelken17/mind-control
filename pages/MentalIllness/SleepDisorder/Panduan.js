@@ -1,4 +1,4 @@
-import { Button, Container, List, ListItem, Typography } from "@mui/material";
+import { Box, Button, Container, List, ListItem, Typography } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { motion } from "framer-motion";
@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
 import ErrorIcon from "@mui/icons-material/Error";
+import Image from "next/image";
 
 const theme = createTheme({
   typography: {
@@ -24,7 +25,7 @@ const theme = createTheme({
 });
 
 // SLEEP DISORDER
-export default function SleepDisorder() {
+export default function SleepDisorderPanduan() {
   const router = useRouter();
 
   const startHandler = (event) => {
@@ -40,9 +41,8 @@ export default function SleepDisorder() {
       denyButtonColor: "#EA8FEA",
       denyButtonText: `<h2 color:"black">Tidak</h2>`,
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        router.push("Test");
+        router.push("SleepDisorderTest");
       }
     });
   };
@@ -96,12 +96,21 @@ export default function SleepDisorder() {
                 textAlign: "center",
               }}
             >
-              <img
+              {" "}
+              <Box
+                component="img"
+                sx={{
+                  width: "70%",
+                  borderRadius: 10,
+                }}
+                alt=""
+                src="/image/Mental Illness Illustration/Insomnia.jpg"
+              />
+              {/* <Image
                 src="/image/Mental Illness Illustration/Insomnia.jpg"
                 width="70%"
                 style={{ borderRadius: 10 }}
-              />
-
+              /> */}
               <a
                 href="http://www.freepik.com"
                 style={{
@@ -302,7 +311,9 @@ export default function SleepDisorder() {
               }}
               onClick={startHandler}
             >
-              <Link href="">Mulai Test</Link>
+              <Link legacyBehavior href="">
+                Mulai Test
+              </Link>
             </motion.button>
           </div>
         </motion.div>

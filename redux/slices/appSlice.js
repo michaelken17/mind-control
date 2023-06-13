@@ -82,6 +82,7 @@ const MHCQuestions = [
     english: "Problems with sleep that affected your sleep quality over all",
   },
 ];
+
 // DEPRESSION
 const depressionQuestions = [
   { question: "Saya merasa tidak berharga.", english: "I felt worthless." },
@@ -205,7 +206,8 @@ const anxietySolutions = [
     image: "/image/Mental Illness Illustration/positive.jpg",
   },
   {
-    solution: "Berkonsultasi dengan tenaga profesional, seperti psikolog atau psikiater",
+    solution:
+      "Berkonsultasi dengan tenaga profesional, seperti psikolog atau psikiater",
     image: "/image/Mental Illness Illustration/psychologist.jpg",
   },
 ];
@@ -389,48 +391,50 @@ const OCDChoices = [
 ];
 const OCDSolutions = [
   {
-    solution: "Identifikasi pemicunya (dengan berkonsultasi ke psikiater atau psikolog)",
-    image: "/image/Mental Illness Illustration/book.jpg",
+    solution: "Hubungi terapis ERP",
+    image: "/image/Mental Illness Illustration/erp.jpg",
+  },
+  {
+    solution:
+      "Identifikasi pemicunya (dengan berkonsultasi ke psikiater atau psikolog)",
+    image: "/image/Mental Illness Illustration/findthesource.jpg",
   },
 
   {
     solution: "Lawan gejala yang muncul dengan menantang pikiran obsesif",
-    image: "/image/Mental Illness Illustration/meditate.jpg",
+    image: "/image/Mental Illness Illustration/diffthoughts.jpg",
   },
   {
-    solution: "Latihlah kesadaran (mindfulness) dalam berbagai hal yang dilakukan untuk mengelola stres",
-    image: "/image/Mental Illness Illustration/activity.jpg",
+    solution:
+      "Latihlah kesadaran (mindfulness) dalam berbagai hal yang dilakukan untuk mengelola stres",
+    image: "/image/Mental Illness Illustration/peacefulmind.jpg",
   },
   {
     solution: "Banyak berolahraga",
-    image: "/image/Mental Illness Illustration/noalcohol.jpg",
+    image: "/image/Mental Illness Illustration/jumprope.jpg",
   },
   {
     solution: "Tidur yang nyenyak dan cukup",
-    image: "/image/Mental Illness Illustration/conversation.jpg",
+    image: "/image/Mental Illness Illustration/sleeptight.jpg",
   },
   {
     solution: "Hindari nikotin dan alkohol",
-    image: "/image/Mental Illness Illustration/metime.jpg",
+    image: "/image/Mental Illness Illustration/noalcohol.jpg",
   },
   {
     solution: "Hubungi keluarga dan teman",
     image: "/image/Mental Illness Illustration/berhubungan.jpg",
   },
   {
-    solution: "Hubungi terapis ERP",
-    image: "/image/Mental Illness Illustration/eat.jpg",
-  },
-  {
-    solution: "Beristirahatlah sejenak dalam menggunakan gadget. Lakukan kegiatan seperti membaca buku, menulis buku harian",
-    image: "/image/Mental Illness Illustration/diary.jpg",
+    solution:
+      "Beristirahatlah sejenak dalam menggunakan gadget. Lakukan kegiatan seperti membaca buku, menulis buku harian",
+    image: "/image/Mental Illness Illustration/diary2.jpg",
   },
   {
     solution: "Melakukan teknik relaksasi agar dapat menenangkan pikiran",
-    image: "/image/Mental Illness Illustration/meditate.jpg",
-  }
+    image: "/image/Mental Illness Illustration/relaxing.jpg",
+  },
 ];
-
 
 // SLEEP DISORDER
 const SDQuestions = [
@@ -534,8 +538,53 @@ const SDChoices = [
     score: [5, 1, 1, 5, 5, 5, 1, 1],
   },
 ];
+const SDSolutions = [
+  {
+    solution: "Rencanakan dan patuhi jadwal tidur",
+    image: "/image/Mental Illness Illustration/schedulesleep.jpg",
+  },
+  {
+    solution:
+      "Hindari atau batasi kafein dan alkohol serta jangan menggunakan nikotin",
+    image: "/image/Mental Illness Illustration/fightnicotine.jpg",
+  },
+
+  {
+    solution: "Hindari atau batasi tidur siang",
+    image: "/image/Mental Illness Illustration/nap.jpg",
+  },
+  {
+    solution: "Hindari makanan dan minuman dalam porsi besar sebelum tidur",
+    image: "/image/Mental Illness Illustration/manyfood.jpg",
+  },
+  {
+    solution: "Hindari berusaha terlalu keras untuk tidur",
+    image: "/image/Mental Illness Illustration/sleepdisturb.jpg",
+  },
+  {
+    solution: "Berolahragalah secara teratur",
+    image: "/image/Mental Illness Illustration/jumprope.jpg",
+  },
+  {
+    solution: "Minimalkan kebisingan",
+    image: "/image/Mental Illness Illustration/loud.jpg",
+  },
+  {
+    solution: "Minimalkan cahaya",
+    image: "/image/Mental Illness Illustration/dark.jpg",
+  },
+  {
+    solution: "Atur suhu agar Anda merasa nyaman",
+    image: "/image/Mental Illness Illustration/temp.jpg",
+  },
+  {
+    solution: "Melatih teknik pernapasan dengan meditasi dan relaksasi",
+    image: "/image/Mental Illness Illustration/relaxing.jpg",
+  },
+];
 
 const MHCanswer = [];
+const MHCdata = [];
 const DepressionAns = [];
 const AnxietyAns = [];
 const OCDAns = [];
@@ -558,9 +607,11 @@ const appSlice = createSlice({
 
     OCDQuestions,
     OCDChoices,
+    OCDSolutions,
 
     SDQuestions,
     SDChoices,
+    SDSolutions,
 
     MHCanswer: [
       { no: 1, jawaban: 0 },
@@ -572,6 +623,36 @@ const appSlice = createSlice({
       { no: 7, jawaban: 0 },
       { no: 8, jawaban: 0 },
       { no: 9, jawaban: 0 },
+    ],
+    MHCdata: [
+      {
+        img: "/image/Mental Illness Illustration/4.png",
+        title: "Depression",
+        author: "Gangguan Depresi",
+        link: "/MentalIllness/Depression/Panduan",
+        severity: 0,
+      },
+      {
+        img: "/image/Mental Illness Illustration/1.png",
+        title: "Anxiety",
+        author: "Gangguan Kecemasan",
+        link: "/MentalIllness/Anxiety/Panduan",
+        severity: 0,
+      },
+      {
+        img: "/image/Mental Illness Illustration/3.png",
+        title: "OCD",
+        author: "Obsessive-Compulsive Disorder",
+        link: "/MentalIllness/OCD/Panduan",
+        severity: 0,
+      },
+      {
+        img: "/image/Mental Illness Illustration/5.png",
+        title: "Sleep Disorder",
+        author: "Gangguan Tidur",
+        link: "/MentalIllness/SleepDisorder/Panduan",
+        severity: 0,
+      },
     ],
     DepressionAns: [
       { no: 1, jawaban: 0 },
@@ -625,6 +706,9 @@ const appSlice = createSlice({
     },
     submitAnxiety: (state, action) => {
       state.AnxietyAns = action.payload;
+    },
+    MHCData: (state, action) => {
+      state.MHCdata = action.payload;
     },
   },
 });

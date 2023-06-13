@@ -1,6 +1,8 @@
 import {
   Box,
+  Button,
   Container,
+  Grid,
   IconButton,
   ImageList,
   ImageListItem,
@@ -15,13 +17,40 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import styles from "styles/Quiz.module.css";
-import { montserrat, glacial, cooperHewitt } from "../public/fonts";
+import {
+  montserrat,
+  glacial,
+  cooperHewitt,
+  montserratExtraBold,
+  montserratLight,
+} from "../public/fonts";
+import Swal from "sweetalert2";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const mentalIllnessData = useSelector(
     (x) => x.persistedReducer.app.mentalIllnessData
   );
+  const login = useSelector((state) => state.persistedReducer.login);
   const [isLoaded, setIsLoaded] = useState(false);
+  const router = useRouter();
+  const axios = require("axios");
+
+  const startHandler = (event) => {
+    event.preventDefault();
+
+    if (login?.authorized == false) {
+      Swal.fire({
+        icon: "warning",
+        title: "Mohon <b>Log In</b> terlebih dahulu!",
+        showDenyButton: false,
+        showConfirmButton: false,
+        timer: 2000,
+      });
+    } else {
+      router.push("MentalHealthCheck/Start");
+    }
+  };
 
   useEffect(() => {
     setIsLoaded(true);
@@ -40,216 +69,166 @@ export default function Home() {
       exit={{ opacity: 0 }}
     >
       {/* MindControl Logo */}
-      <div
-      // initial={{ opacity: 0 }}
-      //  animate={{ opacity: 1 }}
-      // transition={{
-      //   duration: 1,
-      //   delay: 0,
-      //   ease: [0, 0.71, 0.2, 1.01],
-      // }}
-      // style={{ textAlign: "center" }}
-      // exit={{ opacity: 0}}
-      >
+      <Box>
         <Container>
-          <div>
-            <div style={{ alignContent: "center", textAlign: "center" }}>
-              <img src="/image/MCFullLogo.png" alt="bg" width="70%"></img>
-            </div>
-
-            <div style={{ marginTop: "15px" }}>
+          <Box>
+            <Box
+              component="img"
+              sx={{
+                height: { xs: 160, sm: 220, md: 220, lg: 280 },
+                width: { xs: 290, sm: 400, md: 400, lg: 500 },
+              }}
+              alt="bg"
+              src="/image/MCFullLogo.png"
+            />
+            <Box style={{ marginTop: "1px" }}>
               <Typography
-                sx={{ fontSize: "25px", color: "black" }}
+                sx={{
+                  fontSize: { xs: "19px", md: "20px", xl: "20px" },
+                  color: "gray",
+                }}
                 className={glacial.className}
               >
-                It's Okay Not To Be Okay.
+                {"it's okay not to be okay."}
               </Typography>
-            </div>
-          </div>
-          <div
-            style={{
-              marginTop: "50px",
-              alignItems: "center",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          ></div>
+            </Box>
+          </Box>
         </Container>
-      </div>
+      </Box>
 
-      {/* Mental Ilness Check */}
-      <div>
-        <Box
-          className={styles.quizDiv}
-          sx={{
-            paddingTop: "20px",
-            paddingBottom: "10px",
-            px: "50px",
-            textAlign: "center",
-            justifyContent: "center",
-            display: { xs: "none", md: "block" },
-          }}
-        >
-          <a style={{ fontSize: "25px", color: "white" }}>
-            Take a Mental Illness Check
-          </a>
-          <motion.div style={{ display: "flex", justifyContent: "center" }}>
-            <ImageList
-              sx={{ width: "80%", height: "100%", padding: "20px" }}
-              cols={4}
-            >
-              {isLoaded &&
-                mentalIllnessData.map((item) => (
-                  <Link href={item.link} key={item.img}>
-                    <motion.div
-                      whileHover={{ scale: 1.03 }}
-                      style={{
-                        borderRadius: "20px",
-                        margin: 5,
-                      }}
-                      transition={{
-                        duration: 5,
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 10,
-                        bounce: 1,
-                      }}
-                    >
-                      <ImageListItem sx={{}}>
-                        <motion.img
-                          style={{
-                            borderRadius: "20px",
-                            width: "100%",
-                            height: "100%",
-                          }}
-                          src={item.img}
-                          alt={item.title}
-                          loading="eager"
-                        />
-
-                        <ImageListItemBar
-                          sx={{
-                            borderBottomLeftRadius: "20px",
-                            borderBottomRightRadius: "20px",
-                          }}
-                          className={glacial.className}
-                          title={<h2>{item.title}</h2>}
-                          subtitle={
-                            <a style={{ fontSize: 14 }}> {item.author}</a>
-                          }
-                        />
-                      </ImageListItem>
-                    </motion.div>
-                  </Link>
-                ))}
-            </ImageList>
-          </motion.div>
-          <div>
-            <a
-              href="https://www.freepik.com/author/stories"
-              style={{ fontSize: "11px", color: "white" }}
-            >
-              Images by storyset on Freepik
-            </a>
-          </div>
-        </Box>
-      </div>
-
-      {/* Tulisan */}
+      {/* Mental Health Check */}
       <Container>
-        <div
-          style={{
-            marginTop: "50px",
-            width: "100%",
-            backgroundColor: "white",
-            height: "100%",
-            overflow: "auto",
+        <Box
+          sx={{
+            // bgcolor: "gray",
+            marginTop: "20px",
+            textAlign: {
+              xs: "justify",
+              sm: "center",
+              md: "center",
+              xl: "center",
+            },
+            display: {},
           }}
         >
-          <div
-            style={{
-              float: "left",
+          <Typography
+            className={montserratExtraBold.className}
+            sx={{
+              fontSize: { xs: "19px", md: "22px" },
+              color: "#FFAACF",
             }}
           >
+            Lakukan Mental Health Check?
+          </Typography>
+
+          <Typography
+            className={montserrat.className}
+            sx={{ fontSize: { xs: "15px", md: "17px" }, color: "black" }}
+          >
+            Mental Health Check berfungsi sebagai tes penilaian diri yang
+            membantu Anda untuk mengetahui kondisi kesehatan mental pribadi dan
+            mempersiapkan untuk langkah selanjutnya.
+          </Typography>
+          <br />
+        </Box>
+      </Container>
+
+      {/* MHC button */}
+
+      <Button
+        className={styles.testbutton}
+        sx={{
+          borderRadius: "10px",
+          fontSize: "20px",
+          px: "50px",
+          py: "12px",
+          border: "0px ",
+          textTransform: "none",
+          color: "white",
+        }}
+        onClick={startHandler}
+      >
+        <Typography className={montserrat.className}>Mulai Tes</Typography>
+      </Button>
+
+      {/* Fitur Lainnya */}
+
+      <Container sx={{ marginTop: "30px" }}>
+        <Typography
+          className={montserratLight.className}
+          sx={{ textAlign: "left", color: "gray", marginBottom: "10px" }}
+        >
+          Fitur-fitur lainnya...
+        </Typography>
+        <Grid container columns={{ xs: 4, sm: 8, xl: 12 }} spacing={{ xl: 17 }}>
+          <Grid item xl={6}>
             <Box
               sx={{
-                width: "35vw",
-                height: "100%",
                 // bgcolor: "gray",
-                textAlign: "left",
-                display: { xs: "none", md: "block" },
+                textAlign: "justify",
               }}
             >
               <Typography
-                className={cooperHewitt.className}
+                className={montserratExtraBold.className}
                 sx={{
-                  fontSize: "30px",
+                  fontSize: { xs: "19px", md: "22px" },
                   color: "#FFAACF",
-                  "&:hover": {
-                    color: "#EA8FEA",
-                  },
                 }}
               >
-                <Link href="/PanduanMentalHealthTest">
-                  Take a Mental Health Check
-                </Link>
+                <i>Mental Illness Test</i>
               </Typography>
-
               <Typography
-                className={glacial.className}
-                sx={{ fontSize: "20px", color: "black" }}
+                className={montserrat.className}
+                sx={{
+                  fontSize: { xs: "19px", md: "18px" },
+                  color: "#EA8FEA",
+                }}
               >
-                Mental Health Check membantu anda untuk mengetahui kondisi
-                kesehatan mental pribadi dan mempersiapkan untuk langkah
-                selanjutnya
+                Tes Penilaian Diri Penyakit Kesehatan Mental
+              </Typography>
+              <Typography
+                className={montserrat.className}
+                sx={{ fontSize: { xs: "15px", md: "17px" }, color: "black" }}
+              >
+                Pengecekan penyakit mental berfungsi sebagai tes penilaian diri
+                yang dapat mengidentifikasi tingkat keparahan penyakit mental
+                yang dialami secara spesifik. Tes akan membantu memberikan
+                solusi dan rekomendasi untuk meningkatkan kesehatan mental dan
+                juga membantu menentukan apakah harus mencari bantuan dari
+                psikolog untuk mengatasi masalah kesehatan mental.
               </Typography>
               <br />
             </Box>
-          </div>
-        </div>
+          </Grid>
 
-        <div
-          style={{
-            marginTop: "0px",
-            width: "100%",
-            backgroundColor: "white",
-            height: "100%",
-            overflow: "auto",
-          }}
-        >
-          <div
-            style={{
-              float: "right",
-            }}
-          >
+          <Grid item xl={6}>
             <Box
               sx={{
-                width: "35vw",
-                height: "100%",
-                // bgcolor: "gray",
-                textAlign: "right",
-                display: { xs: "none", md: "block" },
+                textAlign: "justify",
               }}
             >
               <Typography
-                className={cooperHewitt.className}
+                className={montserratExtraBold.className}
                 sx={{
-                  fontSize: "30px",
+                  fontSize: { xs: "19px", md: "22px" },
                   color: "#FFAACF",
-                  "&:hover": {
-                    color: "#EA8FEA",
-                  },
                 }}
               >
-                <Link href="/PanduanMentalHealthTest">
-                  Do your Daily Mental Health Check!
-                </Link>
+                <i>Daily Health Check</i>
               </Typography>
-
               <Typography
-                className={glacial.className}
+                className={montserrat.className}
                 sx={{
-                  fontSize: "20px",
+                  fontSize: { xs: "19px", md: "18px" },
+                  color: "#EA8FEA",
+                }}
+              >
+                Pemeriksaan Kesehatan Mental Harian
+              </Typography>
+              <Typography
+                className={montserrat.className}
+                sx={{
+                  fontSize: { xs: "15px", md: "17px" },
                   color: "black",
                   textAlign: "justify",
                 }}
@@ -261,28 +240,22 @@ export default function Home() {
                 Pertanyaan harian kesehatan mental ini dapat membantu
                 mempertahankan keadaan pikiran dan emosi anda.
               </Typography>
-              <br />
             </Box>
-          </div>
-        </div>
+          </Grid>
+        </Grid>
       </Container>
 
       {/* Footer */}
-      <div>
-        <Box
-          className={styles.quizDiv}
-          sx={{
-            p: "10px",
-            textAlign: "center",
-            justifyContent: "center",
-            display: { xs: "none", md: "block" },
-          }}
-        >
-          <Link style={{ fontSize: "25px", color: "white" }} href="/AboutUs">
-            About Us
-          </Link>
-        </Box>
-      </div>
+      <Box
+        className={styles.quizDiv}
+        sx={{
+          p: "10px",
+          textAlign: "center",
+          justifyContent: "center",
+          display: { xs: "none", xl: "block" },
+          marginTop: "30px",
+        }}
+      ></Box>
     </motion.div>
   );
 }
