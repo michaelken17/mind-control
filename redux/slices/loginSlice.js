@@ -11,6 +11,7 @@ const loginSlice = createSlice({
     userid: 0,
     consultant: false,
     MHpoints: 0,
+    freeConsultation: 0,
     isDoneMHC: "false",
   },
   reducers: {
@@ -22,6 +23,7 @@ const loginSlice = createSlice({
       state.email = action.payload.email;
       state.pass = action.payload.password;
       state.MHpoints = action.payload.MHpoints;
+      state.freeConsultation = action.payload.freeConsultation;
       state.consultant = action.payload.consultant;
       state.userid = action.payload.userid;
     },

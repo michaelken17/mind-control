@@ -58,18 +58,47 @@ const theme = createTheme({
 export default function RekomendasiKegiatan() {
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
-  const [value, setValue] = useState("Sleep Disorder");
-
+  const [value, setValue] = useState("Anxiety");
+  const [depressionSolutions, setdepressionSolutions] = useState([]);
+  const [anxietySolutions, setanxietySolutions] = useState([]);
+  const [OCDSolutions, setOCDSolutions] = useState([]);
+  const [SDSolutions, setSDSolutions] = useState([]);
   const MHCData = useSelector((x) => x.persistedReducer.app.MHCdata);
   const datePicked = useSelector((x) => x.persistedReducer.consultant.dateTime);
-  const depressionSolutions = useSelector(
-    (x) => x.persistedReducer.app.depressionSolutions
-  );
-  const anxietySolutions = useSelector(
-    (x) => x.persistedReducer.app.anxietySolutions
-  );
-  const OCDSolutions = useSelector((x) => x.persistedReducer.app.OCDSolutions);
-  const SDSolutions = useSelector((x) => x.persistedReducer.app.SDSolutions);
+  const axios = require("axios");
+  // const depressionSolutions = useSelector(
+  //   (x) => x.persistedReducer.app.depressionSolutions
+  // );
+  // const anxietySolutions = useSelector(
+  //   (x) => x.persistedReducer.app.anxietySolutions
+  // );
+  // const OCDSolutions = useSelector((x) => x.persistedReducer.app.OCDSolutions);
+  // const SDSolutions = useSelector((x) => x.persistedReducer.app.SDSolutions);
+
+  useEffect(() => {
+      axios
+      .get("https://localhost:7184/api/MI/GetSolutions?MDID=" + 1)
+      .then((resp) => {
+        setdepressionSolutions(resp.data)
+      });
+      axios
+      .get("https://localhost:7184/api/MI/GetSolutions?MDID=" + 2)
+      .then((resp) => {
+        setanxietySolutions(resp.data)
+      });
+      axios
+      .get("https://localhost:7184/api/MI/GetSolutions?MDID=" + 3)
+      .then((resp) => {
+        setOCDSolutions(resp.data)
+      });
+      axios
+      .get("https://localhost:7184/api/MI/GetSolutions?MDID=" + 4)
+      .then((resp) => {
+        setSDSolutions(resp.data)
+      });
+  }, []);
+
+
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -77,7 +106,7 @@ export default function RekomendasiKegiatan() {
 
   useEffect(() => {
     setIsLoaded(true);
-    console.log(MHCData.length);
+    console.log(MHCData);
 
     for (var i = 0; i < MHCData.length; i++) {
       if (MHCData[i].severity > 2) {
@@ -86,9 +115,17 @@ export default function RekomendasiKegiatan() {
       }
     }
   }, [MHCData]);
+
   useEffect(() => {
     console.log(value);
   }, [value]);
+
+  useEffect(() => {
+    console.log(depressionSolutions);
+    console.log(anxietySolutions);
+    console.log(OCDSolutions);
+    console.log(SDSolutions);
+  }, [depressionSolutions, anxietySolutions, OCDSolutions, SDSolutions]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -189,7 +226,7 @@ export default function RekomendasiKegiatan() {
                                   maxWidth: { xs: 290, md: 290, lg: 300 },
                                 }}
                                 alt=""
-                                src={x.image}
+                                src={x.imagePath}
                               />
                               <Typography
                                 sx={{
@@ -205,7 +242,7 @@ export default function RekomendasiKegiatan() {
                                 className={montserrat.className}
                               >
                                 {/* <CircleIcon sx={{ paddingTop: "11px" }} />{" "} */}
-                                {x.solution}
+                                {x.dailyRecommendationName}
                               </Typography>
                             </Grid>
                           ))}
@@ -235,7 +272,7 @@ export default function RekomendasiKegiatan() {
                                   maxWidth: { xs: 290, md: 290, lg: 300 },
                                 }}
                                 alt=""
-                                src={x.image}
+                                src={x.imagePath}
                               />
                               <Typography
                                 sx={{
@@ -251,7 +288,7 @@ export default function RekomendasiKegiatan() {
                                 className={montserrat.className}
                               >
                                 {/* <CircleIcon sx={{ paddingTop: "11px" }} />{" "} */}
-                                {x.solution}
+                                {x.dailyRecommendationName}
                               </Typography>
                             </Grid>
                           ))}
@@ -281,7 +318,7 @@ export default function RekomendasiKegiatan() {
                                   maxWidth: { xs: 290, md: 290, lg: 300 },
                                 }}
                                 alt=""
-                                src={x.image}
+                                src={x.imagePath}
                               />
                               <Typography
                                 sx={{
@@ -297,7 +334,7 @@ export default function RekomendasiKegiatan() {
                                 className={montserrat.className}
                               >
                                 {/* <CircleIcon sx={{ paddingTop: "11px" }} />{" "} */}
-                                {x.solution}
+                                {x.dailyRecommendationName}
                               </Typography>
                             </Grid>
                           ))}
@@ -327,7 +364,7 @@ export default function RekomendasiKegiatan() {
                                   maxWidth: { xs: 290, md: 290, lg: 300 },
                                 }}
                                 alt=""
-                                src={x.image}
+                                src={x.imagePath}
                               />
                               <Typography
                                 sx={{
@@ -343,7 +380,7 @@ export default function RekomendasiKegiatan() {
                                 className={montserrat.className}
                               >
                                 {/* <CircleIcon sx={{ paddingTop: "11px" }} />{" "} */}
-                                {x.solution}
+                                {x.dailyRecommendationName}
                               </Typography>
                             </Grid>
                           ))}

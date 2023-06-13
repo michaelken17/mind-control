@@ -25,7 +25,7 @@ const theme = createTheme({
 });
 
 // ANXIETY
-export default function PanduanDepression() {
+export default function DepressionPanduan() {
   const router = useRouter();
 
   const startHandler = (event) => {

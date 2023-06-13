@@ -57,7 +57,7 @@ function borderClassname(severity) {
 }
 
 //DEPRESSION
-export default function ResultDepression() {
+export default function DepressionResult() {
   const router = useRouter();
   const depressionAnswer = useSelector(
     (x) => x.persistedReducer.app.DepressionAns

@@ -192,6 +192,7 @@ export default function Navbar() {
             password: resp.data.password,
             consultant: false,
             userid: resp.data.userId,
+            freeConsultation: resp.data.freeConsultation,
             username: resp.data.username,
           })
         );

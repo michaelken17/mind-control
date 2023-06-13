@@ -25,7 +25,7 @@ const theme = createTheme({
 });
 
 // ANXIETY
-export default function PanduanOCD() {
+export default function OCDPanduan() {
   const router = useRouter();
 
   const startHandler = (event) => {

@@ -217,6 +217,7 @@ export default function DHCTest() {
                       password: respUpdate.data.password,
                       consultant: false,
                       userid: respUpdate.data.userId,
+                      freeConsultation: resp.data.freeConsultation,
                       username: respUpdate.data.username,
                     })
                   );

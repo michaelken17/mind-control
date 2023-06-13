@@ -163,6 +163,7 @@ const SignInPage = () => {
                           MHpoints: resp.data[0].healthPoint,
                           password: password,
                           consultant: false,
+                          freeConsultation: resp.data[0].freeConsultation,
                           userid: resp.data[0].userId,
                           username: username,
                         })

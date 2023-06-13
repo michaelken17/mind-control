@@ -43,7 +43,7 @@ const theme = createTheme({
 });
 
 // ANXIETY
-export default function Test() {
+export default function AnxietyTest() {
   const router = useRouter();
   const anxietyQuestions = useSelector(
     (x) => x.persistedReducer.app.anxietyQuestions

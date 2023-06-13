@@ -54,7 +54,7 @@ function borderClassname(severity) {
   }
 }
 
-export default function ResultOCD() {
+export default function OCDResult() {
   const router = useRouter();
   const OCDAnswer = useSelector((x) => x.persistedReducer.app.OCDAns);
   const [isLoaded, setIsLoaded] = useState(false);

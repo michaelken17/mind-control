@@ -55,7 +55,7 @@ function borderClassname(severity) {
 }
 
 // SLEEP DISORDER
-export default function ResultSleepDisorder() {
+export default function SleepDisorderResult() {
   const router = useRouter();
   const SDAnswer = useSelector((x) => x.persistedReducer.app.SDAns);
   const [isLoaded, setIsLoaded] = useState(false);

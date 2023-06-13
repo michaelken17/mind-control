@@ -55,7 +55,7 @@ function borderClassname(severity) {
   }
 }
 
-export default function ResultAnxiety() {
+export default function AnxietyResult() {
   const router = useRouter();
   const anxietyAnswer = useSelector((x) => x.persistedReducer.app.AnxietyAns);
   const anxietySolutions = useSelector(

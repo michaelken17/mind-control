@@ -38,7 +38,7 @@ import Link from "next/link";
 import { container, item } from "/animation";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { forwardRef, useEffect, useState } from "react";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import {
@@ -60,7 +60,7 @@ import TabPanel from "@mui/lab/TabPanel";
 // import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControl from "@mui/material/FormControl";
-
+import { loginActions } from "@/redux/slices/loginSlice";
 // Pembayaran
 export default function Pembayaran(val) {
   const router = useRouter();
@@ -76,20 +76,14 @@ export default function Pembayaran(val) {
   const [tipePembayaran, settipePembayaran] = useState("GoPay");
   const consultant = useSelector((x) => x.persistedReducer.consultant);
   const login = useSelector((state) => state.persistedReducer.login);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setIsLoaded(true);
-
-    axios
-      .get(
-        "https://localhost:7184/api/Users/GetData?Username=" + login.username
-      )
-      .then((resp) => {
-        console.log(resp.data);
-        if (resp.data[0].freeConsultation > 0) {
-          sethasFreeConsultation(true);
-        }
-      });
+    console.log(login);
+    if (login.freeConsultation > 0) {
+      sethasFreeConsultation(true);
+    }
   }, []);
 
   const handleChange = (event, newValue) => {
@@ -124,7 +118,7 @@ export default function Pembayaran(val) {
         console.log(datePicked);
         console.log(timePicked);
         console.log(dateTime);
-        console.log(tipePembayaran)
+        console.log(tipePembayaran);
 
         if (tipePembayaran == "Konsultasi Gratis") {
           axios
@@ -134,7 +128,20 @@ export default function Pembayaran(val) {
                 "&opr=reset"
             )
             .then((resp) => {
-              console.log("KONSULTASI GRATIS");
+              console.log(resp);
+              console.log(resp.data);
+              dispatch(
+                loginActions.login({
+                  email: resp.data.email,
+                  fullname: resp.data.fullName,
+                  MHpoints: resp.data.healthPoint,
+                  password: resp.data.password,
+                  consultant: false,
+                  freeConsultation: resp.data.freeConsultation,
+                  userid: resp.data.userId,
+                  username: resp.data.username,
+                })
+              );
             });
         }
 
@@ -178,7 +185,7 @@ export default function Pembayaran(val) {
   useEffect(() => {
     if (hasFreeConsultation == true) {
       setValue("Konsultasi Gratis");
-      settipePembayaran("Konsultasi Gratis")
+      settipePembayaran("Konsultasi Gratis");
     }
   }, [hasFreeConsultation]);
 

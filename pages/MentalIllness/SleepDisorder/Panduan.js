@@ -25,7 +25,7 @@ const theme = createTheme({
 });
 
 // SLEEP DISORDER
-export default function SleepDisorder() {
+export default function SleepDisorderPanduan() {
   const router = useRouter();
 
   const startHandler = (event) => {

@@ -30,7 +30,7 @@ const theme = createTheme({
   },
 });
 
-export default function MentalIllnessTest() {
+export default function MentalIllnessTestHome() {
   const mentalIllnessData = useSelector(
     (x) => x.persistedReducer.app.mentalIllnessData
   );
