@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
 import { loginActions } from "@/redux/slices/loginSlice";
@@ -18,65 +18,90 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import {montserrat, glacial, cooperHewitt} from "../../public/fonts";
-
+import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
+import Image from "next/image";
 
 const SignUpPage = () => {
   const usernameRef = useRef();
   const passwordRef = useRef();
+  const fullnameRef = useRef();
+  const emailRef = useRef();
   const dispatch = useDispatch();
   const router = useRouter();
+  const [gender, setGender] = useState();
+  const axios = require("axios");
 
-  const loginHandler = (event) => {
+  const signUpHandler = (event) => {
     event.preventDefault();
 
     const username = usernameRef.current.value;
     const password = passwordRef.current.value;
-
-    if (username == "" || password == "") {
+    const fullname = fullnameRef.current.value;
+    const email = emailRef.current.value;
+    // const Toast = Swal.mixin({
+    //   toast: true,
+    //   position: "bottom-end",
+    //   showConfirmButton: false,
+    //   timer: 2000,
+    //   timerProgressBar: true,
+    // });
+    // Toast.fire({
+    //   icon: "success",
+    //   title: "User has been registered!",
+    // });
+    if (
+      username == "" ||
+      password == "" ||
+      fullname == "" ||
+      email == "" ||
+      gender == ""
+    ) {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Please enter your username and password!",
+        text: "Mohon mengisi semua data!",
         timer: 2000,
         showConfirmButton: false,
       });
     } else {
-      dispatch(
-        loginActions.login({
+      axios
+        .post("https://localhost:7184/api/Users/InsertData", {
+          fullName: fullname,
           username: username,
-          email: "emailtest@gmail.com",
+          email: email,
           password: password,
+          gender: gender,
         })
-      );
+        .then((response) => {
+          console.log(response.data);
 
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 2000,
-        timerProgressBar: true,
-        // didOpen: (toast) => {
-        //   toast.addEventListener("mouseenter", Swal.stopTimer);
-        //   toast.addEventListener("mouseleave", Swal.resumeTimer);
-        // },
-      });
-
-      Toast.fire({
-        icon: "success",
-        title: "User has been registered!",
-      });
-
-      router.push("/login");
+          Swal.fire({
+            icon: "success",
+            title: "User telah di registrasi!",
+            text: "Mohon login ulang!",
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+          }).then(() => {
+            router.push("/Login");
+          });
+        });
     }
   };
 
+  const radioHandler = (event) => {
+    setGender(event.target.value);
+  };
+
+  // useEffect(() => {
+  //   console.log(gender)
+  // }, [gender])
   //Press Enter key to signup
   useEffect(() => {
     const keyDownHandler = (event) => {
       if (event.key === "Enter") {
         event.preventDefault();
-        loginHandler(event);
+        signUpHandler(event);
       }
     };
 
@@ -127,11 +152,20 @@ const SignUpPage = () => {
                   justifyContent: "center",
                 }}
               >
-                <img
+                <Box
+                  component="img"
+                  sx={{
+                    width: "100%",
+                    borderRadius: 10,
+                  }}
+                  alt=""
+                  src="/image/mcwebicon.png"
+                />
+                {/* <Image
                   src="/image/mcwebicon.png"
                   width="100%"
                   style={{ borderRadius: 10 }}
-                />
+                /> */}
               </Box>
               {/* LOGO END */}
 
@@ -143,7 +177,7 @@ const SignUpPage = () => {
                   marginTop: 0,
                   marginBottom: 0,
                   fontSize: "20px",
-                  letterSpacing:"1px"
+                  letterSpacing: "1px",
                 }}
                 mt={7}
                 mb={1}
@@ -182,7 +216,48 @@ const SignUpPage = () => {
                   >
                     <InputBase
                       className={montserrat.className}
-                      placeholder="Enter your Full Name..."
+                      placeholder="Masukkan nama lengkap anda..."
+                      fullWidth
+                      sx={{
+                        bgcolor: "white",
+                        p: 1,
+                        borderRadius: "5px",
+                      }}
+                      inputRef={fullnameRef}
+                    />
+                  </Paper>
+                </Box>
+              </Box>
+
+              {/* Username */}
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignContent="center"
+                justifyContent="flex-start"
+                mb={2}
+              >
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="flex-start"
+                >
+                  <Typography
+                    color="#2f4858"
+                    pb={1}
+                    className={montserrat.className}
+                  >
+                    Username
+                  </Typography>
+
+                  <Paper
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <InputBase
+                      className={montserrat.className}
+                      placeholder="Masukkan Username anda..."
                       fullWidth
                       sx={{
                         bgcolor: "white",
@@ -223,14 +298,14 @@ const SignUpPage = () => {
                   >
                     <InputBase
                       className={montserrat.className}
-                      placeholder="Enter your Email..."
+                      placeholder="Masukkan Email anda..."
                       fullWidth
                       sx={{
                         bgcolor: "white",
                         p: 1,
                         borderRadius: "5px",
                       }}
-                      inputRef={passwordRef}
+                      inputRef={emailRef}
                     />
                   </Paper>
                 </Box>
@@ -244,37 +319,32 @@ const SignUpPage = () => {
                 justifyContent="flex-start"
                 mb={2}
               >
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  justifyContent="flex-start"
+                <Typography
+                  color="#2f4858"
+                  pb={1}
+                  className={montserrat.className}
                 >
-                  <Typography
-                    color="#2f4858"
-                    pb={1}
-                    className={montserrat.className}
-                  >
-                    Password
-                  </Typography>
+                  Password
+                </Typography>
 
-                  <Paper
+                <Paper
+                  sx={{
+                    width: "100%",
+                  }}
+                >
+                  <InputBase
+                    className={montserrat.className}
+                    placeholder="Masukkan password anda..."
+                    fullWidth
                     sx={{
-                      width: "100%",
+                      bgcolor: "white",
+                      p: 1,
+                      borderRadius: "5px",
                     }}
-                  >
-                    <InputBase
-                      className={montserrat.className}
-                      placeholder="Enter your Password..."
-                      fullWidth
-                      sx={{
-                        bgcolor: "white",
-                        p: 1,
-                        borderRadius: "5px",
-                      }}
-                      inputRef={usernameRef}
-                    />
-                  </Paper>
-                </Box>
+                    type="password"
+                    inputRef={passwordRef}
+                  />
+                </Paper>
               </Box>
 
               {/* Gender */}
@@ -286,7 +356,7 @@ const SignUpPage = () => {
                 >
                   Gender
                 </Typography>
-                <RadioGroup row>
+                <RadioGroup row onChange={radioHandler}>
                   <FormControlLabel
                     value="female"
                     control={<Radio />}
@@ -323,7 +393,7 @@ const SignUpPage = () => {
                     backgroundColor: "#FFAACF",
                   },
                 }}
-                onClick={loginHandler}
+                onClick={signUpHandler}
               >
                 Sign Up
               </Button>

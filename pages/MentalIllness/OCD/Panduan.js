@@ -1,4 +1,4 @@
-import { Button, Container, List, ListItem, Typography } from "@mui/material";
+import { Box, Button, Container, List, ListItem, Typography } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { motion } from "framer-motion";
@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
 import ErrorIcon from "@mui/icons-material/Error";
+import Image from "next/image";
 
 const theme = createTheme({
   typography: {
@@ -24,7 +25,7 @@ const theme = createTheme({
 });
 
 // ANXIETY
-export default function PanduanOCD() {
+export default function OCDPanduan() {
   const router = useRouter();
 
   const startHandler = (event) => {
@@ -96,11 +97,20 @@ export default function PanduanOCD() {
                 textAlign: "center",
               }}
             >
-              <img
+               <Box
+                component="img"
+                sx={{
+                  width: "80%",
+                  borderRadius: 10,
+                }}
+                alt=""
+                src="/image/Mental Illness Illustration/ocdIll.jpg"
+              />
+              {/* <Image
                 src="/image/Mental Illness Illustration/ocdIll.jpg"
                 width="80%"
                 style={{ borderRadius: 10 }}
-              />
+              /> */}
 
               <a
                 href="http://www.freepik.com"
@@ -305,7 +315,9 @@ export default function PanduanOCD() {
               }}
               onClick={startHandler}
             >
-              <Link href="">Mulai Test</Link>
+              <Link legacyBehavior href="">
+                Mulai Test
+              </Link>
             </motion.button>
           </div>
         </motion.div>

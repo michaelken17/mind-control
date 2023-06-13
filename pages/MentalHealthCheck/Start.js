@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Button, Container, Typography } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { Montserrat } from "next/font/google";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
@@ -9,6 +9,11 @@ import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
 import styles from "styles/Quiz.module.css";
 import Link from "next/link";
 import ErrorIcon from "@mui/icons-material/Error";
+import { useRouter } from "next/router";
+import Swal from "sweetalert2";
+import { useSelector } from "react-redux";
+import { isDoneActions } from "@/redux/slices/isDoneSlice";
+import Image from "next/image";
 
 const theme = createTheme({
   typography: {
@@ -19,8 +24,37 @@ const theme = createTheme({
   },
 });
 
-export default function MentalHealthCheck() {
+export default function MHCStart() {
   const [readMore, setReadMore] = React.useState(false);
+  const router = useRouter();
+  const login = useSelector((state) => state.persistedReducer.login);
+  const isDone = useSelector((state) => state.persistedReducer.isDone);
+
+  const mhcStartHandler = () => {
+    const newRecord = true;
+
+    if (isDone.isDoneMHC == false) {
+      router.push("Panduan");
+    } else {
+      Swal.fire({
+        icon: "warning",
+        title: "Anda sudah pernah melakukan tes ini!",
+        text: "Memulai ulang tes akan mengreset data!",
+        showDenyButton: true,
+        //   showCancelButton: true,
+        background: "white",
+        confirmButtonText: `<h2 color:"black">Tes ulang</h2>`,
+        confirmButtonColor: "#FFAACF",
+        denyButtonColor: "#EA8FEA",
+        denyButtonText: `<h2 color:"black">Cancel</h2>`,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          router.push("Panduan");
+        }
+      });
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -35,23 +69,35 @@ export default function MentalHealthCheck() {
         exit={{ opacity: 0, scale: 0.2 }}
       >
         <Container component="main" maxWidth="md" sx={{}}>
-          <img
+          <Box
+            component="img"
+            sx={{
+              width: "100%",
+            }}
+            alt=""
+            src="/image/MentalHealthCheck.png"
+          />
+          {/* <Image
             src="/image/MentalHealthCheck.png"
             style={{
               width: "100%",
             }}
-          ></img>
+          /> */}
           <div style={{ marginTop: "15px" }}>
             <Typography
-              sx={{ fontSize: {xs:"16px", md:"19px", lg:"22px"}, color: "black", textAlign: "center" }}
+              sx={{
+                fontSize: { xs: "16px", md: "19px", lg: "22px" },
+                color: "black",
+                textAlign: "center",
+              }}
               className={glacial.className}
             >
               Mental Health Check membantu anda untuk mengetahui kondisi
               kesehatan mental pribadi dan mengidentifikasi tingkat keparahan
-              penyakit mental yang di derita.
+              penyakit mental yang diderita.
             </Typography>
             {readMore && (
-              <div style={{ marginTop: "10px", display:"flex" }} >
+              <div style={{ marginTop: "10px", display: "flex" }}>
                 <ErrorIcon
                   fontSize="15px"
                   sx={{ marginTop: "5px", marginRight: "5px", color: "orange" }}
@@ -80,8 +126,10 @@ export default function MentalHealthCheck() {
               sx={{
                 color: "gray",
                 textAlign: "center",
+                cursor: "pointer",
                 fontSize: "15px",
                 marginTop: "12px",
+                textDecoration: "underline",
               }}
               onClick={() => {
                 if (readMore == true) setReadMore(false);
@@ -95,39 +143,39 @@ export default function MentalHealthCheck() {
           </div>
 
           <motion.div style={{ textAlign: "center" }}>
-            <Link href="Panduan">
-              <motion.button
-                className={styles.button}
-                whileHover={{ scale: 1.1 }}
-                style={{
-                  borderRadius: 10,
-                  padding: 20,
-                  marginTop: 30,
-                  marginBottom: 30,
-                  fontSize: 20,
-                  border: "0px ",
+            <motion.button
+              className={styles.button}
+              whileHover={{ scale: 1.1 }}
+              style={{
+                borderRadius: 10,
+                padding: 20,
+                marginTop: 30,
+                marginBottom: 30,
+                fontSize: 20,
+                border: "0px ",
+                cursor: "pointer",
+              }}
+              transition={{
+                duration: 1,
+                type: "spring",
+                stiffness: 300,
+                damping: 20,
+                bounce: 1,
+              }}
+              whileTap={{ scale: 0.9 }}
+              onClick={mhcStartHandler}
+            >
+              <Typography
+                sx={{
+                  fontSize: "20px",
+                  color: "white",
+                  textAlign: "center",
                 }}
-                transition={{
-                  duration: 1,
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 20,
-                  bounce: 1,
-                }}
-                whileTap={{ scale: 0.9 }}
+                className={glacial.className}
               >
-                <Typography
-                  sx={{
-                    fontSize: "20px",
-                    color: "white",
-                    textAlign: "center",
-                  }}
-                  className={glacial.className}
-                >
-                  Take Your Mental Health Check
-                </Typography>
-              </motion.button>
-            </Link>
+                Lakukan Mental Health Check!
+              </Typography>
+            </motion.button>
           </motion.div>
         </Container>
       </motion.div>

@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Montserrat } from "next/font/google";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import localFont from "next/font/local";
 import { motion } from "framer-motion";
 import { VisibilityOff } from "@mui/icons-material";
@@ -23,16 +23,31 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import Link from "next/link";
 import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
+import { appActions } from "@/redux/slices/appSlice";
+import { isDoneActions } from "@/redux/slices/isDoneSlice";
+import Breadcrumbs from "nextjs-breadcrumbs";
+import Image from "next/image";
 
-const SigninPage = () => {
+const SignInPage = () => {
   const usernameRef = useRef();
   const passwordRef = useRef();
   const dispatch = useDispatch();
   const router = useRouter();
+  const axios = require("axios");
+  // const [isDoneMHC, setisDoneMHC] = useState(false);
+  // const [isDoneDpr, setisDoneDpr] = useState(false);
+  // const [isDoneAnx, setisDoneAnx] = useState(false);
+  // const [isDoneOcd, setisDoneOcd] = useState(false);
+  // const [isDoneSd, setisDoneSd] = useState(false);
+  // const [isDoneDHC, setisDoneDHC] = useState(false);
+
+  // useEffect(() => {
+  //   console.log(isDoneMHC);
+  // }, [isDoneMHC]);
 
   const loginHandler = (event) => {
     event.preventDefault();
-
+    console.log("LOGIN BUTTOn")
     const username = usernameRef.current.value;
     const password = passwordRef.current.value;
 
@@ -40,37 +55,139 @@ const SigninPage = () => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Please enter your username and password!",
+        text: "Mohon mengisi semua data!",
         timer: 2000,
         showConfirmButton: false,
       });
     } else {
-      dispatch(
-        loginActions.login({
-          username: username,
-          email: "emailtest@gmail.com",
-          password: password,
-        })
-      );
+      axios
+        .get("https://localhost:7184/api/Users/GetData?Username=" + username)
+        .then((resp) => {
+          console.log(resp.data[0]);
 
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 2000,
-        timerProgressBar: false,
-        // didOpen: (toast) => {
-        //   toast.addEventListener("mouseenter", Swal.stopTimer);
-        //   toast.addEventListener("mouseleave", Swal.resumeTimer);
-        // },
-      });
+          if (resp.data[0] === undefined) {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "Username tidak terdaftar!",
+              timer: 2000,
+              showConfirmButton: false,
+            });
+          } else {
+            axios
+              .get(
+                "https://localhost:7184/api/Users/CheckPassword?username=" +
+                  username +
+                  "&password=" +
+                  password
+              )
+              .then((respCheck) => {
+                console.log(respCheck);
+                if (respCheck.data == "False") {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Password tidak sesuai!",
+                    timer: 2000,
+                    showConfirmButton: false,
+                  });
+                } else {
+                  // Check if user has done MHC
+                  axios
+                    .get(
+                      "https://localhost:7184/api/MHCheck/CheckUserMhCheckHeaderExit?userId=" +
+                        resp.data[0].userId
+                    )
+                    .then((respcheckMHC) => {
+                      console.log(respcheckMHC.data);
+                      // respcheckMHC.data == "False" ? setisDoneMHC(false) : setisDoneMHC(true);
 
-      Toast.fire({
-        icon: "success",
-        title: "Signed in successfully",
-      });
+                      if (respcheckMHC.data == "True") {
+                        axios
+                          .get(
+                            "https://localhost:7184/api/MHCheck/GetSeverity?userId=" +
+                              resp.data[0].userId
+                          )
+                          .then((respSeverity) => {
+                            console.log(respSeverity.data);
+                            const MentalIllnessList = [
+                              {
+                                img: "/image/Mental Illness Illustration/4.png",
+                                title: "Depression",
+                                author: "Gangguan Depresi",
+                                link: "/MentalIllness/Depression/Panduan",
+                                severity: respSeverity.data.anxSeverity,
+                              },
+                              {
+                                img: "/image/Mental Illness Illustration/1.png",
+                                title: "Anxiety",
+                                author: "Gangguan Kecemasan",
+                                link: "/MentalIllness/Anxiety/Panduan",
+                                severity: respSeverity.data.dprSeverity,
+                              },
+                              {
+                                img: "/image/Mental Illness Illustration/3.png",
+                                title: "OCD",
+                                author: "Obsessive-Compulsive Disorder",
+                                link: "/MentalIllness/OCD/Panduan",
+                                severity: respSeverity.data.ocdSeverity,
+                              },
+                              {
+                                img: "/image/Mental Illness Illustration/5.png",
+                                title: "Sleep Disorder",
+                                author: "Gangguan Tidur",
+                                link: "/MentalIllness/SleepDisorder/Panduan",
+                                severity: respSeverity.data.sdSeverity,
+                              },
+                            ];
+                            dispatch(appActions.MHCData(MentalIllnessList));
+                          });
 
-      router.push("/Home");
+                        dispatch(
+                          isDoneActions.isDone({
+                            isDoneMHC: true,
+                            isDoneDpr: false,
+                            isDoneAnx: false,
+                            isDoneOcd: false,
+                            isDoneSd: false,
+                            isDoneDHC: false,
+                          })
+                        );
+                      }
+
+                      dispatch(
+                        loginActions.login({
+                          isDoneMHC: respcheckMHC.data,
+                          email: resp.data[0].email,
+                          fullname: resp.data[0].fullName,
+                          MHpoints: resp.data[0].healthPoint,
+                          password: password,
+                          consultant: false,
+                          freeConsultation: resp.data[0].freeConsultation,
+                          userid: resp.data[0].userId,
+                          username: username,
+                        })
+                      );
+
+                      const Toast = Swal.mixin({
+                        toast: true,
+                        position: "bottom-end",
+                        showConfirmButton: false,
+                        timer: 2000,
+                        timerProgressBar: false,
+                      });
+
+                      Toast.fire({
+                        icon: "success",
+                        title: "Sign In berhasil!",
+                      });
+
+                      router.push("/Home");
+                    });
+                }
+              });
+          }
+        });
     }
   };
 
@@ -81,7 +198,6 @@ const SigninPage = () => {
 
       if (event.key === "Enter") {
         event.preventDefault();
-
         // 👇️ call submit function here
         loginHandler(event);
       }
@@ -103,7 +219,7 @@ const SigninPage = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          height:"60vh",
+          height: "65vh",
           // boxShadow: `0 0 5 px black`,
           borderRadius: {
             xs: "30px",
@@ -114,23 +230,28 @@ const SigninPage = () => {
           },
         }}
       >
-        <Box width="50%">
+        <Box width="70%">
           <Box display="flex" flexDirection="column" alignItems="center">
             {/* LOGO */}
             <Box
               sx={{
-                width: "50%",
-                height: "50%",
+                width: "40%",
+                height: "40%",
                 //  borderRadius: "12px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <img
+              <Box
+                component="img"
+                sx={{
+                  maxHeight: 150,
+                  maxWidth: 150,
+                  borderRadius: 10,
+                }}
+                alt=""
                 src="image/mcwebicon.png"
-                width="100%"
-                style={{ borderRadius: 10 }}
               />
             </Box>
             {/* LOGO END */}
@@ -181,7 +302,7 @@ const SigninPage = () => {
                 >
                   <InputBase
                     className={montserrat.className}
-                    placeholder="Enter your username..."
+                    placeholder="Tulis username anda..."
                     fullWidth
                     sx={{
                       bgcolor: "white",
@@ -221,7 +342,7 @@ const SigninPage = () => {
                 >
                   <InputBase
                     className={montserrat.className}
-                    placeholder="Enter your Password..."
+                    placeholder="Tulis password anda..."
                     fullWidth
                     sx={{
                       bgcolor: "white",
@@ -264,16 +385,30 @@ const SigninPage = () => {
             </Button>
           </motion.div>
         </Box>
-        <Link href="Login/SignUpPage">
+        <Link legacyBehavior href="Login/SignUpPage">
           <Typography
             sx={{
               mt: 1,
               fontSize: 13,
               textDecoration: "underline",
               color: "gray",
+              cursor: "pointer",
             }}
           >
             Sign Up
+          </Typography>
+        </Link>
+
+        <Link legacyBehavior href="Login/LoginConsultant">
+          <Typography
+            sx={{
+              mt: 1,
+              fontSize: 13,
+              color: "#FFAACF",
+            }}
+            className={montserrat.className}
+          >
+            Login sebagai Konsultan
           </Typography>
         </Link>
       </Box>
@@ -281,4 +416,4 @@ const SigninPage = () => {
   );
 };
 
-export default SigninPage;
+export default SignInPage;

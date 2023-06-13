@@ -17,6 +17,8 @@ import {
 
 import { ThemeProvider } from "@emotion/react";
 import {
+  Box,
+  Button,
   Container,
   Grid,
   List,
@@ -34,10 +36,13 @@ import { container, item } from "/animation";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import ArticleIcon from "@mui/icons-material/Article";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { montserratBold, montserrat, openSans } from "../../public/fonts";
 import { current } from "@reduxjs/toolkit";
+import CircleIcon from "@mui/icons-material/Circle";
+import appSlice, { appActions, MHCData } from "@/redux/slices/appSlice";
+import ErrorIcon from "@mui/icons-material/Error";
 
 const theme = createTheme({
   typography: {
@@ -82,31 +87,38 @@ export default function MHCResult() {
   const sleepDisorderSeverity = MHCAnswer[7].jawaban;
   const [isLoaded, setIsLoaded] = useState(false);
   const [isBad, setIsBad] = useState(false);
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const MHCData = useSelector((x) => x.persistedReducer.app.MHCdata);
 
   const MentalIllnessList = [
     {
-      judul: "Depression Test",
-      desc: "Tes Gangguan Depresi",
-      url: "/MentalIllness/Depression/Panduan",
-      severity: depressionSeverity,
+      img: "/image/Mental Illness Illustration/4.png",
+      title: "Depression",
+      author: "Gangguan Depresi",
+      link: "/MentalIllness/Depression/Panduan",
+      severity: MHCData[0].severity,
     },
     {
-      judul: "Anxiety Test",
-      desc: "Tes Gangguan Kecemasan",
-      url: "/MentalIllness/Anxiety/Panduan",
-      severity: anxietySeverity,
+      img: "/image/Mental Illness Illustration/1.png",
+      title: "Anxiety",
+      author: "Gangguan Kecemasan",
+      link: "/MentalIllness/Anxiety/Panduan",
+      severity: MHCData[0].severity,
     },
     {
-      judul: "OCD Test",
-      desc: "Tes Gangguan Obsesif Kompulsif",
-      url: "/MentalIllness/OCD/Panduan",
-      severity: OCDSeverity,
+      img: "/image/Mental Illness Illustration/3.png",
+      title: "OCD",
+      author: "Obsessive-Compulsive Disorder",
+      link: "/MentalIllness/OCD/Panduan",
+      severity: MHCData[2].severity,
     },
     {
-      judul: "Sleep Disorder Test",
-      desc: "Tes Gangguan Tdiur",
-      url: "/MentalIllness/SleepDisorder/Panduan",
-      severity: sleepDisorderSeverity,
+      img: "/image/Mental Illness Illustration/5.png",
+      title: "Sleep Disorder",
+      author: "Gangguan Tidur",
+      link: "/MentalIllness/SleepDisorder/Panduan",
+      severity: MHCData[3].severity,
     },
   ];
 
@@ -115,7 +127,16 @@ export default function MHCResult() {
     datasets: [
       {
         label: "Tingkat Keparahan",
-        data: [depressionSeverity, anxietySeverity, OCDSeverity, sleepDisorderSeverity],
+        data: [
+          // depressionSeverity,
+          // anxietySeverity,
+          // OCDSeverity,
+          // sleepDisorderSeverity,
+          MHCData[0].severity,
+          MHCData[1].severity,
+          MHCData[2].severity,
+          MHCData[3].severity,
+        ],
         backgroundColor: "rgba(0, 0, 0, 0.2)",
         borderColor: "black",
         borderWidth: 1,
@@ -271,28 +292,37 @@ export default function MHCResult() {
 
   useEffect(() => {
     setIsLoaded(true);
-
     if (
       Math.max(
-        depressionSeverity,
-        anxietySeverity,
-        OCDSeverity,
-        sleepDisorderSeverity
+        MHCData[0].severity,
+        MHCData[1].severity,
+        MHCData[2].severity,
+        MHCData[3].severity
       ) >= 2
     ) {
       setIsBad(true);
     }
-    
   }, []);
 
   useEffect(() => {
-    console.log(isBad);
+    // console.log(isBad);
   }, [isBad]);
 
   useEffect(() => {
-    console.log(MentalIllnessList);
+    // console.log(MentalIllnessList);
   }, [MentalIllnessList]);
 
+  const mentalIllnessBtn = (event) => {
+    event.preventDefault();
+    // dispatch(appActions.MHCData({}));
+    // dispatch(appActions.MHCData(MentalIllnessList));
+    router.push("/MentalIllnessTest/Home");
+  };
+
+  const koBtn = (event) => {
+    event.preventDefault();
+    router.push("/KonsultasiOnline/Home");
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -380,26 +410,148 @@ export default function MHCResult() {
               >
                 <Grid item xs={12} md={9}>
                   {isBad == true ? (
-                    <Typography
-                      sx={{
-                        // paddingX: "100px",
-                        marginTop: "10px",
-                        fontSize: "16px",
-                        color: "black",
-                        textAlign: "justify",
-                      }}
-                      className={openSans.className}
-                    >
-                      Berdasarkan hasil screening, kondisi kesehatan mental anda
-                      <b> kurang baik</b>. Hasil tes menunjukkan bahwa anda
-                      memiliki gejala penyakit mental yang sudah mencapai
-                      tingkat keparahan <b>ringan keatas</b>.
-                      <br />
-                      <br />
-                      Berikut adalah rekomendasi tes yang dapat dilakukan
-                      selanjutnya untuk menentukan tingkat keparahan penyakit
-                      mental tersebut secara spesifik:
-                    </Typography>
+                    <Box>
+                      <Typography
+                        sx={{
+                          // paddingX: "100px",
+                          marginTop: "10px",
+                          fontSize: "16px",
+                          color: "black",
+                          textAlign: "justify",
+                        }}
+                        className={openSans.className}
+                      >
+                        <Grid container columns={2}>
+                          <Grid item>
+                            <ErrorIcon
+                              sx={{
+                                fontSize: "20px",
+                                marginTop: "1px",
+                                marginRight: "5px",
+                                color: "orange",
+                              }}
+                            />
+                          </Grid>
+                          <Grid item>
+                            <Typography sx={{ mt: "0px" }}>
+                              Hasil ini bukan ditujukan untuk memberi diagnosis
+                              tapi hanya untuk memantau keadaan anda sekarang.
+                            </Typography>
+                          </Grid>
+                        </Grid>
+                      </Typography>
+
+                      <Typography
+                        sx={{
+                          // paddingX: "100px",
+                          marginTop: "10px",
+                          fontSize: "16px",
+                          color: "black",
+                          textAlign: "justify",
+                        }}
+                        className={openSans.className}
+                      >
+                        Berdasarkan hasil screening, kondisi kesehatan mental
+                        anda <b>kurang baik.</b> Hasil tes menunjukkan bahwa
+                        anda memiliki gejala penyakit mental yang sudah mencapai
+                        tingkat keparahan ringan yaitu:
+                      </Typography>
+                      <Grid container sx={{ justifyContent: "center" }}>
+                        <Grid item xs={12} md={12} sm={12} xl={12}>
+                          {isLoaded &&
+                            MentalIllnessList.map((value, index) => {
+                              if (value.severity >= 2)
+                                return (
+                                  <List
+                                    dense={true}
+                                    key={index}
+                                    sx={{ textAlign: "left" }}
+                                  >
+                                    <Typography>
+                                      <CircleIcon sx={{ fontSize: "10px" }} />{" "}
+                                      {value.title}
+                                    </Typography>
+                                  </List>
+                                );
+                            })}
+                        </Grid>
+                      </Grid>
+
+                      <Grid container columns={2} spacing={5}>
+                        <Grid item xl={1}>
+                          <Typography
+                            sx={{
+                              // paddingX: "100px",
+                              marginTop: "10px",
+                              fontSize: "16px",
+                              color: "black",
+                              textAlign: "justify",
+                            }}
+                            className={openSans.className}
+                          >
+                            Berikut adalah rekomendasi tes yang dapat dilakukan
+                            selanjutnya untuk menentukan tingkat keparahan
+                            penyakit mental tersebut secara spesifik:
+                          </Typography>
+                          <Button
+                            className={styles.testbutton}
+                            sx={{
+                              marginTop: "30px",
+                              borderRadius: "10px",
+                              fontSize: "20px",
+                              px: "50px",
+                              py: "12px",
+                              border: "0px ",
+                              textTransform: "none",
+                              color: "white",
+                            }}
+                            onClick={mentalIllnessBtn}
+                          >
+                            <Typography className={montserrat.className}>
+                              Mental Illness Test
+                            </Typography>
+                          </Button>
+                        </Grid>
+                        <Grid item xl={1}>
+                          <Typography
+                            sx={{
+                              // paddingX: "100px",
+                              marginTop: "10px",
+                              fontSize: "16px",
+                              color: "black",
+                              textAlign: "justify",
+                            }}
+                            className={openSans.className}
+                          >
+                            Anda dapat melakukan konsultasi online bersama
+                            psikolog. Anda akan mendapatkan konsultasi{" "}
+                            <b style={{ color: "red" }}>KONSULTASI GRATIS </b>{" "}
+                            <b>
+                              ketika telah mengerjakan Daily Health Check selama
+                              5 hari berturut
+                            </b>
+                          </Typography>
+                          <Button
+                            className={styles.testbutton}
+                            sx={{
+                              marginTop: "10px",
+                              borderRadius: "10px",
+                              fontSize: "20px",
+                              px: "50px",
+                              py: "12px",
+                              border: "0px ",
+                              textTransform: "none",
+                              color: "white",
+                            }}
+                            onClick={koBtn}
+                          >
+                            <Typography className={montserrat.className}>
+                              Konsultasi Online
+                            </Typography>
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </Box>
                   ) : (
                     <Typography
                       sx={{
@@ -413,41 +565,12 @@ export default function MHCResult() {
                     >
                       Berdasarkan hasil screening, kondisi kesehatan mental anda
                       <b> cukup stabil</b>. Hasil tes menunjukkan gejala
-                      penyakit mental dengan tingkat keparahan 
-                      <b> sedikit atau tidak ada</b>. Pertahankanlah kesehatan mental anda!
+                      penyakit mental dengan tingkat keparahan
+                      <b> sedikit atau tidak ada</b>. Pertahankanlah kesehatan
+                      mental anda!
                       <br />
                     </Typography>
                   )}
-                </Grid>
-              </Grid>
-
-              <Grid container sx={{ justifyContent: "center" }}>
-                <Grid item xs={12} md={9}>
-                  {isLoaded &&
-                    MentalIllnessList.map((value, index) => {
-                      if (value.severity >= 2)
-                        return (
-                          <List dense={true} key={index}>
-                            <Link href={value.url} passHref>
-                              <ListItemButton
-                                sx={{
-                                  border: "1px solid black",
-                                  width: "100%",
-                                  borderRadius: "10px",
-                                }}
-                              >
-                                <ListItemIcon>
-                                  <ArticleIcon />
-                                </ListItemIcon>
-                                <ListItemText
-                                  primary={value.judul}
-                                  secondary={value.desc}
-                                />
-                              </ListItemButton>
-                            </Link>
-                          </List>
-                        );
-                    })}
                 </Grid>
               </Grid>
             </div>

@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import SigninPage from "./Login/SignInPage";
+import SignInPage from "./Login/SignInPage";
 import TitleBox from "./Login/TitleBox";
 import MainLayout from "../components/SignInLayout";
 import React, { useRef } from "react";
@@ -19,7 +19,7 @@ export default function login() {
       >
         {/* GRID SYSTEM */}
         <Grid container alignItems="center" justifyContent="center">
-          <SigninPage />
+          <SignInPage />
 
           <TitleBox />
         </Grid>
