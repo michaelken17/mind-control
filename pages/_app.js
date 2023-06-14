@@ -5,12 +5,13 @@ import { AnimatePresence } from "framer-motion";
 import { store } from "../redux/store";
 import { Provider } from "react-redux";
 import Head from "next/head";
+import { Typography } from "@mui/material";
+import Link from "next/link";
+import Breadcrumbs from "nextjs-breadcrumbs";
 
 export default function App({ Component, pageProps, router }) {
   const path = router.pathname;
-  // console.log(path);
-  const title = path.split("/")[1];
-  // console.log(title);
+
   return (
     <Provider store={store}>
       <Head>

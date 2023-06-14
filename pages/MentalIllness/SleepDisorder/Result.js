@@ -27,7 +27,7 @@ import { useEffect, useState } from "react";
 import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
 import { SDSeverity } from "../../ShortFormConversionTable";
 import { rekomendasiSD } from "../../RekomendasiKegiatan";
-
+import ErrorIcon from "@mui/icons-material/Error";
 
 const theme = createTheme({
   typography: {
@@ -54,13 +54,10 @@ function borderClassname(severity) {
   }
 }
 
-
 // SLEEP DISORDER
-export default function ResultSleepDisorder() {
+export default function SleepDisorderResult() {
   const router = useRouter();
-  const SDAnswer = useSelector(
-    (x) => x.persistedReducer.app.SDAns
-  );
+  const SDAnswer = useSelector((x) => x.persistedReducer.app.SDAns);
   const [isLoaded, setIsLoaded] = useState(false);
   const [severity, setSeverity] = useState(0);
 
@@ -123,10 +120,9 @@ export default function ResultSleepDisorder() {
                   }}
                   className={montserrat.className}
                 >
-                  Hasil tes menunjukkan tingkat keparahan gangguan tidur anda adalah{" "}
-                  <b>{rekomendasiSD[severity].severity}</b>.
+                  Hasil tes menunjukkan tingkat keparahan gangguan tidur anda
+                  adalah <b>{rekomendasiSD[severity].severity}</b>.
                 </Typography>
-
                 <div
                   width="100%"
                   style={{
@@ -144,15 +140,20 @@ export default function ResultSleepDisorder() {
                       textAlign: "center",
                     }}
                   >
-                    <img
+                    <Box
+                      component="img"
+                      sx={{
+                        maxHeight: { xs: 210, md: 240, lg: 300 },
+                        maxWidth: { xs: 200, md: 240, lg: 300 },
+                        borderRadius: 10,
+                      }}
+                      alt=""
                       src={
                         rekomendasiSD[severity].severity ==
                         "Tidak ada atau sedikit"
                           ? "/image/Mental Illness Illustration/happy.jpg"
                           : "/image/Mental Illness Illustration/confused.jpg"
                       }
-                      width="70%"
-                      style={{ borderRadius: 10 }}
                     />
 
                     <a
@@ -169,16 +170,61 @@ export default function ResultSleepDisorder() {
                   </div>
                 </div>
 
-                <Typography
-                  sx={{
-                    fontSize: "16px",
-                    color: "black",
-                    textAlign: "justify",
-                  }}
-                  className={montserrat.className}
-                >
-                  {rekomendasiSD[severity].text}
-                </Typography>
+                <div style={{ display: "flex", marginTop: "50px" }}>
+                  <ErrorIcon
+                    fontSize="17px"
+                    sx={{
+                      marginTop: "3px",
+                      marginRight: "5px",
+                      color: "orange",
+                    }}
+                  />
+                  <Typography
+                    sx={{
+                      fontSize: {
+                        lg: "17px",
+                        md: "16px",
+                        sm: "15px",
+                        xs: "16px",
+                      },
+                      color: "#5d5d5d",
+                      textAlign: "justify",
+                      marginBottom: "15px",
+                    }}
+                    className={glacial.className}
+                  >
+                    Untuk selanjutnya, Anda dapat menggunakan fitur{" "}
+                    <i>Daily Health Check</i> yang tersedia dibawah ini untuk
+                    memantau kesehatan mental Anda tiap harinya dan mendapatkan
+                    rekomendasi kegiatan yang berguna demi meningkatkan
+                    kesehatan mental.
+                  </Typography>
+                </div>
+                {/* Button for daily health check */}
+                <motion.div style={{ textAlign: "center" }}>
+                  <Link legacyBehavior href="../../DailyHealthCheck/Start">
+                    <button
+                      style={{
+                        borderRadius: 10,
+                        padding: 10,
+                        marginTop: "0px",
+                        fontSize: 20,
+                        border: "0px ",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: "18px",
+                          color: "white",
+                          textAlign: "center",
+                        }}
+                        className={glacial.className}
+                      >
+                        Daily Health Check
+                      </Typography>
+                    </button>
+                  </Link>
+                </motion.div>
               </div>
             </div>
           </motion.div>

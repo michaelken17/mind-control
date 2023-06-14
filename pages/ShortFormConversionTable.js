@@ -555,9 +555,8 @@ export function AnxietySeverity(rawScoreGet) {
 }
 
 export function OCDSeverity(rawScoreGet) {
-   
-  const avg = Math.round(rawScoreGet/5)
-  console.log(avg)
+  const avg = Math.round(rawScoreGet / 5);
+  console.log(avg);
   // None to Slight
   if (avg == 0) {
     return 0;

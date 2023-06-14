@@ -43,7 +43,7 @@ const theme = createTheme({
 });
 
 // ANXIETY
-export default function Test() {
+export default function AnxietyTest() {
   const router = useRouter();
   const anxietyQuestions = useSelector(
     (x) => x.persistedReducer.app.anxietyQuestions
@@ -280,9 +280,9 @@ export default function Test() {
                 onClick={() => nextHandler()}
               >
                 {currentQuestion + 1 == anxietyQuestions.length ? (
-                  <a>End Test</a>
+                  <Typography>End Test</Typography>
                 ) : (
-                  <a>Next</a>
+                  <Typography>Next</Typography>
                 )}
               </motion.button>
             )}

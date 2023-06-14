@@ -57,7 +57,7 @@ function borderClassname(severity) {
 }
 
 //DEPRESSION
-export default function ResultDepression() {
+export default function DepressionResult() {
   const router = useRouter();
   const depressionAnswer = useSelector(
     (x) => x.persistedReducer.app.DepressionAns
@@ -160,7 +160,8 @@ export default function ResultDepression() {
                       component="img"
                       sx={{
                         maxHeight: { xs: 210, md: 240, lg: 300 },
-                        maxWidth: { xs: 200, md: 240, lg: 300 },borderRadius: 10
+                        maxWidth: { xs: 200, md: 240, lg: 300 },
+                        borderRadius: 10,
                       }}
                       alt=""
                       src={
@@ -184,95 +185,7 @@ export default function ResultDepression() {
                     </a>
                   </div>
                 </div>
-
-                <Typography
-                  sx={{
-                    fontSize: {
-                      lg: "17px",
-                      md: "15px",
-                      sm: "15px",
-                      xs: "13px",
-                    },
-                    color: "black",
-                    textAlign: "justify",
-                    marginBottom: "10px",
-                  }}
-                  className={montserrat.className}
-                >
-                  {rekomendasiDepression[severity].text}
-                </Typography>
-
-                {/* LIST SOLUSI */}
-                <Grid container spacing={1} columns={16}>
-                  {depressionSolutions
-                    .filter((item, index) => index < 5)
-                    .map((x, index) => (
-                      <Grid item lg={8} md={8} sm={8}>
-                        <Box
-                          component="img"
-                          sx={{
-                            height: 233,
-                            width: 350,
-                            maxHeight: { xs: 230, md: 230, lg: 250 },
-                            maxWidth: { xs: 290, md: 290, lg: 300 },
-                          }}
-                          alt=""
-                          src={x.image}
-                        />
-                        <Typography
-                          sx={{
-                            fontSize: {
-                              lg: "17px",
-                              md: "15px",
-                              sm: "15px",
-                              xs: "13px",
-                            },
-                            color: "black",
-                            textAlign: "left",
-                          }}
-                          className={montserrat.className}
-                        >
-                          {/* <CircleIcon sx={{ paddingTop: "11px" }} />{" "} */}
-                          {x.solution}
-                        </Typography>
-                      </Grid>
-                    ))}
-                  {depressionSolutions
-                    .filter((item, index) => index >= 5)
-                    .map((x, index) => (
-                      <Grid item lg={8} md={8} sm={8}>
-                        <Box
-                          component="img"
-                          sx={{
-                            height: 350,
-                            width: 300,
-                            maxHeight: { xs: 230, md: 230, lg: 250 },
-                            maxWidth: { xs: 290, md: 290, lg: 300 },
-                          }}
-                          alt=""
-                          src={x.image}
-                        />
-                        <Typography
-                          sx={{
-                            fontSize: {
-                              lg: "17px",
-                              md: "15px",
-                              sm: "15px",
-                              xs: "13px",
-                            },
-
-                            color: "black",
-                            textAlign: "left",
-                          }}
-                          className={montserrat.className}
-                        >
-                          {/* <CircleIcon sx={{ paddingTop: "11px" }} />{" "} */}
-                          {x.solution}
-                        </Typography>
-                      </Grid>
-                    ))}
-                </Grid>
-                <div style={{ display: "flex", marginTop: "50px" }}>
+                <div style={{ display: "flex", marginTop: "0px" }}>
                   <ErrorIcon
                     fontSize="17px"
                     sx={{
@@ -285,48 +198,199 @@ export default function ResultDepression() {
                     sx={{
                       fontSize: {
                         lg: "17px",
-                        md: "16px",
+                        md: "15px",
                         sm: "15px",
-                        xs: "16px",
+                        xs: "13px",
                       },
-                      color: "#5d5d5d",
+                      color: "black",
                       textAlign: "justify",
                       marginBottom: "15px",
                     }}
-                    className={glacial.className}
+                    className={montserrat.className}
                   >
-                    Untuk selanjutnya, Anda dapat menggunakan fitur{" "}
-                    <i>Daily Health Check</i> yang tersedia dibawah ini untuk
-                    memantau kesehatan mental Anda tiap harinya dan mendapatkan
-                    rekomendasi kegiatan yang berguna demi meningkatkan
-                    kesehatan mental.
+                    Hasil ini bukan ditujukan untuk memberi diagnosis tapi hanya
+                    untuk memantau keadaan anda sekarang.
                   </Typography>
                 </div>
-                {/* Button for daily health check */}
-                <motion.div style={{ textAlign: "center" }}>
-                  <Link href="../../DailyHealthCheck/Start">
-                    <button
-                      style={{
-                        borderRadius: 10,
-                        padding: 20,
-                        marginTop: "0px",
-                        fontSize: 20,
-                        border: "0px ",
+                {depressionSeverity(rawScore) <= 1 ? (
+                  <Box>
+                    <Typography
+                      sx={{
+                        fontSize: {
+                          lg: "17px",
+                          md: "15px",
+                          sm: "15px",
+                          xs: "13px",
+                        },
+                        color: "black",
+                        textAlign: "justify",
+                        marginBottom: "10px",
                       }}
+                      className={montserrat.className}
                     >
+                      {rekomendasiDepression[severity].text}
+                    </Typography>
+
+                    <div style={{ display: "flex", marginTop: "0px" }}>
                       <Typography
                         sx={{
-                          fontSize: "18px",
-                          color: "white",
-                          textAlign: "center",
+                          fontSize: {
+                            lg: "17px",
+                            md: "15px",
+                            sm: "15px",
+                            xs: "13px",
+                          },
+                          color: "black",
+                          textAlign: "justify",
+                          marginBottom: "15px",
                         }}
-                        className={glacial.className}
+                        className={montserrat.className}
                       >
-                        Daily Health Check
+                        Untuk selanjutnya, Anda dapat menggunakan fitur{" "}
+                        <i>Daily Health Check</i> yang tersedia dibawah ini
+                        untuk memantau kesehatan mental Anda tiap harinya dan
+                        mendapatkan rekomendasi kegiatan yang berguna demi
+                        meningkatkan kesehatan mental.
                       </Typography>
-                    </button>
-                  </Link>
-                </motion.div>
+                    </div>
+                  </Box>
+                ) : (
+                  <Box>
+                    <Typography
+                      sx={{
+                        fontSize: {
+                          lg: "17px",
+                          md: "15px",
+                          sm: "15px",
+                          xs: "13px",
+                        },
+                        color: "black",
+                        textAlign: "justify",
+                        marginBottom: "10px",
+                      }}
+                      className={montserrat.className}
+                    >
+                      Skor yang tinggi secara konsisten dapat menunjukkan area
+                      yang signifikan dan bermasalah bagi individu yang mungkin
+                      memerlukan penilaian, pengobatan, dan penanganan lebih
+                      lanjut.
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: {
+                          lg: "17px",
+                          md: "15px",
+                          sm: "15px",
+                          xs: "13px",
+                        },
+                        color: "black",
+                        textAlign: "justify",
+                        marginBottom: "10px",
+                      }}
+                      className={montserrat.className}
+                    >
+                      Untuk selanjutnya, disarankan untuk berkonsultasi dengan
+                      pakar (psikolog) agar dapat menangani masalah dengan lebih
+                      baik.
+                    </Typography>
+                    <div style={{ display: "flex", marginTop: "0px" }}>
+                      <Typography
+                        sx={{
+                          fontSize: {
+                            lg: "17px",
+                            md: "15px",
+                            sm: "15px",
+                            xs: "13px",
+                          },
+                          color: "black",
+                          textAlign: "justify",
+                          marginBottom: "15px",
+                        }}
+                        className={montserrat.className}
+                      >
+                        Selain itu, Anda dapat menggunakan fitur Daily Health
+                        Check yang tersedia dibawah ini untuk memantau kesehatan
+                        mental Anda tiap harinya dan mendapatkan rekomendasi
+                        kegiatan yang berguna demi meningkatkan kesehatan
+                        mental.
+                      </Typography>
+                    </div>
+                  </Box>
+                )}
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    textAlign: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {/* Button for konsultasi online */}
+                  {depressionSeverity(rawScore) > 1 && (
+                    <motion.div style={{ textAlign: "center" }}>
+                      <Link legacyBehavior href="../../KonsultasiOnline/Start" >
+                        <Button
+                          sx={{
+                            textTransform: "none",
+                            padding: "10px",
+                            px: "20px",
+                            marginTop: "0px",
+                            borderRadius: "8px",
+
+                            mx: { xs: "20px", xl: "40px" },
+                            border: "0px ",
+                            backgroundColor: "#FFAACF",
+                            "&:hover": {
+                              background: "rgb(234, 143, 234,0.275)",
+                            },
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              fontSize: { xs: "15px", xl: "20px" },
+                              color: "white",
+                              textAlign: "center",
+                            }}
+                            className={glacial.className}
+                          >
+                            Konsultasi Online
+                          </Typography>
+                        </Button>
+                      </Link>
+                    </motion.div>
+                  )}
+                  <motion.div style={{ textAlign: "center" }}>
+                    <Link legacyBehavior href="../../DailyHealthCheck/Start" >
+                      <Button
+                        sx={{
+                          textTransform: "none",
+                          padding: "10px",
+                          px: "20px",
+                          marginTop: "0px",
+                          borderRadius: "8px",
+                          fontSize: "20px",
+                          mx: { xs: "20px", xl: "40px" },
+                          border: "0px ",
+                          backgroundColor: "#FFAACF",
+                          "&:hover": {
+                            background: "rgb(234, 143, 234,0.275)",
+                          },
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            fontSize: { xs: "15px", xl: "20px" },
+                            color: "white",
+                            textAlign: "center",
+                          }}
+                          className={glacial.className}
+                        >
+                          Daily Health Check
+                        </Typography>
+                      </Button>
+                    </Link>
+                  </motion.div>
+                </Box>
               </div>
             </div>
           </motion.div>

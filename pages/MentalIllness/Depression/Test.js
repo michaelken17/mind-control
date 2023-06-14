@@ -28,7 +28,8 @@ import appSlice, {
   appActions,
   submitDepression,
 } from "@/redux/slices/appSlice";
-
+import { depressionSeverity } from "../../ShortFormConversionTable";
+import axios from "axios";
 const theme = createTheme({
   typography: {
     fontFamily: montserrat,
@@ -55,7 +56,6 @@ export default function DepressionTest() {
   const [currentQuestion, setcurrentQuestion] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(1);
   const dispatch = useDispatch();
-
   const [depressionData, setdepressionData] = useState([
     { no: 1, jawaban: 0 },
     { no: 2, jawaban: 0 },
@@ -66,6 +66,11 @@ export default function DepressionTest() {
     { no: 7, jawaban: 0 },
     { no: 8, jawaban: 0 },
   ]);
+  const [rawTotalScore, setrawTotalScore] = useState(0);
+  const login = useSelector((state) => state.persistedReducer.login);
+
+  let ansArray = depressionData.map((x) => x.jawaban);
+  let rawScore = ansArray.reduce((a, b) => a + b, 0);
 
   const toggleHandler = (value) => () => {
     setSelectedIndex(value);
@@ -87,26 +92,28 @@ export default function DepressionTest() {
       dispatch(appActions.submitDepression({}));
       dispatch(appActions.submitDepression(depressionData));
       router.push("Result");
+
+      axios
+        .post("https://localhost:7184/api/MI/InsertMICheckDepressionHeader", {
+          userId: login.userid,
+          totalRawScore: rawScore,
+          severity: depressionSeverity(rawScore),
+        })
+        .then((resp) => {
+          console.log(resp.data)
+          console.log(resp.data.headerID)
+          axios.post(
+            "https://localhost:7184/api/MI/InsertMICheckDepressionDetail?headerID=" + resp.data.headerID,
+            {
+             dprDetailData: depressionData
+            }
+          );
+        });
     }
   };
 
-  // useEffect(() => {
-  //   console.log(currentQuestion);
-  //   console.log(depressionQuestions.length);
-  // }, [currentQuestion]);
-
-  useEffect(() => {
-    // console.log(selectedIndex);
-  }, [selectedIndex]);
-
-  useEffect(() => {
-    console.log(depressionData);
-  }, [depressionData]);
-
   useEffect(() => {
     setIsLoaded(true);
-    // console.log(depressionQuestions]);
-    // console.log(anxietyAnswer);
   }, []);
 
   return (

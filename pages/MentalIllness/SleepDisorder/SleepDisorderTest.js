@@ -24,10 +24,7 @@ import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
-import {
-  appActions,
-  submitSD,
-} from "@/redux/slices/appSlice";
+import { appActions, submitSD } from "@/redux/slices/appSlice";
 
 const theme = createTheme({
   typography: {
@@ -279,9 +276,9 @@ export default function SleepDisorderTest() {
                 onClick={() => nextHandler()}
               >
                 {currentQuestion + 1 == SDQuestions.length ? (
-                  <a>End Test</a>
+                  <Typography>End Test</Typography>
                 ) : (
-                  <a>Next</a>
+                  <Typography>Next</Typography>
                 )}
               </motion.button>
             )}

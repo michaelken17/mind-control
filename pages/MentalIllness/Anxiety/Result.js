@@ -55,7 +55,7 @@ function borderClassname(severity) {
   }
 }
 
-export default function ResultAnxiety() {
+export default function AnxietyResult() {
   const router = useRouter();
   const anxietyAnswer = useSelector((x) => x.persistedReducer.app.AnxietyAns);
   const anxietySolutions = useSelector(
@@ -196,76 +196,6 @@ export default function ResultAnxiety() {
                   {rekomendasiAnxiety[severity].text}
                 </Typography>
 
-                {/* LIST SOLUSI */}
-                <Grid container spacing={1} columns={16}>
-                  {anxietySolutions
-                    .filter((item, index) => index < 5)
-                    .map((x, index) => (
-                      <Grid item lg={8} md={8} sm={8}>
-                        <Box
-                          component="img"
-                          sx={{
-                            height: 233,
-                            width: 350,
-                            maxHeight: { xs: 230, md: 230, lg: 250 },
-                            maxWidth: { xs: 290, md: 290, lg: 300 },
-                          }}
-                          alt=""
-                          src={x.image}
-                        />
-                        <Typography
-                          sx={{
-                            fontSize: {
-                              lg: "17px",
-                              md: "15px",
-                              sm: "15px",
-                              xs: "13px",
-                            },
-                            color: "black",
-                            textAlign: "left",
-                          }}
-                          className={montserrat.className}
-                        >
-                          {/* <CircleIcon sx={{ paddingTop: "11px" }} />{" "} */}
-                          {x.solution}
-                        </Typography>
-                      </Grid>
-                    ))}
-                  {anxietySolutions
-                    .filter((item, index) => index >= 5)
-                    .map((x, index) => (
-                      <Grid item lg={8} md={8} sm={8}>
-                        <Box
-                          component="img"
-                          sx={{
-                            height: 350,
-                            width: 300,
-                            maxHeight: { xs: 230, md: 230, lg: 250   },
-                            maxWidth: { xs: 290, md: 290, lg: 330 },
-                          }}
-                          alt=""
-                          src={x.image}
-                        />
-                        <Typography
-                          sx={{
-                            fontSize: {
-                              lg: "17px",
-                              md: "15px",
-                              sm: "15px",
-                              xs: "13px",
-                            },
-
-                            color: "black",
-                            textAlign: "left",
-                          }}
-                          className={montserrat.className}
-                        >
-                          {/* <CircleIcon sx={{ paddingTop: "11px" }} />{" "} */}
-                          {x.solution}
-                        </Typography>
-                      </Grid>
-                    ))}
-                </Grid>
                 <div style={{ display: "flex", marginTop: "50px" }}>
                   <ErrorIcon
                     fontSize="17px"
@@ -298,7 +228,7 @@ export default function ResultAnxiety() {
                 </div>
                 {/* Button for daily health check */}
                 <motion.div style={{ textAlign: "center" }}>
-                  <Link href="../../DailyHealthCheck/Start">
+                  <Link legacyBehavior href="../../DailyHealthCheck/Start" >
                     <button
                       style={{
                         borderRadius: 10,
