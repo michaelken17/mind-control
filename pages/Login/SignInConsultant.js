@@ -13,23 +13,27 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Montserrat } from "next/font/google";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import localFont from "next/font/local";
 import { motion } from "framer-motion";
 import { VisibilityOff } from "@mui/icons-material";
 import { useSelector, useDispatch } from "react-redux";
-import { loginActions } from "@/redux/slices/loginSlice";
+import { loginConsultantAction } from "@/redux/slices/loginConsultantSlice";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import Link from "next/link";
 import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
+import { appActions } from "@/redux/slices/appSlice";
+import { isDoneActions } from "@/redux/slices/isDoneSlice";
+import Breadcrumbs from "nextjs-breadcrumbs";
+import Image from "next/image";
 
 const SignInConsultant = () => {
   const usernameRef = useRef();
   const passwordRef = useRef();
   const dispatch = useDispatch();
   const router = useRouter();
-
+  const axios = require("axios");
   const loginHandler = (event) => {
     event.preventDefault();
 
@@ -45,33 +49,78 @@ const SignInConsultant = () => {
         showConfirmButton: false,
       });
     } else {
-      dispatch(
-        loginActions.login({
-          username: username,
-          email: "emailtest@gmail.com",
-          password: password,
-          consultant: true,
-        })
-      );
+      axios
+      .get(
+        "https://localhost:7184/api/Consultant/GetConsultantData?username=1" +
+          username
+      )
+      axios
+        .get(
+          "https://localhost:7184/api/Consultant/GetConsultantData?username=" +
+            username
+        )
+        .then((resp) => {
+          console.log(resp.data[0]);
 
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "bottom-end",
-        showConfirmButton: false,
-        timer: 2000,
-        timerProgressBar: false,
-        // didOpen: (toast) => {
-        //   toast.addEventListener("mouseenter", Swal.stopTimer);
-        //   toast.addEventListener("mouseleave", Swal.resumeTimer);
-        // },
-      });
+          if (resp.data[0] === undefined) {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "Username tidak terdaftar!",
+              timer: 2000,
+              showConfirmButton: false,
+            });
+          } else {
+            axios
+              .get(
+                "https://localhost:7184/api/Consultant/CheckPasswordConsultant?username=" +
+                  username +
+                  "&password=" +
+                  password
+              )
+              .then((respCheck) => {
+                console.log(respCheck);
+                if (respCheck.data == false) {
+                  Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: "Password tidak sesuai!",
+                    timer: 2000,
+                    showConfirmButton: false,
+                  });
+                } else {
+                  dispatch(
+                    loginConsultantAction.loginConsultant({
+                      username: resp.data[0].username,
+                      fullname: resp.data[0].fullName,
+                      gelar: resp.data[0].gelar,
+                      pendidikan: resp.data[0].pendidikan,
+                      spesialisasi: resp.data[0].spesialisasi,
+                      pengalaman: resp.data[0].pengalaman,
+                      consultantid: resp.data[0].consultantID,
+                      tempatpraktek: resp.data[0].tempatPraktek,
+                      harga: resp.data[0].harga,
+                    })
+                  );
 
-      Toast.fire({
-        icon: "success",
-        title: "Signed in successfully",
-      });
+                  const Toast = Swal.mixin({
+                    toast: true,
+                    position: "bottom-end",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: false,
+                  });
 
-      router.push("/HomeConsultant");
+                  Toast.fire({
+                    icon: "success",
+                    title: "Sign In berhasil!",
+                  });
+
+                  router.push("/HomeConsultant");
+                }
+              });
+          }
+        });
     }
   };
 
@@ -277,6 +326,7 @@ const SignInConsultant = () => {
               fontSize: 13,
               textDecoration: "underline",
               color: "gray",
+              cursor: "pointer",
             }}
           >
             Sign Up

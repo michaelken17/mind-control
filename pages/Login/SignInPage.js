@@ -405,8 +405,10 @@ const SignInPage = () => {
               mt: 1,
               fontSize: 13,
               color: "#FFAACF",
+              cursor:"pointer"
             }}
             className={montserrat.className}
+
           >
             Login sebagai Konsultan
           </Typography>
