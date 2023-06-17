@@ -27,6 +27,9 @@ import { appActions } from "@/redux/slices/appSlice";
 import { isDoneActions } from "@/redux/slices/isDoneSlice";
 import Breadcrumbs from "nextjs-breadcrumbs";
 import Image from "next/image";
+import dayjs from "dayjs";
+
+const today = dayjs();
 
 const SignInPage = () => {
   const usernameRef = useRef();
@@ -34,20 +37,10 @@ const SignInPage = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const axios = require("axios");
-  // const [isDoneMHC, setisDoneMHC] = useState(false);
-  // const [isDoneDpr, setisDoneDpr] = useState(false);
-  // const [isDoneAnx, setisDoneAnx] = useState(false);
-  // const [isDoneOcd, setisDoneOcd] = useState(false);
-  // const [isDoneSd, setisDoneSd] = useState(false);
-  // const [isDoneDHC, setisDoneDHC] = useState(false);
-
-  // useEffect(() => {
-  //   console.log(isDoneMHC);
-  // }, [isDoneMHC]);
 
   const loginHandler = (event) => {
     event.preventDefault();
-    console.log("LOGIN BUTTOn")
+    console.log("LOGIN BUTTOn");
     const username = usernameRef.current.value;
     const password = passwordRef.current.value;
 
@@ -183,6 +176,52 @@ const SignInPage = () => {
                       });
 
                       router.push("/Home");
+                    });
+
+                  // CHECK DHC STREAK (if streak broken, set MHP back to 0)
+                  axios
+                    .get(
+                      "https://localhost:7184/api/Users/GetDHCData?UserID=" +
+                        resp.data[0].userId
+                    )
+                    .then((respDHCData) => {
+                      let dayDiff = today.diff(
+                        dayjs(respDHCData.data.creationDate),
+                        "day"
+                      );
+
+                      if (dayDiff > 1) {
+                        axios
+                          .put(
+                            "https://localhost:7184/api/DHC/UpdateMHCPoint?UserID=" +
+                              resp.data[0].userId +
+                              "&opr=reset"
+                          )
+                          .then((respUpdate) => {
+                            Swal.fire({
+                              title: "Daily Health Check streak anda berakhir!",
+                              icon: "warning",
+                              showDenyButton: false,
+                              showConfirmButton: true,
+                              allowOutsideClick: false,
+                              html: "<a>Mental Health Point anda di reset menjadi 0</a>",
+                              background: "white",
+                            });
+
+                            dispatch(
+                              loginActions.login({
+                                email: resp.data[0].email,
+                                fullname: resp.data[0].fullName,
+                                MHpoints: 0,
+                                password: password,
+                                consultant: false,
+                                freeConsultation: resp.data[0].freeConsultation,
+                                userid: resp.data[0].userId,
+                                username: username,
+                              })
+                            );
+                          });
+                      }
                     });
                 }
               });
@@ -405,6 +444,7 @@ const SignInPage = () => {
               mt: 1,
               fontSize: 13,
               color: "#FFAACF",
+              cursor: "pointer",
             }}
             className={montserrat.className}
           >
