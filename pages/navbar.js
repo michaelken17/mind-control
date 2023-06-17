@@ -54,7 +54,7 @@ const pages = [
   { title: "Mental Illness Test", path: "/MentalIllnessTest/Home " },
   { title: "Konsultasi Online", path: "/KonsultasiOnline/Home" },
   { title: "Set Availability", path: "/Consultant/SetAvailability" },
-  { title: "Konsultasi Online Konsultan", path: "/KonsultasiOnline/Home" },
+  { title: "Patient List", path: "/Consultant/PatientList" },
 ];
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -668,7 +668,37 @@ export default function Navbar() {
                         </Button>
                       </Link>
                     </Box>
-                  ) : (
+                  ) :// SET AVAILABILITY
+                  page.title == "Patient List" &&
+                    loginConsultant?.authorized == true ? (
+                    <Box key={page.title}>
+                      <Link href={page.path}>
+                        <Button
+                          sx={{
+                            mx: 2,
+                            py: 4,
+                            color: "#42493A",
+                            display: "block",
+                            borderBottom: window.location.pathname.includes(
+                              "PatientList"
+                            )
+                              ? "4px solid #FFAACF"
+                              : "4px solid white",
+                            "&:hover": {
+                              color: "gray",
+                              backgroundColor: "white",
+                              borderBottom: "4px solid #FFAACF",
+                            },
+                            fontSize: 15,
+                            textTransform: "none",
+                          }}
+                          className={montserratBold.className}
+                        >
+                          {page.title}
+                        </Button>
+                      </Link>
+                    </Box>
+                  ) :  (
                     <Box key={page.title}></Box>
                   )
                 )}

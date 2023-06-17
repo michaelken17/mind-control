@@ -299,7 +299,7 @@ export default function SetAvailability() {
                                       control={
                                         <Switch
                                           sx={{
-                                            "& .Mui-checked": {
+                                            ".css-5ryogn-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked": {
                                               color: "#FFAACF",
                                             },
                                             "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track":
