@@ -6,6 +6,7 @@ import { persistReducer, persistStore } from "redux-persist";
 import appSlice from "./slices/appSlice";
 import isDoneSlice from "./slices/isDoneSlice";
 import consultantSlice from "./slices/consultantSlice";
+import loginConsultantSlice from "./slices/loginConsultantSlice";
 
 const persistConfig = {
   key: "root",
@@ -14,6 +15,7 @@ const persistConfig = {
 
 const reducers = combineReducers({
   login: loginSlice,
+  loginConsultant: loginConsultantSlice,
   app: appSlice,
   isDone: isDoneSlice,
   consultant: consultantSlice,

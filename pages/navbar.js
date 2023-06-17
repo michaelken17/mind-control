@@ -47,11 +47,14 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import HistoryIcon from "@mui/icons-material/History";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Logout } from "@mui/icons-material";
+import { loginConsultantAction } from "@/redux/slices/loginConsultantSlice";
 const pages = [
   { title: "Mental Health Check", path: "/MentalHealthCheck/Start" },
   { title: "Daily Health Check", path: "/DailyHealthCheck/Start" },
-  { title: "Mental Illness Test", path: "/MentalIllnessTest/Home  " },
-  { title: "Konsultasi Online", path: "/KonsultasiOnline/Home  " },
+  { title: "Mental Illness Test", path: "/MentalIllnessTest/Home " },
+  { title: "Konsultasi Online", path: "/KonsultasiOnline/Home" },
+  { title: "Set Availability", path: "/Consultant/SetAvailability" },
+  { title: "Patient List", path: "/Consultant/PatientList" },
 ];
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -144,6 +147,9 @@ export default function Navbar() {
         isDoneDHC: false,
       })
     );
+
+    dispatch(loginConsultantAction.logoutConsultant());
+
     const Toast = Swal.mixin({
       toast: true,
       position: "top-end",
@@ -201,15 +207,19 @@ export default function Navbar() {
 
   const MHCData = useSelector((x) => x.persistedReducer.app.MHCdata);
   const login = useSelector((state) => state.persistedReducer.login);
+  const loginConsultant = useSelector(
+    (state) => state.persistedReducer.loginConsultant
+  );
   const isDone = useSelector((state) => state.persistedReducer.isDone);
   React.useEffect(() => {
     setIsLoad(true);
-  }, []);
+    console.log(loginConsultant);
+  }, [loginConsultant]);
 
   return (
-    <div>
+    <div style={{}}>
       <AppBar position="fixed" open={open}>
-        <Container maxWidth="" sx={{ backgroundColor: "white" }}>
+        <Container maxWidth="" sx={{ backgroundColor: "white", pr: "20px" }}>
           <Toolbar>
             <Typography
               sx={{
@@ -220,20 +230,42 @@ export default function Navbar() {
                 textDecoration: "none",
               }}
             >
-              <Link legacyBehavior href="/Home">
-                <Box
-                  component="img"
-                  sx={{
-                    width: "160px",
-                    height: "80px",
-                    alt: "Mind Control",
-                    margin: "20px",
-                    cursor: "pointer",
-                  }}
-                  alt=""
-                  src="/image/MCIcon.png"
-                />
-              </Link>
+              {isLoaded && loginConsultant?.authorized == true ? (
+                <Link
+                  legacyBehavior
+                  href="/HomeConsultant"
+                  sx={{ cursor: "pointer" }}
+                >
+                  <Image
+                    width={150}
+                    height={80}
+                    // component="img"
+                    style={{
+                      // width: "160px",
+                      // height: "80px",
+                      // alt: "Mind Control",
+                      margin: "15px",
+                      cursor: "pointer",
+                    }}
+                    alt=""
+                    src="/image/MCIconConsultant.png"
+                  />
+                </Link>
+              ) : (
+                <Link legacyBehavior href="/Home" sx={{ cursor: "pointer" }}>
+                  <Image
+                    width={160}
+                    height={80}
+                    // component="img"
+                    style={{
+                      cursor: "pointer",
+                      margin: "20px",
+                    }}
+                    alt=""
+                    src="/image/MCIcon.png"
+                  />
+                </Link>
+              )}
             </Typography>
 
             <IconButton
@@ -268,15 +300,33 @@ export default function Navbar() {
                 zIndex: "5",
               }}
             >
-              <Link legacyBehavior href="/Home" sx={{ cursor: "pointer" }}>
-                <Image
-                  src="/image/MCIcon.png"
-                  width={160}
-                  height={80}
-                  alt="Mind Control"
-                  style={{ margin: 15 }}
-                />
-              </Link>
+              {isLoaded ? (
+                <Link legacyBehavior href="/Home" sx={{ cursor: "pointer" }}>
+                  <Image
+                    src="/image/MCIcon.png"
+                    width={160}
+                    height={80}
+                    alt="Mind Control"
+                    style={{ margin: 15 }}
+                  />
+                </Link>
+              ) : isLoaded && loginConsultant?.authorized == true ? (
+                <Link
+                  legacyBehavior
+                  href="/HomeConsultant"
+                  sx={{ cursor: "pointer" }}
+                >
+                  <Image
+                    src="/image/MCIcon.png"
+                    width={160}
+                    height={80}
+                    alt="Mind Control"
+                    style={{ margin: 15 }}
+                  />
+                </Link>
+              ) : (
+                <></>
+              )}
             </Typography>
 
             {/* Nav bar options*/}
@@ -588,7 +638,67 @@ export default function Navbar() {
                         </Link>
                       </HtmlTooltip>
                     </Box>
-                  ) : (
+                  ) : // SET AVAILABILITY
+                  page.title == "Set Availability" &&
+                    loginConsultant?.authorized == true ? (
+                    <Box key={page.title}>
+                      <Link href={page.path}>
+                        <Button
+                          sx={{
+                            mx: 2,
+                            py: 4,
+                            color: "#42493A",
+                            display: "block",
+                            borderBottom: window.location.pathname.includes(
+                              "SetAvailability"
+                            )
+                              ? "4px solid #FFAACF"
+                              : "4px solid white",
+                            "&:hover": {
+                              color: "gray",
+                              backgroundColor: "white",
+                              borderBottom: "4px solid #FFAACF",
+                            },
+                            fontSize: 15,
+                            textTransform: "none",
+                          }}
+                          className={montserratBold.className}
+                        >
+                          {page.title}
+                        </Button>
+                      </Link>
+                    </Box>
+                  ) :// SET AVAILABILITY
+                  page.title == "Patient List" &&
+                    loginConsultant?.authorized == true ? (
+                    <Box key={page.title}>
+                      <Link href={page.path}>
+                        <Button
+                          sx={{
+                            mx: 2,
+                            py: 4,
+                            color: "#42493A",
+                            display: "block",
+                            borderBottom: window.location.pathname.includes(
+                              "PatientList"
+                            )
+                              ? "4px solid #FFAACF"
+                              : "4px solid white",
+                            "&:hover": {
+                              color: "gray",
+                              backgroundColor: "white",
+                              borderBottom: "4px solid #FFAACF",
+                            },
+                            fontSize: 15,
+                            textTransform: "none",
+                          }}
+                          className={montserratBold.className}
+                        >
+                          {page.title}
+                        </Button>
+                      </Link>
+                    </Box>
+                  ) :  (
                     <Box key={page.title}></Box>
                   )
                 )}
@@ -718,76 +828,105 @@ export default function Navbar() {
               )}
 
             {/* Profile Avatar */}
-            {isLoaded && login?.authorized == true && (
-              <Box sx={{ ml: "30px" }}>
-                <IconButton
-                  id="basic-button"
-                  aria-controls={openAvatar ? "basic-menu" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={openAvatar ? "true" : undefined}
-                  onClick={handleClick}
-                >
-                  <Avatar />
-                </IconButton>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={openAvatar}
-                  onClose={handleClose}
-                >
-                  <Typography
-                    className={montserrat.className}
-                    style={{
-                      textAlign: "center",
-                      padding: "10px",
-                      fontWeight: "bold",
+            {isLoaded &&
+              (login?.authorized == true ||
+                loginConsultant?.authorized == true) && (
+                <Box sx={{ ml: "30px" }}>
+                  <IconButton
+                    id="basic-button"
+                    aria-controls={openAvatar ? "basic-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={openAvatar ? "true" : undefined}
+                    onClick={handleClick}
+                  >
+                    <Avatar />
+                  </IconButton>
+                  <Menu
+                    anchorEl={anchorEl}
+                    open={openAvatar}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }}
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "left",
                     }}
                   >
-                    {login.fullname}
-                  </Typography>
-                  <Link href="/TransactionHistory">
-                    <MenuItem>
-                      <HistoryIcon sx={{ fontSize: "18px", mr: "7px" }} />
+                    {login?.authorized == true ? (
+                      <Typography
+                        className={montserrat.className}
+                        style={{
+                          textAlign: "center",
+                          padding: "10px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {login.fullname}
+                      </Typography>
+                    ) : loginConsultant?.authorized == true ? (
+                      <Typography
+                        className={montserrat.className}
+                        style={{
+                          textAlign: "center",
+                          padding: "10px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {loginConsultant.fullname}
+                      </Typography>
+                    ) : (
+                      <Typography></Typography>
+                    )}
+                    {login?.authorized && (
+                      <Link href="/TransactionHistory">
+                        <MenuItem>
+                          <HistoryIcon sx={{ fontSize: "18px", mr: "7px" }} />
+                          <Typography
+                            className={montserrat.className}
+                            sx={{ textAlign: "center" }}
+                          >
+                            Transaction History
+                          </Typography>
+                        </MenuItem>
+                      </Link>
+                    )}
+
+                    <MenuItem onClick={handleLogout}>
+                      <LogoutIcon sx={{ fontSize: "18px", mr: "7px" }} />
                       <Typography
                         className={montserrat.className}
                         sx={{ textAlign: "center" }}
                       >
-                        Transaction History
+                        Logout
                       </Typography>
                     </MenuItem>
-                  </Link>
-
-                  <MenuItem onClick={handleLogout}>
-                    <LogoutIcon sx={{ fontSize: "18px", mr: "7px" }} />
-                    <Typography
-                      className={montserrat.className}
-                      sx={{ textAlign: "center" }}
-                    >
-                      Logout
-                    </Typography>
-                  </MenuItem>
-                </Menu>
-              </Box>
-            )}
+                  </Menu>
+                </Box>
+              )}
 
             {/* Login Button */}
-            {isLoaded && login?.authorized == false && (
-              <Link legacyBehavior href="/Login">
-                <Button
-                  variant="outlined"
-                  sx={{
-                    color: "#FFAACF",
-                    borderColor: "#FFAACF",
-                    "&:hover": {
-                      color: "#EA8FEA",
-                      backgroundColor: "white",
-                      borderColor: "#EA8FEA",
-                    },
-                  }}
-                >
-                  Log In
-                </Button>
-              </Link>
-            )}
+            {isLoaded &&
+              login?.authorized == false &&
+              loginConsultant?.authorized == false && (
+                <Link legacyBehavior href="/Login">
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      color: "#FFAACF",
+                      borderColor: "#FFAACF",
+                      "&:hover": {
+                        color: "#EA8FEA",
+                        backgroundColor: "white",
+                        borderColor: "#EA8FEA",
+                      },
+                    }}
+                  >
+                    Log In
+                  </Button>
+                </Link>
+              )}
           </Toolbar>
         </Container>
       </AppBar>

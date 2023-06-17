@@ -1,32 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const loginSlice = createSlice({
-  name: "login",
+const loginConsultantSlice = createSlice({
+  name: "loginConsultant",
   initialState: {
     authorized: false,
     username: null,
     fullname: null,
     isLoggedOut: null,
     email: null,
-    userid: 0,
-    consultant: false,
-    MHpoints: 0,
-    freeConsultation: 0,
-    isDoneMHC: "false",
+    gelar: "",
+    pendidikan: "",
+    spesialisasi: "",
+    pengalaman: "",
+    consultantid: 0,
+    tempatpraktek: "",
+    harga: 0,
   },
   reducers: {
-    login: (state, action) => {
-      state.authorized = true;
-      state.isLoggedOut = null;
-      state.username = action.payload.username;
-      state.fullname = action.payload.fullname;
-      state.email = action.payload.email;
-      state.pass = action.payload.password;
-      state.MHpoints = action.payload.MHpoints;
-      state.freeConsultation = action.payload.freeConsultation;
-      state.consultant = action.payload.consultant;
-      state.userid = action.payload.userid;
-    },
     loginConsultant: (state, action) => {
       state.authorized = true;
       state.isLoggedOut = null;
@@ -40,7 +30,7 @@ const loginSlice = createSlice({
       state.tempatpraktek = action.payload.tempatpraktek;
       state.harga = action.payload.harga;
     },
-    logout: (state, action) => {
+    logoutConsultant: (state, action) => {
       state.authorized = false;
       state.username = null;
       state.isLoggedOut = true;
@@ -48,5 +38,5 @@ const loginSlice = createSlice({
   },
 });
 
-export const loginActions = loginSlice.actions;
-export default loginSlice.reducer;
+export const loginConsultantAction = loginConsultantSlice.actions;
+export default loginConsultantSlice.reducer;
