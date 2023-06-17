@@ -466,7 +466,7 @@ const SignUpConsultant = () => {
               </FormControl>
             </Grid>
 
-            {/* Login Btn */}
+            {/* Sign up Btn */}
             <Grid item xl={12} md={12} sm={12} xs={12}>
               <motion.div whileHover={{ scale: 1.05 }}>
                 <Button

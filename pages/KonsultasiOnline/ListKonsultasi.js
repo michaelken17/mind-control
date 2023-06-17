@@ -89,7 +89,6 @@ export default function ListKonsultasi() {
   const login = useSelector((state) => state.persistedReducer.login);
   const axios = require("axios");
   const [readMore, setReadMore] = useState(false);
-  const [doneConsult, setdoneConsult] = useState(false);
 
   useEffect(() => {
     axios
@@ -98,11 +97,9 @@ export default function ListKonsultasi() {
           login.userid
       )
       .then((resp) => {
+        console.log(resp.data);
         setlistPatientData(resp.data);
         setIsLoaded(true);
-        if (resp.data.status == "ongoing") {
-          setdoneConsult(true);
-        }
       });
   }, []);
 
@@ -110,6 +107,11 @@ export default function ListKonsultasi() {
     setTimeDiff(today.diff(dayjs(listPatientData.tanggalPertemuan), "minute"));
     console.log(listPatientData);
   }, [listPatientData]);
+
+  useEffect(() => {
+    console.log(timeDiff);
+    console.log(listPatientData.status);
+  }, [timeDiff]);
 
   const startMeetingHandler = () => {
     Swal.fire({
@@ -129,20 +131,30 @@ export default function ListKonsultasi() {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        console.log("true");
+        axios.put(
+          "https://localhost:7184/api/Consultant/UpdateStatusListPatient?UserID=" +
+            login.userid +
+            "&status=ongoing"
+        );
 
-        axios
-          .put(
-            "https://localhost:7184/api/Consultant/UpdateStatusListPatient?UserID=" +
-              login.userid +
-              "&status=ongoing"
-          )
-          .then((respUpdate) => {
-            console.log(respUpdate);
-            setdoneConsult(true);
-          });
+        router.reload(window.location.pathname);
       }
     });
+  };
+
+  const resetMeetingHandler = () => {
+    axios.put(
+      "https://localhost:7184/api/Consultant/UpdateStatusListPatient?UserID=" +
+        login.userid +
+        "&status=patientlate"
+    );
+
+    axios.put(
+      "https://localhost:7184/api/Consultant/UpdateIsActiveListPatient?UserID=" +
+        login.userid
+    );
+
+    router.reload(window.location.pathname);
   };
 
   return (
@@ -401,10 +413,39 @@ export default function ListKonsultasi() {
                           className={montserratExtraBold.className}
                           sx={{ fontSize: "16px" }}
                         >
-                          Rp. {listPatientData.harga.toLocaleString("id")},00
-                          ({listPatientData.tipePembayaran})
-                        </Typography>{" "}
-                        {doneConsult == false ? (
+                          Rp. {listPatientData.harga.toLocaleString("id")},00 (
+                          {listPatientData.tipePembayaran})
+                        </Typography>
+                        {listPatientData.status == "waiting" &&
+                        timeDiff >= 30 ? (
+                          <Box sx={{ textAlign: "right" }}>
+                            <Typography
+                              className={montserratBold.className}
+                              sx={{ fontSize: "14px", px: "10px" }}
+                            >
+                              Sudah melewati jadwal. Mohon melakukan booking
+                              ulang.
+                            </Typography>
+                            <Button
+                              sx={{
+                                textTransform: "none",
+                                color: "white",
+                                backgroundColor: "#FFAACF",
+                                "&:hover": {
+                                  color: "white",
+                                  backgroundColor: "#EA8FEA",
+                                },
+                                "&:disabled": {
+                                  color: "black",
+                                  backgroundColor: "#EEEEEE",
+                                },
+                              }}
+                              onClick={resetMeetingHandler}
+                            >
+                              Ok
+                            </Button>
+                          </Box>
+                        ) : listPatientData.status == "waiting" ? (
                           <Button
                             sx={{
                               textTransform: "none",
@@ -420,17 +461,18 @@ export default function ListKonsultasi() {
                               },
                             }}
                             disabled={
-                              (timeDiff >= 0 && timeDiff < 30) ||
-                              doneConsult == true
+                              listPatientData.status == "waiting" &&
+                              timeDiff >= 0 &&
+                              timeDiff < 30
                                 ? false
                                 : true
                             }
+                            onClick={startMeetingHandler}
                           >
                             {timeDiff >= 0 && timeDiff < 30 ? (
                               <Typography
                                 className={montserratBold.className}
                                 sx={{ fontSize: "14px", px: "10px" }}
-                                onClick={startMeetingHandler}
                               >
                                 Mulai
                               </Typography>
@@ -451,13 +493,45 @@ export default function ListKonsultasi() {
                               </Typography>
                             )}
                           </Button>
-                        ) : (
+                        ) : listPatientData.status == "ongoing" ? (
+                          <Box sx={{textAlign:"right"}}>
+                            {" "}
+                            <Typography
+                              className={montserratBold.className}
+                              sx={{ fontSize: "15px", pl: "10px" }}
+                            >
+                              Konsultasi sedang berlangsung
+                            </Typography>
+                            <Button
+                              sx={{
+                                textTransform: "none",
+                                color: "white",
+                                backgroundColor: "#FFAACF",
+                                "&:hover": {
+                                  color: "white",
+                                  backgroundColor: "#EA8FEA",
+                                },
+                                "&:disabled": {
+                                  color: "black",
+                                  backgroundColor: "#EEEEEE",
+                                },
+                                ml: "10px",
+                              }}
+                              className={montserratBold.className}
+                              href="https://binus.zoom.us/j/99515710879"
+                            >
+                              Meet Link
+                            </Button>
+                          </Box>
+                        ) : listPatientData.status == "done" ? (
                           <Typography
                             className={montserratBold.className}
                             sx={{ fontSize: "15px", px: "10px" }}
                           >
-                            Konsultasi sedang berlangsung
+                            Konsultasi sudah selesai.
                           </Typography>
+                        ) : (
+                          <Typography>Nah</Typography>
                         )}
                       </CardActions>
                     </Card>
