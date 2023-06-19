@@ -137,7 +137,14 @@ export default function JadwalKonsultasi(val) {
     //       return { hariPertemuan, jamPertemuan };
     //     })
     // );
-    console.log(timeAvailable.length);
+
+    // console.log(
+    //   timeAvailable.sort(
+    //     (a, b) => parseInt(a.jamPertemuan) - parseInt(b.jamPertemuan)
+    //   )
+    // );
+    // console.log(timeAvailable.map((x) => parseInt(x.jamPertemuan)));
+    // timeAvailable.map((x) => x.jamPertemuan).forEach((x) => console.log(x));
   }, [timeAvailable]);
 
   useEffect(() => {
@@ -147,6 +154,7 @@ export default function JadwalKonsultasi(val) {
     settimeAvailable(
       availability
         .filter((x) => x.hariPertemuan === datePicked.format("dddd"))
+        .sort((a, b) => parseInt(a.jamPertemuan) - parseInt(b.jamPertemuan))
         .map(({ hariPertemuan, jamPertemuan }) => {
           return { hariPertemuan, jamPertemuan };
         })
@@ -165,10 +173,10 @@ export default function JadwalKonsultasi(val) {
       consultantActions.dateTime({
         date: datePicked.format("dddd, DD MMMM"),
         time: timePicked,
-        datetime: datePicked.format("YYYY-MM-DD") +"T"+timePicked
+        datetime: datePicked.format("YYYY-MM-DD") + "T" + timePicked,
       })
     );
-    console.log(datePicked.format("YYYY-MM-DD") +"T"+timePicked)
+    console.log(datePicked.format("YYYY-MM-DD") + "T" + timePicked);
   }, [dateTime]);
 
   return (
@@ -412,8 +420,13 @@ export default function JadwalKonsultasi(val) {
                       ) : (
                         <Typography
                           className={montserratExtraBold.className}
-                          sx={{ width: "100%", textAlign: "left", fontSize:"15px", my:"15px"}}
-                          >
+                          sx={{
+                            width: "100%",
+                            textAlign: "left",
+                            fontSize: "15px",
+                            my: "15px",
+                          }}
+                        >
                           Jadwal tidak tersedia, mohon mencari hari lain
                         </Typography>
                       )}

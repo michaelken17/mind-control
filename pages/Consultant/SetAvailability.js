@@ -35,8 +35,8 @@ import {
   montserratBold,
   montserratExtraBold,
 } from "../../public/fonts";
-import { depressionSeverity } from "../ShortFormConversionTable";
-import { rekomendasiDepression } from "../RekomendasiKegiatan";
+import { depressionSeverity } from "../../public/ShortFormConversionTable";
+import { rekomendasiDepression } from "../../public/RekomendasiKegiatan";
 import CircleIcon from "@mui/icons-material/Circle";
 import ErrorIcon from "@mui/icons-material/Error";
 import TabContext from "@mui/lab/TabContext";
