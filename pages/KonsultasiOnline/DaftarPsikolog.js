@@ -184,13 +184,13 @@ export default function DaftarPsikolog({ handleScheduleBtn }) {
                         }
                         action={
                           <Box sx={{ display: "flex" }}>
-                            <Typography
+                            {/* <Typography
                               sx={{ marginRight: "5px" }}
                               className={montserratBold.className}
                             >
                               {val.rating.toFixed(1)}
                             </Typography>
-                            <FavoriteIcon sx={{ color: "#FFAACF" }} />
+                            <FavoriteIcon sx={{ color: "#FFAACF" }} /> */}
                           </Box>
                         }
                         title={

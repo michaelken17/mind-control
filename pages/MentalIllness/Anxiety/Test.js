@@ -24,11 +24,9 @@ import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
-import {
-  appActions,
-  submitAnxiety,
-} from "@/redux/slices/appSlice";
-
+import { appActions, submitAnxiety } from "@/redux/slices/appSlice";
+import { AnxietySeverity } from "../../../public/ShortFormConversionTable";
+import axios from "axios";
 
 const theme = createTheme({
   typography: {
@@ -56,6 +54,7 @@ export default function AnxietyTest() {
   const [currentQuestion, setcurrentQuestion] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(1);
   const dispatch = useDispatch();
+  const login = useSelector((state) => state.persistedReducer.login);
 
   const [anxietyData, setanxietyData] = useState([
     { no: 1, jawaban: 0 },
@@ -66,6 +65,9 @@ export default function AnxietyTest() {
     { no: 6, jawaban: 0 },
     { no: 7, jawaban: 0 },
   ]);
+
+  let ansArray = anxietyData.map((x) => x.jawaban);
+  let rawScore = ansArray.reduce((a, b) => a + b, 0);
 
   const toggleHandler = (value) => () => {
     setSelectedIndex(value);
@@ -87,6 +89,22 @@ export default function AnxietyTest() {
       dispatch(appActions.submitAnxiety({}));
       dispatch(appActions.submitAnxiety(anxietyData));
       router.push("Result");
+
+      axios
+        .post("https://localhost:7184/api/MI/InsertMICheckAnxietyHeader", {
+          userId: login.userid,
+          totalRawScore: rawScore,
+          severity: AnxietySeverity(rawScore),
+        })
+        .then((resp) => {
+          axios.post(
+            "https://localhost:7184/api/MI/InsertMICheckAnxietyDetail?headerID=" +
+              resp.data.headerID,
+            {
+              anxDetailData: anxietyData,
+            }
+          );
+        });
     }
   };
 
@@ -256,8 +274,9 @@ export default function AnxietyTest() {
 
             {isAnswered && (
               <motion.button
+                className={montserrat.className}
                 animate={{}}
-                whileHover={{ scale: 1.0 }}
+                whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.9 }}
                 style={{
                   borderRadius: 5,
@@ -269,6 +288,7 @@ export default function AnxietyTest() {
                   fontSize: 20,
                   border: "0px ",
                   backgroundColor: "#FFAACF",
+                  cursor: "pointer",
                 }}
                 transition={{
                   type: "spring",
