@@ -75,7 +75,7 @@ export default function MHCStart() {
               width: "100%",
             }}
             alt=""
-            src="/image/MentalHealthCheck.png"
+            src="/image/mentalhealthcheck.png"
           />
           {/* <Image
             src="/image/MentalHealthCheck.png"

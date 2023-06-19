@@ -157,6 +157,15 @@ export default function ListKonsultasi() {
     router.reload(window.location.pathname);
   };
 
+  const confirmEndConsultation = () => {
+    axios.put(
+      "https://localhost:7184/api/Consultant/UpdateIsActiveListPatient?UserID=" +
+        login.userid
+    );
+
+    router.reload(window.location.pathname);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="lg" sx={{}}>
@@ -494,7 +503,7 @@ export default function ListKonsultasi() {
                             )}
                           </Button>
                         ) : listPatientData.status == "ongoing" ? (
-                          <Box sx={{textAlign:"right"}}>
+                          <Box sx={{ textAlign: "right" }}>
                             {" "}
                             <Typography
                               className={montserratBold.className}
@@ -518,18 +527,41 @@ export default function ListKonsultasi() {
                                 ml: "10px",
                               }}
                               className={montserratBold.className}
+                              target="_blank" 
                               href="https://binus.zoom.us/j/99515710879"
                             >
                               Meet Link
                             </Button>
                           </Box>
                         ) : listPatientData.status == "done" ? (
-                          <Typography
-                            className={montserratBold.className}
-                            sx={{ fontSize: "15px", px: "10px" }}
-                          >
-                            Konsultasi sudah selesai.
-                          </Typography>
+                          <Box sx={{textAlign:"right"}}>
+                            <Typography
+                              className={montserratBold.className}
+                              sx={{ fontSize: "15px", pl: "10px" }}
+                            >
+                              Konsultasi sudah selesai.
+                            </Typography>
+                            <Button
+                              sx={{
+                                textTransform: "none",
+                                color: "white",
+                                backgroundColor: "#FFAACF",
+                                "&:hover": {
+                                  color: "white",
+                                  backgroundColor: "#EA8FEA",
+                                },
+                                "&:disabled": {
+                                  color: "black",
+                                  backgroundColor: "#EEEEEE",
+                                },
+                                ml: "10px",
+                              }}
+                              className={montserratBold.className}
+                              onClick={confirmEndConsultation}
+                            >
+                              Ok
+                            </Button>
+                          </Box>
                         ) : (
                           <Typography>Nah</Typography>
                         )}

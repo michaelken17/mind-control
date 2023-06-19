@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
 import { loginActions } from "@/redux/slices/loginSlice";
@@ -22,57 +22,104 @@ import FormControl from "@mui/material/FormControl";
 import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
 import Image from "next/image";
 
+function validateEmail(email) {
+  var re = /\S+@\S+\.\S+/;
+  return re.test(email);
+}
+
 const SignUpConsultant = () => {
   const usernameRef = useRef();
   const passwordRef = useRef();
+  const fullnameRef = useRef();
+  const emailRef = useRef();
+  const bidangKeahlianRef = useRef();
+  const tempatPraktikRef = useRef();
+  const pengalamanRef = useRef();
+  const pendidikanRef = useRef();
+  const [gender, setGender] = useState();
   const dispatch = useDispatch();
   const router = useRouter();
+  const axios = require("axios");
 
-  const loginHandler = (event) => {
+  const signUpHandler = (event) => {
     event.preventDefault();
 
     const username = usernameRef.current.value;
     const password = passwordRef.current.value;
+    const fullname = fullnameRef.current.value;
+    const email = emailRef.current.value;
+    const bidangKeahlian = bidangKeahlianRef.current.value;
+    const tempatPraktik = tempatPraktikRef.current.value;
+    const pengalaman = pengalamanRef.current.value;
+    const pendidikan = pendidikanRef.current.value;
 
-    // if (username == "" || password == "") {
-    //   Swal.fire({
-    //     icon: "error",
-    //     title: "Error",
-    //     text: "Please enter your username and password!",
-    //     timer: 2000,
-    //     showConfirmButton: false,
-    //   });
-    // } else {
-    //   dispatch(
-    //     loginActions.login({
-    //       username: username,
-    //       email: "emailtest@gmail.com",
-    //       password: password,
-    //     })
-    //   );
+    console.log(
+      username,
+      password,
+      fullname,
+      email,
+      bidangKeahlian,
+      tempatPraktik,
+      pengalaman,
+      pendidikan,
+      gender
+    );
+    console.log(validateEmail(email));
+    if (
+      username == "" ||
+      password == "" ||
+      fullname == "" ||
+      bidangKeahlian == "" ||
+      tempatPraktik == "" ||
+      pengalaman == "" ||
+      pendidikan == "" ||
+      gender == ""
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Mohon mengisi semua data!",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    } else if (validateEmail(email) == false) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Mohon mengisi email yang valid!",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    } else {
+      axios.post("https://localhost:7184/api/Consultant/InsertConsultantData", {
+        fullName: fullname,
+        username: username,
+        gender: gender,
+        email: email,
+        password: password,
+        pendidikan: pendidikan,
+        spesialisasi: bidangKeahlian,
+        pengalaman: pengalaman,
+        tempatPraktek: tempatPraktik,
+        gender: gender,
+        harga: 150000,
+      });
 
-    //   const Toast = Swal.mixin({
-    //     toast: true,
-    //     position: "top-end",
-    //     showConfirmButton: false,
-    //     timer: 2000,
-    //     timerProgressBar: true,
-    //     // didOpen: (toast) => {
-    //     //   toast.addEventListener("mouseenter", Swal.stopTimer);
-    //     //   toast.addEventListener("mouseleave", Swal.resumeTimer);
-    //     // },
-    //   });
-
-    //   Toast.fire({
-    //     icon: "success",
-    //     title: "User has been registered!",
-    //   });
-
-    //   router.push("/LoginConsultant");
-    // }
-    router.push("LoginConsultant");
+      Swal.fire({
+        icon: "success",
+        title: "User telah di registrasi!",
+        text: "Mohon login ulang!",
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false,
+      }).then(() => {
+        router.push("/Login/LoginConsultant");
+      });
+    }
   };
-
+  const radioHandler = (event) => {
+    setGender(event.target.value.toString());
+  };
   //Press Enter key to signup
   useEffect(() => {
     const keyDownHandler = (event) => {
@@ -126,7 +173,8 @@ const SignUpConsultant = () => {
               <Box
                 component="img"
                 sx={{
-                  width: "100%",borderRadius: 10
+                  width: "100%",
+                  borderRadius: 10,
                 }}
                 alt=""
                 src="/image/mcwebicon.png"
@@ -193,6 +241,43 @@ const SignUpConsultant = () => {
                       p: 1,
                       borderRadius: "5px",
                     }}
+                    inputRef={fullnameRef}
+                  />
+                </Paper>
+              </Box>
+            </Grid>
+
+            {/* username */}
+            <Grid item xl={6} md={6} sm={12} xs={12}>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignContent="center"
+                justifyContent="flex-start"
+                mb={2}
+              >
+                <Typography
+                  color="#2f4858"
+                  pb={1}
+                  className={montserrat.className}
+                >
+                  Username
+                </Typography>
+
+                <Paper
+                  sx={{
+                    width: "100%",
+                  }}
+                >
+                  <InputBase
+                    className={montserrat.className}
+                    placeholder="Masukkan Username anda..."
+                    fullWidth
+                    sx={{
+                      bgcolor: "white",
+                      p: 1,
+                      borderRadius: "5px",
+                    }}
                     inputRef={usernameRef}
                   />
                 </Paper>
@@ -230,7 +315,7 @@ const SignUpConsultant = () => {
                       p: 1,
                       borderRadius: "5px",
                     }}
-                    inputRef={usernameRef}
+                    inputRef={bidangKeahlianRef}
                   />
                 </Paper>
               </Box>
@@ -272,7 +357,7 @@ const SignUpConsultant = () => {
                         p: 1,
                         borderRadius: "5px",
                       }}
-                      inputRef={passwordRef}
+                      inputRef={emailRef}
                     />
                   </Paper>
                 </Box>
@@ -315,7 +400,7 @@ const SignUpConsultant = () => {
                         p: 1,
                         borderRadius: "5px",
                       }}
-                      inputRef={passwordRef}
+                      inputRef={tempatPraktikRef}
                     />
                   </Paper>
                 </Box>
@@ -345,6 +430,7 @@ const SignUpConsultant = () => {
                   }}
                 >
                   <InputBase
+                    type={"password"}
                     className={montserrat.className}
                     placeholder="Masukkan password anda..."
                     fullWidth
@@ -353,7 +439,7 @@ const SignUpConsultant = () => {
                       p: 1,
                       borderRadius: "5px",
                     }}
-                    inputRef={usernameRef}
+                    inputRef={passwordRef}
                   />
                 </Paper>
               </Box>
@@ -390,7 +476,7 @@ const SignUpConsultant = () => {
                       p: 1,
                       borderRadius: "5px",
                     }}
-                    inputRef={usernameRef}
+                    inputRef={pengalamanRef}
                   />
                 </Paper>
               </Box>
@@ -427,7 +513,7 @@ const SignUpConsultant = () => {
                       p: 1,
                       borderRadius: "5px",
                     }}
-                    inputRef={usernameRef}
+                    inputRef={pendidikanRef}
                   />
                 </Paper>
               </Box>
@@ -443,7 +529,7 @@ const SignUpConsultant = () => {
                 >
                   Gender
                 </Typography>
-                <RadioGroup row>
+                <RadioGroup row onChange={radioHandler}>
                   <FormControlLabel
                     value="female"
                     control={<Radio />}
@@ -481,7 +567,7 @@ const SignUpConsultant = () => {
                       backgroundColor: "#FFAACF",
                     },
                   }}
-                  onClick={loginHandler}
+                  onClick={signUpHandler}
                 >
                   Sign Up
                 </Button>
