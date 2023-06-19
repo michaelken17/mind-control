@@ -328,7 +328,7 @@ export default function DepressionResult() {
                   {/* Button for konsultasi online */}
                   {depressionSeverity(rawScore) > 1 && (
                     <motion.div style={{ textAlign: "center" }}>
-                      <Link legacyBehavior href="../../KonsultasiOnline/Start" >
+                      <Link legacyBehavior href="../../KonsultasiOnline/Home">
                         <Button
                           sx={{
                             textTransform: "none",
@@ -341,7 +341,7 @@ export default function DepressionResult() {
                             border: "0px ",
                             backgroundColor: "#FFAACF",
                             "&:hover": {
-                              background: "rgb(234, 143, 234,0.275)",
+                              background: "rgb(234, 143, 234,0.8)",
                             },
                           }}
                         >
@@ -360,7 +360,7 @@ export default function DepressionResult() {
                     </motion.div>
                   )}
                   <motion.div style={{ textAlign: "center" }}>
-                    <Link legacyBehavior href="../../DailyHealthCheck/Start" >
+                    <Link legacyBehavior href="../../DailyHealthCheck/Start">
                       <Button
                         sx={{
                           textTransform: "none",
@@ -373,7 +373,7 @@ export default function DepressionResult() {
                           border: "0px ",
                           backgroundColor: "#FFAACF",
                           "&:hover": {
-                            background: "rgb(234, 143, 234,0.275)",
+                            background: "rgb(234, 143, 234,0.8)",
                           },
                         }}
                       >

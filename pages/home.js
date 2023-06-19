@@ -160,8 +160,12 @@ export default function Home() {
         >
           Fitur-fitur lainnya...
         </Typography>
-        <Grid container columns={{ xs: 4, sm: 8, xl: 12 }} spacing={{ xl: 17 }}>
-          <Grid item xl={6}>
+        <Grid
+          container
+          columns={{ xs: 4, sm: 8, xl: 20 }}
+          spacing={{ xl: 5, lg: 0 }}
+        >
+          <Grid item xl={8}>
             <Box
               sx={{
                 // bgcolor: "gray",
@@ -190,21 +194,24 @@ export default function Home() {
                 className={montserrat.className}
                 sx={{ fontSize: { xs: "15px", md: "17px" }, color: "black" }}
               >
-                Pengecekan penyakit mental berfungsi sebagai tes penilaian diri
+                {/* Pengecekan penyakit mental berfungsi sebagai tes penilaian diri
                 yang dapat mengidentifikasi tingkat keparahan penyakit mental
                 yang dialami secara spesifik. Tes akan membantu memberikan
                 solusi dan rekomendasi untuk meningkatkan kesehatan mental dan
                 juga membantu menentukan apakah harus mencari bantuan dari
-                psikolog untuk mengatasi masalah kesehatan mental.
+                psikolog untuk mengatasi masalah kesehatan mental. */}
+                Pengecekan penyakit mental berfungsi sebagai tes penilaian diri
+                yang dapat mengidentifikasi tingkat keparahan penyakit mental
+                yang dialami secara spesifik.
               </Typography>
               <br />
             </Box>
           </Grid>
 
-          <Grid item xl={6}>
+          <Grid item xl={7}>
             <Box
               sx={{
-                textAlign: "justify",
+                textAlign: "justify", marginBottom: "20px" 
               }}
             >
               <Typography
@@ -233,12 +240,53 @@ export default function Home() {
                   textAlign: "justify",
                 }}
               >
-                Pengecekan kesehatan mental harian dapat membuat anda tetap
+                {/* Pengecekan kesehatan mental harian dapat membuat anda tetap
                 terkendali dan mengingatkan tentang waktu untuk perawatan diri
                 dan kebahagiaan. Kita seringkali mengabaikannya kebahagiaan diri
                 sendiri dan menjadikan diri sendiri sebagai prioritas terakhir.
                 Pertanyaan harian kesehatan mental ini dapat membantu
-                mempertahankan keadaan pikiran dan emosi anda.
+                mempertahankan keadaan pikiran dan emosi anda. */}
+                Pengecekan kesehatan mental harian dapat membuat anda tetap
+                terkendali dan mengingatkan tentang waktu untuk perawatan diri
+                dan kebahagiaan.
+              </Typography>
+            </Box>
+          </Grid>
+
+          <Grid item xl={5}>
+            <Box
+              sx={{
+                textAlign: "justify",
+              }}
+            >
+              <Typography
+                className={montserratExtraBold.className}
+                sx={{
+                  fontSize: { xs: "19px", md: "22px" },
+                  color: "#FFAACF",
+                }}
+              >
+                <i>Online Consultation</i>
+              </Typography>
+              <Typography
+                className={montserrat.className}
+                sx={{
+                  fontSize: { xs: "19px", md: "18px" },
+                  color: "#EA8FEA",
+                }}
+              >
+                Konsultasi Online
+              </Typography>
+              <Typography
+                className={montserrat.className}
+                sx={{
+                  fontSize: { xs: "15px", md: "17px" },
+                  color: "black",
+                  textAlign: "justify",
+                }}
+              >
+                Konsultasi online adalah fitur yang menyediakan layanan
+                konsultasi online dengan psikolog
               </Typography>
             </Box>
           </Grid>
@@ -253,7 +301,7 @@ export default function Home() {
           textAlign: "center",
           justifyContent: "center",
           display: { xs: "none", xl: "block" },
-          marginTop: "30px",
+          marginTop: "40px",
         }}
       ></Box>
     </motion.div>

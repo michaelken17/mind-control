@@ -78,12 +78,122 @@ export default function MHCTest() {
     x.jawaban = value.score;
     setMHCdata(updateData);
 
+    // if (currentQuestion + 1 != MHCQuestions.length) {
+    //   setTimeout(() => {
+    //     setcurrentQuestion(currentQuestion + 1);
+    //     setisAnswered(false);
+    //     setSelectedIndex(0);
+    //   }, 500);
+    // } else {
+    //   dispatch(appActions.submitMHC({}));
+    //   dispatch(appActions.submitMHC(MHCdata));
+
+    //   const depressionSeverity = Math.max(
+    //     MHCdata[0].jawaban,
+    //     MHCdata[1].jawaban
+    //   );
+    //   const anxietySeverity = Math.max(
+    //     MHCdata[2].jawaban,
+    //     MHCdata[3].jawaban,
+    //     MHCdata[4].jawaban
+    //   );
+    //   const OCDSeverity = Math.max(MHCdata[5].jawaban, MHCdata[6].jawaban);
+    //   const sleepDisorderSeverity = MHCdata[7].jawaban;
+
+    //   const MentalIllnessList = [
+    //     {
+    //       img: "/image/Mental Illness Illustration/4.png",
+    //       title: "Depression",
+    //       author: "Gangguan Depresi",
+    //       link: "/MentalIllness/Depression/Panduan",
+    //       severity: depressionSeverity,
+    //     },
+    //     {
+    //       img: "/image/Mental Illness Illustration/1.png",
+    //       title: "Anxiety",
+    //       author: "Gangguan Kecemasan",
+    //       link: "/MentalIllness/Anxiety/Panduan",
+    //       severity: anxietySeverity,
+    //     },
+    //     {
+    //       img: "/image/Mental Illness Illustration/3.png",
+    //       title: "OCD",
+    //       author: "Obsessive-Compulsive Disorder",
+    //       link: "/MentalIllness/OCD/Panduan",
+    //       severity: OCDSeverity,
+    //     },
+    //     {
+    //       img: "/image/Mental Illness Illustration/5.png",
+    //       title: "Sleep Disorder",
+    //       author: "Gangguan Tidur",
+    //       link: "/MentalIllness/SleepDisorder/Panduan",
+    //       severity: sleepDisorderSeverity,
+    //     },
+    //   ];
+
+    //   dispatch(appActions.MHCData({}));
+    //   dispatch(appActions.MHCData(MentalIllnessList));
+
+    //   dispatch(
+    //     isDoneActions.isDone({
+    //       isDoneMHC: true,
+    //       isDoneDpr: false,
+    //       isDoneAnx: false,
+    //       isDoneOcd: false,
+    //       isDoneSd: false,
+    //       isDoneDHC: false,
+    //     })
+    //   );
+
+    //   if (isDone.isDoneMHC == true) {
+    //     await axios
+    //       .put(
+    //         " https://localhost:7184/api/MHCheck/UpdateMHCheckHeader?userId=" +
+    //           login.userid
+    //       )
+    //       .then((respUpdate) => {
+    //         console.log(respUpdate);
+    //       });
+    //   }
+    //   // Insert Header
+    //   await axios
+    //     .post(
+    //       "https://localhost:7184/api/MHCheck/InsertMHCheckHeader?username=" +
+    //         login.username
+    //     )
+    //     .then(async (responseHeader) => {
+    //       // Insert MD
+    //       await axios
+    //         .post("https://localhost:7184/api/MHCheck/InsertMHCheckMD", {
+    //           headerID: responseHeader.data.headerID,
+    //           dprSeverity: depressionSeverity,
+    //           anxSeverity: anxietySeverity,
+    //           ocdSeverity: OCDSeverity,
+    //           sdSeverity: sleepDisorderSeverity,
+    //         })
+    //         .then(async (responseMD) => {
+    //           console.log(responseMD.data);
+    //           // Insert Detail
+    //           await axios.post(
+    //             "https://localhost:7184/api/MHCheck/InsertMHCheckDetail?headerID=" +
+    //               responseMD.data,
+    //             {
+    //               MHCdata: MHCdata,
+    //             }
+    //           );
+    //         });
+    //     });
+
+    //   router.push("Result");
+    // }
+  };
+
+  const nextHandler = () => {
+    console.log("123");
     if (currentQuestion + 1 != MHCQuestions.length) {
-      setTimeout(() => {
-        setcurrentQuestion(currentQuestion + 1);
-        setisAnswered(false);
-        setSelectedIndex(0);
-      }, 500);
+      setcurrentQuestion(currentQuestion + 1);
+      setisAnswered(false);
+      setSelectedIndex(0);
     } else {
       dispatch(appActions.submitMHC({}));
       dispatch(appActions.submitMHC(MHCdata));
@@ -146,7 +256,7 @@ export default function MHCTest() {
       );
 
       if (isDone.isDoneMHC == true) {
-        await axios
+        axios
           .put(
             " https://localhost:7184/api/MHCheck/UpdateMHCheckHeader?userId=" +
               login.userid
@@ -156,76 +266,12 @@ export default function MHCTest() {
           });
       }
       // Insert Header
-      await axios
-        .post(
-          "https://localhost:7184/api/MHCheck/InsertMHCheckHeader?username=" +
-            login.username
-        )
-        .then(async (responseHeader) => {
-          // Insert MD
-          await axios
-            .post("https://localhost:7184/api/MHCheck/InsertMHCheckMD", {
-              headerID: responseHeader.data.headerID,
-              dprSeverity: depressionSeverity,
-              anxSeverity: anxietySeverity,
-              ocdSeverity: OCDSeverity,
-              sdSeverity: sleepDisorderSeverity,
-            })
-            .then(async (responseMD) => {
-              console.log(responseMD.data);
-              // Insert Detail
-              await axios.post(
-                "https://localhost:7184/api/MHCheck/InsertMHCheckDetail?headerID=" +
-                  responseMD.data,
-                {
-                  MHCdata: MHCdata,
-                }
-              );
-            });
-        });
-
-      router.push("Result");
-    }
-  };
-
-  const nextHandler = () => {
-    if (currentQuestion + 1 != MHCQuestions.length) {
-      setcurrentQuestion(currentQuestion + 1);
-      setisAnswered(false);
-      setSelectedIndex(0);
-    } else {
-      dispatch(appActions.submitMHC({}));
-      dispatch(appActions.submitMHC(MHCdata));
-      const depressionSeverity = Math.max(
-        MHCdata[0].jawaban,
-        MHCdata[1].jawaban
-      );
-      const anxietySeverity = Math.max(
-        MHCdata[2].jawaban,
-        MHCdata[3].jawaban,
-        MHCdata[4].jawaban
-      );
-      const OCDSeverity = Math.max(MHCdata[5].jawaban, MHCdata[6].jawaban);
-      const sleepDisorderSeverity = MHCdata[7].jawaban;
-
-      dispatch(
-        isDoneActions.isDone({
-          isDoneMHC: true,
-          isDoneDpr: false,
-          isDoneAnx: false,
-          isDoneOcd: false,
-          isDoneSd: false,
-          isDoneDHC: false,
-        })
-      );
-
-      // Insert Header
       axios
         .post(
           "https://localhost:7184/api/MHCheck/InsertMHCheckHeader?username=" +
             login.username
         )
-        .then((responseHeader) => {
+        .then(async (responseHeader) => {
           // Insert MD
           axios
             .post("https://localhost:7184/api/MHCheck/InsertMHCheckMD", {
@@ -235,7 +281,7 @@ export default function MHCTest() {
               ocdSeverity: OCDSeverity,
               sdSeverity: sleepDisorderSeverity,
             })
-            .then((responseMD) => {
+            .then(async (responseMD) => {
               console.log(responseMD.data);
               // Insert Detail
               axios.post(
@@ -448,30 +494,51 @@ export default function MHCTest() {
                 <ArrowBack sx={{ color: "black" }} />
               </Button>
             )}
-            {/* 
+
             {isAnswered && (
-              <Button
-                sx={{
-                  textTransform: "none",
-                  "&:hover": {
-                    backgroundColor: "#FFAACF",
-                    color: "white",
-                  },
+              <motion.button
+                className={montserrat.className}
+                animate={{}}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.9 }}
+                style={{
+                  borderRadius: 5,
+                  // margin: "auto",
+                  // float: "right",
+                  padding: 10,
+                  paddingLeft: 30,
+                  paddingRight: 30,
+                  fontSize: 20,
+                  border: "0px ",
+                  backgroundColor: "#FFAACF",
+                  cursor: "pointer",
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 10,
+                  bounce: 5,
+                  ease: "easeInOut",
                 }}
                 onClick={() => nextHandler()}
               >
                 {currentQuestion + 1 == MHCQuestions.length ? (
                   <Typography
                     className={montserrat.className}
-                    sx={{ color: "black" }}
+                    sx={{ color: "white" }}
                   >
                     End Test
                   </Typography>
                 ) : (
-                  <ArrowForward sx={{ color: "black" }} />
+                  <Typography
+                    className={montserrat.className}
+                    sx={{ color: "white" }}
+                  >
+                    Next
+                  </Typography>
                 )}
-              </Button>
-            )} */}
+              </motion.button>
+            )}
           </div>
         </motion.div>
       </Container>

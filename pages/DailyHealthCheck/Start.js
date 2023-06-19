@@ -115,13 +115,18 @@ export default function DailyHealthCheck() {
                   // marginTop: "10px",
                   marginLeft: "20px",
                   marginRight: "20px",
-                  fontSize: "19px",
+
                   border: "0px ",
                   textTransform: "none",
                   color: "white",
                 }}
               >
-                Lihat Rekomendasi Kegiatan Hari Ini
+                <Typography
+                  sx={{ fontSize: "17px" }}
+                  className={montserrat.className}
+                >
+                  Lihat Rekomendasi Kegiatan Hari Ini
+                </Typography>
               </Button>
             </Link>
 
@@ -140,12 +145,13 @@ export default function DailyHealthCheck() {
             >
               <Link legacyBehavior href="Test" sx={{ cursor: "pointer" }}>
                 <button
+                  className={montserrat.className}
                   style={{
                     borderRadius: 10,
                     padding: 20,
                     marginLeft: "20px",
                     marginRight: "20px",
-                    fontSize: 20,
+                    fontSize: 16,
                     border: "0px ",
                     backgroundColor: "#FF4E9B",
                     cursor: "pointer",

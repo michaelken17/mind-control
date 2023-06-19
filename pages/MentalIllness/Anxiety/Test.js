@@ -274,8 +274,9 @@ export default function AnxietyTest() {
 
             {isAnswered && (
               <motion.button
+                className={montserrat.className}
                 animate={{}}
-                whileHover={{ scale: 1.0 }}
+                whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.9 }}
                 style={{
                   borderRadius: 5,
@@ -287,6 +288,7 @@ export default function AnxietyTest() {
                   fontSize: 20,
                   border: "0px ",
                   backgroundColor: "#FFAACF",
+                  cursor: "pointer",
                 }}
                 transition={{
                   type: "spring",

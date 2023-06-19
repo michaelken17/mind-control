@@ -1,4 +1,11 @@
-import { Button, Container, List, ListItem, Typography, Box } from "@mui/material";
+import {
+  Button,
+  Container,
+  List,
+  ListItem,
+  Typography,
+  Box,
+} from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { motion } from "framer-motion";
@@ -290,32 +297,33 @@ export default function AnxietyPanduan() {
                 </i>
               </Typography>
             </div>
-            <motion.button
-              // className={styles.testbutton}
-              animate={{}}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.9 }}
-              style={{
-                borderRadius: 0,
-                padding: 15,
-                paddingLeft: 60,
-                paddingRight: 60,
-                fontSize: 20,
-                border: "0px ",
-              }}
-              transition={{
-                type: "spring",
-                stiffness: 400,
-                damping: 20,
-                bounce: 5,
-                ease: "easeInOut",
-              }}
-              onClick={startHandler}
-            >
-              <Link legacyBehavior href="">
+            <Link legacyBehavior href="">
+              <motion.button
+                className={styles.testbutton}
+                animate={{}}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.9 }}
+                style={{
+                  borderRadius: 0,
+                  padding: 15,
+                  paddingLeft: 60,
+                  paddingRight: 60,
+                  fontSize: 20,
+                  border: "0px ",
+                  cursor: "pointer",
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 20,
+                  bounce: 5,
+                  ease: "easeInOut",
+                }}
+                onClick={startHandler}
+              >
                 Mulai Test
-              </Link>
-            </motion.button>
+              </motion.button>
+            </Link>
           </div>
         </motion.div>
       </Container>
