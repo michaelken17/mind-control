@@ -28,7 +28,7 @@ import appSlice, {
   appActions,
   submitDepression,
 } from "@/redux/slices/appSlice";
-import { depressionSeverity } from "../../ShortFormConversionTable";
+import { depressionSeverity } from "../../../public/ShortFormConversionTable";
 import axios from "axios";
 const theme = createTheme({
   typography: {
@@ -100,12 +100,13 @@ export default function DepressionTest() {
           severity: depressionSeverity(rawScore),
         })
         .then((resp) => {
-          console.log(resp.data)
-          console.log(resp.data.headerID)
+          console.log(resp.data);
+          console.log(resp.data.headerID);
           axios.post(
-            "https://localhost:7184/api/MI/InsertMICheckDepressionDetail?headerID=" + resp.data.headerID,
+            "https://localhost:7184/api/MI/InsertMICheckDepressionDetail?headerID=" +
+              resp.data.headerID,
             {
-             dprDetailData: depressionData
+              dprDetailData: depressionData,
             }
           );
         });

@@ -25,8 +25,8 @@ import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
-import { SDSeverity } from "../../ShortFormConversionTable";
-import { rekomendasiSD } from "../../RekomendasiKegiatan";
+import { SDSeverity } from "../../../public/ShortFormConversionTable";
+import { rekomendasiSD } from "../../../public/RekomendasiKegiatan";
 import ErrorIcon from "@mui/icons-material/Error";
 
 const theme = createTheme({

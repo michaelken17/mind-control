@@ -25,7 +25,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
 import { appActions, submitSD } from "@/redux/slices/appSlice";
-
+import axios from "axios";
+import { SDSeverity } from "@/public/ShortFormConversionTable";
 const theme = createTheme({
   typography: {
     fontFamily: montserrat,
@@ -48,6 +49,7 @@ export default function SleepDisorderTest() {
   const [currentQuestion, setcurrentQuestion] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState(1);
   const dispatch = useDispatch();
+  const login = useSelector((state) => state.persistedReducer.login);
 
   const [SDData, setSDData] = useState([
     { no: 1, jawaban: 0 },
@@ -59,6 +61,9 @@ export default function SleepDisorderTest() {
     { no: 7, jawaban: 0 },
     { no: 8, jawaban: 0 },
   ]);
+
+  let ansArray = SDData.map((x) => x.jawaban);
+  let rawScore = ansArray.reduce((a, b) => a + b, 0);
 
   const toggleHandler = (value) => () => {
     setSelectedIndex(value);
@@ -80,6 +85,27 @@ export default function SleepDisorderTest() {
       dispatch(appActions.submitSD({}));
       dispatch(appActions.submitSD(SDData));
       router.push("Result");
+
+      axios
+        .post(
+          "https://localhost:7184/api/MI/InsertMICheckSleepDisorderHeader",
+          {
+            userId: login.userid,
+            totalRawScore: rawScore,
+            severity: SDSeverity(rawScore),
+          }
+        )
+        .then((resp) => {
+          console.log(resp.data);
+          console.log(resp.data.headerID);
+          axios.post(
+            "https://localhost:7184/api/MI/InsertMICheckSleepDisorderDetail?headerID=" +
+              resp.data.headerID,
+            {
+              sdDetailData: SDData,
+            }
+          );
+        });
     }
   };
 
