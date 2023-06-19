@@ -65,7 +65,7 @@ export default function MentalIllnessTestHome() {
               width: "100%",
             }}
             alt=""
-            src="/image/MentalIllnessTest.png"
+            src="/image/mentalillnesstest.png"
           />
           {/* <Image
             src="/image/MentalIllnessTest.png"

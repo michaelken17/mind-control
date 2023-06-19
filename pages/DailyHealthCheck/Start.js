@@ -50,7 +50,7 @@ export default function DailyHealthCheck() {
               width: "90%",
             }}
             alt=""
-            src="/image/DailyHealthCheck.png"
+            src="/image/dailyhealthcheck.png"
           />
           {/* <Image
             src="/image/DailyHealthCheck.png"

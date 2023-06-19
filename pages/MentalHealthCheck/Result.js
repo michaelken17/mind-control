@@ -104,7 +104,7 @@ export default function MHCResult() {
       title: "Anxiety",
       author: "Gangguan Kecemasan",
       link: "/MentalIllness/Anxiety/Panduan",
-      severity: MHCData[0].severity,
+      severity: MHCData[1].severity,
     },
     {
       img: "/image/Mental Illness Illustration/3.png",
