@@ -33,7 +33,7 @@ import {
   glacial,
   cooperHewitt,
   montserratBold,
-} from "../../public/fonts";
+} from "fonts";
 import { depressionSeverity } from "../../public/ShortFormConversionTable";
 import { rekomendasiDepression } from "../../public/RekomendasiKegiatan";
 import CircleIcon from "@mui/icons-material/Circle";
@@ -77,22 +77,22 @@ export default function RekomendasiKegiatan() {
 
   useEffect(() => {
       axios
-      .get("https://localhost:7184/api/MI/GetSolutions?MDID=" + 1)
+      .get(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MI/GetSolutions?MDID=" + 1)
       .then((resp) => {
         setdepressionSolutions(resp.data)
       });
       axios
-      .get("https://localhost:7184/api/MI/GetSolutions?MDID=" + 2)
+      .get(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MI/GetSolutions?MDID=" + 2)
       .then((resp) => {
         setanxietySolutions(resp.data)
       });
       axios
-      .get("https://localhost:7184/api/MI/GetSolutions?MDID=" + 3)
+      .get(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MI/GetSolutions?MDID=" + 3)
       .then((resp) => {
         setOCDSolutions(resp.data)
       });
       axios
-      .get("https://localhost:7184/api/MI/GetSolutions?MDID=" + 4)
+      .get(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MI/GetSolutions?MDID=" + 4)
       .then((resp) => {
         setSDSolutions(resp.data)
       });

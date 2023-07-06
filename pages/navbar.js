@@ -26,14 +26,9 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import {
-  montserratBold,
-  glacial,
-  cooperHewitt,
-  montserrat,
-} from "../public/fonts";
+import { montserratBold, glacial, cooperHewitt, montserrat } from "fonts";
 import { AnimatedLineProgressBar, LineProgressBar } from "@frogress/line";
-import { Grid, MenuItem } from "@mui/material";
+import { Grid, MenuItem, createTheme } from "@mui/material";
 import { Montserrat, Open_Sans } from "next/font/google";
 import { useRouter } from "next/router";
 import { loginActions } from "@/redux/slices/loginSlice";
@@ -47,6 +42,7 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import HistoryIcon from "@mui/icons-material/History";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Logout } from "@mui/icons-material";
+import { ThemeProvider } from "@emotion/react";
 import { loginConsultantAction } from "@/redux/slices/loginConsultantSlice";
 const pages = [
   { title: "Mental Health Check", path: "/MentalHealthCheck/Start" },
@@ -113,11 +109,17 @@ const HtmlTooltip = styled(({ className, ...props }) => (
     border: "1px solid #dadde9",
   },
 }));
-
+const theme = createTheme({
+  typography: {
+    fontFamily: montserrat,
+  },
+  button: {
+    fontFamily: montserrat,
+  },
+});
 export default function Navbar() {
   const [isLoaded, setIsLoad] = useState(false);
   const [open, setOpen] = useState(false);
-  const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   const openAvatar = Boolean(anchorEl);
   const dispatch = useDispatch();
@@ -176,7 +178,8 @@ export default function Navbar() {
   const claimConsultationHandler = () => {
     axios
       .put(
-        "https://localhost:7184/api/Consultant/UpdateFreeConsultation?UserID=" +
+        process.env.NEXT_PUBLIC_BACKEND_URL +
+          "/api/Consultant/UpdateFreeConsultation?UserID=" +
           login.userid +
           "&opr=add"
       )
@@ -217,824 +220,832 @@ export default function Navbar() {
   }, [loginConsultant]);
 
   return (
-    <div style={{}}>
-      <AppBar position="fixed" open={open}>
-        <Container maxWidth="" sx={{ backgroundColor: "white", pr: "20px" }}>
-          <Toolbar>
-            <Typography
-              sx={{
-                mr: 2,
-                display: { xs: "none", md: "flex" },
-                fontWeight: 750,
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              {isLoaded && loginConsultant?.authorized == true ? (
-                <Link
-                  legacyBehavior
-                  href="/HomeConsultant"
-                  sx={{ cursor: "pointer" }}
-                >
-                  <Image
-                    width={150}
-                    height={80}
-                    // component="img"
-                    style={{
-                      // width: "160px",
-                      // height: "80px",
-                      // alt: "Mind Control",
-                      margin: "15px",
-                      cursor: "pointer",
-                    }}
-                    alt=""
-                    src="/image/MCIconConsultant.png"
-                  />
-                </Link>
-              ) : (
-                <Link legacyBehavior href="/Home" sx={{ cursor: "pointer" }}>
-                  <Image
-                    width={160}
-                    height={80}
-                    // component="img"
-                    style={{
-                      cursor: "pointer",
-                      margin: "20px",
-                    }}
-                    alt=""
-                    src="/image/MCIcon.png"
-                  />
-                </Link>
-              )}
-            </Typography>
-
-            <IconButton
-              color="black"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{
-                mr: 2,
-                ...(open && { display: "none" }),
-                display: { xs: "flex", sm: "flex", md: "none", lg: "none" },
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-
-            {/* Side Menu  */}
-            <Box
-              sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
-            ></Box>
-
-            {/* MC Icon */}
-            <Typography
-              sx={{
-                mr: 2,
-                display: { xs: "flex", md: "none" },
-                flexGrow: 1,
-                fontWeight: 700,
-                color: "inherit",
-                textDecoration: "none",
-                cursor: "pointer",
-                zIndex: "5",
-              }}
-            >
-              {isLoaded ? (
-                <Link legacyBehavior href="/Home" sx={{ cursor: "pointer" }}>
-                  <Image
-                    src="/image/MCIcon.png"
-                    width={160}
-                    height={80}
-                    alt="Mind Control"
-                    style={{ margin: 15 }}
-                  />
-                </Link>
-              ) : isLoaded && loginConsultant?.authorized == true ? (
-                <Link
-                  legacyBehavior
-                  href="/HomeConsultant"
-                  sx={{ cursor: "pointer" }}
-                >
-                  <Image
-                    src="/image/MCIcon.png"
-                    width={160}
-                    height={80}
-                    alt="Mind Control"
-                    style={{ margin: 15 }}
-                  />
-                </Link>
-              ) : (
-                <></>
-              )}
-            </Typography>
-
-            {/* Nav bar options*/}
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {isLoaded &&
-                pages.map((page) =>
-                  page.title == "Mental Illness Test" &&
-                  login?.authorized !== false &&
-                  isDone.isDoneMHC == true ? (
-                    // MENTAL ILLNESS DROPDOWN MENU
-                    <Box key={page.title}>
-                      <HtmlTooltip
-                        interactive="true"
-                        open={showTooltip}
-                        onOpen={() => setShowTooltip(true)}
-                        onClose={() => setShowTooltip(false)}
-                        TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
-                        title={
-                          <Typography>
-                            {MHCData.map((item, index) => {
-                              if (item.severity >= 2)
-                                return (
-                                  <Link
-                                    legacyBehavior
-                                    href={item.link}
-                                    key={item.title}
-                                  >
-                                    <MenuItem
-                                      className={montserrat.className}
-                                      sx={{
-                                        padding: "10px",
-                                        fontSize: "15px",
-                                        px: "30px",
-                                      }}
-                                    >
-                                      {item.title}
-                                    </MenuItem>
-                                  </Link>
-                                );
-                            })}
-                          </Typography>
-                        }
-                      >
-                        <Link href={page.path}>
-                          <Button
-                            sx={{
-                              mx: 2,
-                              py: 4,
-                              color: "#42493A",
-                              display: "block",
-                              borderBottom: window.location.pathname.includes(
-                                "MentalIllness"
-                              )
-                                ? "4px solid #FFAACF"
-                                : "4px solid white",
-                              "&:hover": {
-                                color: "gray",
-                                backgroundColor: "white",
-                                borderBottom: "4px solid #FFAACF",
-                              },
-                              fontSize: 15,
-                              textTransform: "none",
-                            }}
-                            className={montserratBold.className}
-                          >
-                            <Grid container columns={12}>
-                              <Grid item xl={11}>
-                                {page.title}
-                              </Grid>
-                              <Grid item xl={1}>
-                                {showTooltip ? (
-                                  <ArrowDropUpIcon sx={{ mt: 0 }} />
-                                ) : (
-                                  <ArrowDropDownIcon sx={{ mt: 0 }} />
-                                )}
-                              </Grid>
-                            </Grid>
-                          </Button>
-                        </Link>
-                      </HtmlTooltip>
-                    </Box>
-                  ) : // MENTAL HEALTH CHECK
-                  page.title == "Mental Health Check" &&
-                    login?.authorized == true &&
-                    isDone.isDoneMHC == true ? (
-                    <Box key={page.title}>
-                      <HtmlTooltip
-                        interactive="true"
-                        open={showTooltipMHC}
-                        onOpen={() => setShowTooltipMHC(true)}
-                        onClose={() => setShowTooltipMHC(false)}
-                        TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
-                        title={
-                          <Link
-                            legacyBehavior
-                            href={"/MentalHealthCheck/Result"}
-                          >
-                            <Typography>
-                              <MenuItem
-                                className={montserrat.className}
-                                sx={{ px: "50px", fontSize: "15px" }}
-                              >
-                                Hasil Tes
-                              </MenuItem>
-                            </Typography>
-                          </Link>
-                        }
-                      >
-                        <Link href={page.path}>
-                          <Button
-                            sx={{
-                              mx: 2,
-                              py: 4,
-                              color: "#42493A",
-                              display: "block",
-                              // background:"gray"
-                              borderBottom: window.location.pathname.includes(
-                                "MentalHealthCheck"
-                              )
-                                ? "4px solid #FFAACF"
-                                : "4px solid white",
-                              "&:hover": {
-                                color: "gray",
-                                backgroundColor: "white",
-                                borderBottom: "4px solid #FFAACF",
-                              },
-                              fontSize: 15,
-                              textTransform: "none",
-                            }}
-                            className={montserratBold.className}
-                          >
-                            <Grid container columns={12}>
-                              <Grid item xl={11}>
-                                {page.title}
-                              </Grid>
-                              <Grid item xl={1}>
-                                {showTooltipKO ? (
-                                  <ArrowDropUpIcon sx={{ mt: 0 }} />
-                                ) : (
-                                  <ArrowDropDownIcon sx={{ mt: 0 }} />
-                                )}
-                              </Grid>
-                            </Grid>
-                          </Button>
-                        </Link>
-                      </HtmlTooltip>
-                    </Box>
-                  ) : // DAILY HEALTH CHECK
-                  page.title == "Daily Health Check" &&
-                    login?.authorized !== false &&
-                    isDone.isDoneMHC == true ? (
-                    <Box key={page.title}>
-                      <HtmlTooltip
-                        interactive="true"
-                        open={showTooltipDHC}
-                        onOpen={() => setShowTooltipDHC(true)}
-                        onClose={() => setShowTooltipDHC(false)}
-                        TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
-                        title={
-                          <Box>
-                            <Link
-                              legacyBehavior
-                              href={"/DailyHealthCheck/RekomendasiKegiatan"}
-                            >
-                              <Typography>
-                                <MenuItem
-                                  className={montserrat.className}
-                                  sx={{ padding: "10px", fontSize: "15px" }}
-                                >
-                                  Rekomendasi Kegiatan
-                                </MenuItem>
-                              </Typography>
-                            </Link>
-                            <Link
-                              legacyBehavior
-                              href={"/DailyHealthCheck/Test"}
-                            >
-                              <Typography>
-                                <MenuItem
-                                  className={montserrat.className}
-                                  sx={{ padding: "10px", fontSize: "15px" }}
-                                >
-                                  Daily Health Test
-                                </MenuItem>
-                              </Typography>
-                            </Link>
-                          </Box>
-                        }
-                      >
-                        <Link href={page.path}>
-                          <Button
-                            sx={{
-                              mx: 2,
-                              py: 4,
-                              color: "#42493A",
-                              display: "block",
-                              borderBottom: window.location.pathname.includes(
-                                "DailyHealthCheck"
-                              )
-                                ? "4px solid #FFAACF"
-                                : "4px solid white",
-                              "&:hover": {
-                                color: "gray",
-                                backgroundColor: "white",
-                                borderBottom: "4px solid #FFAACF",
-                              },
-                              fontSize: 15,
-                              textTransform: "none",
-                            }}
-                            className={montserratBold.className}
-                          >
-                            <Grid container columns={12}>
-                              <Grid item xl={11}>
-                                {page.title}
-                              </Grid>
-                              <Grid item xl={1}>
-                                {showTooltipDHC ? (
-                                  <ArrowDropUpIcon sx={{ mt: 0 }} />
-                                ) : (
-                                  <ArrowDropDownIcon sx={{ mt: 0 }} />
-                                )}
-                              </Grid>
-                            </Grid>
-                          </Button>
-                        </Link>
-                      </HtmlTooltip>
-                    </Box>
-                  ) : // KONSULTASI ONLINE
-                  page.title == "Konsultasi Online" &&
-                    login?.authorized !== false &&
-                    isDone.isDoneMHC == true ? (
-                    <Box key={page.title}>
-                      <HtmlTooltip
-                        interactive="true"
-                        open={showTooltipKO}
-                        onOpen={() => setShowTooltipKO(true)}
-                        onClose={() => setShowTooltipKO(false)}
-                        TransitionComponent={Fade}
-                        TransitionProps={{ timeout: 300 }}
-                        title={
-                          <Box>
-                            <Link
-                              legacyBehavior
-                              href={"/KonsultasiOnline/PemesananKonsultasi"}
-                            >
-                              <Typography>
-                                <MenuItem
-                                  className={montserrat.className}
-                                  sx={{ padding: "10px", fontSize: "15px" }}
-                                >
-                                  Pemesanan Konsultasi
-                                </MenuItem>
-                              </Typography>
-                            </Link>
-                            <Link
-                              legacyBehavior
-                              href={"/KonsultasiOnline/ListKonsultasi"}
-                            >
-                              <Typography>
-                                <MenuItem
-                                  className={montserrat.className}
-                                  sx={{ padding: "10px", fontSize: "15px" }}
-                                >
-                                  Jadwal Konsultasi
-                                </MenuItem>
-                              </Typography>
-                            </Link>
-                          </Box>
-                        }
-                      >
-                        <Link href={page.path}>
-                          <Button
-                            sx={{
-                              mx: 2,
-                              py: 4,
-                              color: "#42493A",
-                              display: "block",
-                              borderBottom: window.location.pathname.includes(
-                                "KonsultasiOnline"
-                              )
-                                ? "4px solid #FFAACF"
-                                : "4px solid white",
-                              "&:hover": {
-                                color: "gray",
-                                backgroundColor: "white",
-                                borderBottom: "4px solid #FFAACF",
-                              },
-                              fontSize: 15,
-                              textTransform: "none",
-                            }}
-                            className={montserratBold.className}
-                          >
-                            <Grid container columns={12}>
-                              <Grid item xl={11}>
-                                {page.title}
-                              </Grid>
-                              <Grid item xl={1}>
-                                {showTooltipKO ? (
-                                  <ArrowDropUpIcon sx={{ mt: 0 }} />
-                                ) : (
-                                  <ArrowDropDownIcon sx={{ mt: 0 }} />
-                                )}
-                              </Grid>
-                            </Grid>
-                          </Button>
-                        </Link>
-                      </HtmlTooltip>
-                    </Box>
-                  ) : // SET AVAILABILITY
-                  page.title == "Set Availability" &&
-                    loginConsultant?.authorized == true ? (
-                    <Box key={page.title}>
-                      <Link href={page.path}>
-                        <Button
-                          sx={{
-                            mx: 2,
-                            py: 4,
-                            color: "#42493A",
-                            display: "block",
-                            borderBottom: window.location.pathname.includes(
-                              "SetAvailability"
-                            )
-                              ? "4px solid #FFAACF"
-                              : "4px solid white",
-                            "&:hover": {
-                              color: "gray",
-                              backgroundColor: "white",
-                              borderBottom: "4px solid #FFAACF",
-                            },
-                            fontSize: 15,
-                            textTransform: "none",
-                          }}
-                          className={montserratBold.className}
-                        >
-                          {page.title}
-                        </Button>
-                      </Link>
-                    </Box>
-                  ) :// SET AVAILABILITY
-                  page.title == "Patient List" &&
-                    loginConsultant?.authorized == true ? (
-                    <Box key={page.title}>
-                      <Link href={page.path}>
-                        <Button
-                          sx={{
-                            mx: 2,
-                            py: 4,
-                            color: "#42493A",
-                            display: "block",
-                            borderBottom: window.location.pathname.includes(
-                              "PatientList"
-                            )
-                              ? "4px solid #FFAACF"
-                              : "4px solid white",
-                            "&:hover": {
-                              color: "gray",
-                              backgroundColor: "white",
-                              borderBottom: "4px solid #FFAACF",
-                            },
-                            fontSize: 15,
-                            textTransform: "none",
-                          }}
-                          className={montserratBold.className}
-                        >
-                          {page.title}
-                        </Button>
-                      </Link>
-                    </Box>
-                  ) :  (
-                    <Box key={page.title}></Box>
-                  )
+    <ThemeProvider theme={theme}>
+      <div style={{}}>
+        <AppBar position="fixed" open={open}>
+          <Container maxWidth="" sx={{ backgroundColor: "white", pr: "20px" }}>
+            <Toolbar>
+              <Typography
+                sx={{
+                  mr: 2,
+                  display: { xs: "none", md: "flex" },
+                  fontWeight: 750,
+                  color: "inherit",
+                  textDecoration: "none",
+                }}
+              >
+                {isLoaded && loginConsultant?.authorized == true ? (
+                  <Link
+                    legacyBehavior
+                    href="/HomeConsultant"
+                    sx={{ cursor: "pointer" }}
+                  >
+                    <Image
+                      width={150}
+                      height={80}
+                      // component="img"
+                      style={{
+                        // width: "160px",
+                        // height: "80px",
+                        // alt: "Mind Control",
+                        margin: "15px",
+                        cursor: "pointer",
+                      }}
+                      alt=""
+                      src="/image/MCIconConsultant.png"
+                    />
+                  </Link>
+                ) : (
+                  <Link legacyBehavior href="/Home" sx={{ cursor: "pointer" }}>
+                    <Image
+                      width={160}
+                      height={80}
+                      // component="img"
+                      style={{
+                        cursor: "pointer",
+                        margin: "20px",
+                      }}
+                      alt=""
+                      src="/image/MCIcon.png"
+                    />
+                  </Link>
                 )}
-            </Box>
+              </Typography>
 
-            {/* Mental Health Bar */}
-            {isLoaded &&
-              login?.authorized == true &&
-              login?.consultant == false && (
+              <IconButton
+                color="black"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                sx={{
+                  mr: 2,
+                  ...(open && { display: "none" }),
+                  display: { xs: "flex", sm: "flex", md: "none", lg: "none" },
+                }}
+              >
+                <MenuIcon />
+              </IconButton>
+
+              {/* Side Menu  */}
+              <Box
+                sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
+              ></Box>
+
+              {/* MC Icon */}
+              <Typography
+                sx={{
+                  mr: 2,
+                  display: { xs: "flex", md: "none" },
+                  flexGrow: 1,
+                  fontWeight: 700,
+                  color: "inherit",
+                  textDecoration: "none",
+                  cursor: "pointer",
+                  zIndex: "5",
+                }}
+              >
+                {isLoaded ? (
+                  <Link legacyBehavior href="/Home" sx={{ cursor: "pointer" }}>
+                    <Image
+                      src="/image/MCIcon.png"
+                      width={160}
+                      height={80}
+                      alt="Mind Control"
+                      style={{ margin: 15 }}
+                    />
+                  </Link>
+                ) : isLoaded && loginConsultant?.authorized == true ? (
+                  <Link
+                    legacyBehavior
+                    href="/HomeConsultant"
+                    sx={{ cursor: "pointer" }}
+                  >
+                    <Image
+                      src="/image/MCIcon.png"
+                      width={160}
+                      height={80}
+                      alt="Mind Control"
+                      style={{ margin: 15 }}
+                    />
+                  </Link>
+                ) : (
+                  <></>
+                )}
+              </Typography>
+
+              {/* Nav bar options*/}
+              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                {isLoaded &&
+                  pages.map((page) =>
+                    page.title == "Mental Illness Test" &&
+                    login?.authorized !== false &&
+                    isDone.isDoneMHC == true ? (
+                      // MENTAL ILLNESS DROPDOWN MENU
+                      <Box key={page.title}>
+                        <HtmlTooltip
+                          interactive="true"
+                          open={showTooltip}
+                          onOpen={() => setShowTooltip(true)}
+                          onClose={() => setShowTooltip(false)}
+                          TransitionComponent={Fade}
+                          TransitionProps={{ timeout: 300 }}
+                          title={
+                            <Typography>
+                              {MHCData.map((item, index) => {
+                                if (item.severity >= 2)
+                                  return (
+                                    <Link
+                                      legacyBehavior
+                                      href={item.link}
+                                      key={item.title}
+                                    >
+                                      <MenuItem
+                                        className={montserrat.className}
+                                        sx={{
+                                          padding: "10px",
+                                          fontSize: "15px",
+                                          px: "30px",
+                                        }}
+                                      >
+                                        {item.title}
+                                      </MenuItem>
+                                    </Link>
+                                  );
+                              })}
+                            </Typography>
+                          }
+                        >
+                          <Link href={page.path}>
+                            <Button
+                              sx={{
+                                mx: 2,
+                                py: 4,
+                                color: "#42493A",
+                                display: "block",
+                                borderBottom: window.location.pathname.includes(
+                                  "MentalIllness"
+                                )
+                                  ? "4px solid #FFAACF"
+                                  : "4px solid white",
+                                "&:hover": {
+                                  color: "gray",
+                                  backgroundColor: "white",
+                                  borderBottom: "4px solid #FFAACF",
+                                },
+                                fontSize: 15,
+                                textTransform: "none",
+                              }}
+                              className={montserratBold.className}
+                            >
+                              <Grid container columns={12}>
+                                <Grid item xl={11}>
+                                  {page.title}
+                                </Grid>
+                                <Grid item xl={1}>
+                                  {showTooltip ? (
+                                    <ArrowDropUpIcon sx={{ mt: 0 }} />
+                                  ) : (
+                                    <ArrowDropDownIcon sx={{ mt: 0 }} />
+                                  )}
+                                </Grid>
+                              </Grid>
+                            </Button>
+                          </Link>
+                        </HtmlTooltip>
+                      </Box>
+                    ) : // MENTAL HEALTH CHECK
+                    page.title == "Mental Health Check" &&
+                      login?.authorized == true &&
+                      isDone.isDoneMHC == true ? (
+                      <Box key={page.title}>
+                        <HtmlTooltip
+                          interactive="true"
+                          open={showTooltipMHC}
+                          onOpen={() => setShowTooltipMHC(true)}
+                          onClose={() => setShowTooltipMHC(false)}
+                          TransitionComponent={Fade}
+                          TransitionProps={{ timeout: 300 }}
+                          title={
+                            <Link
+                              legacyBehavior
+                              href={"/MentalHealthCheck/Result"}
+                            >
+                              <Typography>
+                                <MenuItem
+                                  className={montserrat.className}
+                                  sx={{ px: "50px", fontSize: "15px" }}
+                                >
+                                  Hasil Tes
+                                </MenuItem>
+                              </Typography>
+                            </Link>
+                          }
+                        >
+                          <Link href={page.path}>
+                            <Button
+                              sx={{
+                                mx: 2,
+                                py: 4,
+                                color: "#42493A",
+                                display: "block",
+                                // background:"gray"
+                                borderBottom: window.location.pathname.includes(
+                                  "MentalHealthCheck"
+                                )
+                                  ? "4px solid #FFAACF"
+                                  : "4px solid white",
+                                "&:hover": {
+                                  color: "gray",
+                                  backgroundColor: "white",
+                                  borderBottom: "4px solid #FFAACF",
+                                },
+                                fontSize: 15,
+                                textTransform: "none",
+                              }}
+                              className={montserratBold.className}
+                            >
+                              <Grid container columns={12}>
+                                <Grid item xl={11}>
+                                  {page.title}
+                                </Grid>
+                                <Grid item xl={1}>
+                                  {showTooltipKO ? (
+                                    <ArrowDropUpIcon sx={{ mt: 0 }} />
+                                  ) : (
+                                    <ArrowDropDownIcon sx={{ mt: 0 }} />
+                                  )}
+                                </Grid>
+                              </Grid>
+                            </Button>
+                          </Link>
+                        </HtmlTooltip>
+                      </Box>
+                    ) : // DAILY HEALTH CHECK
+                    page.title == "Daily Health Check" &&
+                      login?.authorized !== false &&
+                      isDone.isDoneMHC == true ? (
+                      <Box key={page.title}>
+                        <HtmlTooltip
+                          interactive="true"
+                          open={showTooltipDHC}
+                          onOpen={() => setShowTooltipDHC(true)}
+                          onClose={() => setShowTooltipDHC(false)}
+                          TransitionComponent={Fade}
+                          TransitionProps={{ timeout: 300 }}
+                          title={
+                            <Box>
+                              <Link
+                                legacyBehavior
+                                href={"/DailyHealthCheck/RekomendasiKegiatan"}
+                              >
+                                <Typography>
+                                  <MenuItem
+                                    className={montserrat.className}
+                                    sx={{ padding: "10px", fontSize: "15px" }}
+                                  >
+                                    Rekomendasi Kegiatan
+                                  </MenuItem>
+                                </Typography>
+                              </Link>
+                              <Link
+                                legacyBehavior
+                                href={"/DailyHealthCheck/Test"}
+                              >
+                                <Typography>
+                                  <MenuItem
+                                    className={montserrat.className}
+                                    sx={{ padding: "10px", fontSize: "15px" }}
+                                  >
+                                    Daily Health Test
+                                  </MenuItem>
+                                </Typography>
+                              </Link>
+                            </Box>
+                          }
+                        >
+                          <Link href={page.path}>
+                            <Button
+                              sx={{
+                                mx: 2,
+                                py: 4,
+                                color: "#42493A",
+                                display: "block",
+                                borderBottom: window.location.pathname.includes(
+                                  "DailyHealthCheck"
+                                )
+                                  ? "4px solid #FFAACF"
+                                  : "4px solid white",
+                                "&:hover": {
+                                  color: "gray",
+                                  backgroundColor: "white",
+                                  borderBottom: "4px solid #FFAACF",
+                                },
+                                fontSize: 15,
+                                textTransform: "none",
+                              }}
+                              className={montserratBold.className}
+                            >
+                              <Grid container columns={12}>
+                                <Grid item xl={11}>
+                                  {page.title}
+                                </Grid>
+                                <Grid item xl={1}>
+                                  {showTooltipDHC ? (
+                                    <ArrowDropUpIcon sx={{ mt: 0 }} />
+                                  ) : (
+                                    <ArrowDropDownIcon sx={{ mt: 0 }} />
+                                  )}
+                                </Grid>
+                              </Grid>
+                            </Button>
+                          </Link>
+                        </HtmlTooltip>
+                      </Box>
+                    ) : // KONSULTASI ONLINE
+                    page.title == "Konsultasi Online" &&
+                      login?.authorized !== false &&
+                      isDone.isDoneMHC == true ? (
+                      <Box key={page.title}>
+                        <HtmlTooltip
+                          interactive="true"
+                          open={showTooltipKO}
+                          onOpen={() => setShowTooltipKO(true)}
+                          onClose={() => setShowTooltipKO(false)}
+                          TransitionComponent={Fade}
+                          TransitionProps={{ timeout: 300 }}
+                          title={
+                            <Box>
+                              <Link
+                                legacyBehavior
+                                href={"/KonsultasiOnline/PemesananKonsultasi"}
+                              >
+                                <Typography>
+                                  <MenuItem
+                                    className={montserrat.className}
+                                    sx={{ padding: "10px", fontSize: "15px" }}
+                                  >
+                                    Pemesanan Konsultasi
+                                  </MenuItem>
+                                </Typography>
+                              </Link>
+                              <Link
+                                legacyBehavior
+                                href={"/KonsultasiOnline/ListKonsultasi"}
+                              >
+                                <Typography>
+                                  <MenuItem
+                                    className={montserrat.className}
+                                    sx={{ padding: "10px", fontSize: "15px" }}
+                                  >
+                                    Jadwal Konsultasi
+                                  </MenuItem>
+                                </Typography>
+                              </Link>
+                            </Box>
+                          }
+                        >
+                          <Link href={page.path}>
+                            <Button
+                              sx={{
+                                mx: 2,
+                                py: 4,
+                                color: "#42493A",
+                                display: "block",
+                                borderBottom: window.location.pathname.includes(
+                                  "KonsultasiOnline"
+                                )
+                                  ? "4px solid #FFAACF"
+                                  : "4px solid white",
+                                "&:hover": {
+                                  color: "gray",
+                                  backgroundColor: "white",
+                                  borderBottom: "4px solid #FFAACF",
+                                },
+                                fontSize: 15,
+                                textTransform: "none",
+                              }}
+                              className={montserratBold.className}
+                            >
+                              <Grid container columns={12}>
+                                <Grid item xl={11}>
+                                  {page.title}
+                                </Grid>
+                                <Grid item xl={1}>
+                                  {showTooltipKO ? (
+                                    <ArrowDropUpIcon sx={{ mt: 0 }} />
+                                  ) : (
+                                    <ArrowDropDownIcon sx={{ mt: 0 }} />
+                                  )}
+                                </Grid>
+                              </Grid>
+                            </Button>
+                          </Link>
+                        </HtmlTooltip>
+                      </Box>
+                    ) : // SET AVAILABILITY
+                    page.title == "Set Availability" &&
+                      loginConsultant?.authorized == true ? (
+                      <Box key={page.title}>
+                        <Link href={page.path}>
+                          <Button
+                            sx={{
+                              mx: 2,
+                              py: 4,
+                              color: "#42493A",
+                              display: "block",
+                              borderBottom: window.location.pathname.includes(
+                                "SetAvailability"
+                              )
+                                ? "4px solid #FFAACF"
+                                : "4px solid white",
+                              "&:hover": {
+                                color: "gray",
+                                backgroundColor: "white",
+                                borderBottom: "4px solid #FFAACF",
+                              },
+                              fontSize: 15,
+                              textTransform: "none",
+                            }}
+                            className={montserratBold.className}
+                          >
+                            {page.title}
+                          </Button>
+                        </Link>
+                      </Box>
+                    ) : // SET AVAILABILITY
+                    page.title == "Patient List" &&
+                      loginConsultant?.authorized == true ? (
+                      <Box key={page.title}>
+                        <Link href={page.path}>
+                          <Button
+                            sx={{
+                              mx: 2,
+                              py: 4,
+                              color: "#42493A",
+                              display: "block",
+                              borderBottom: window.location.pathname.includes(
+                                "PatientList"
+                              )
+                                ? "4px solid #FFAACF"
+                                : "4px solid white",
+                              "&:hover": {
+                                color: "gray",
+                                backgroundColor: "white",
+                                borderBottom: "4px solid #FFAACF",
+                              },
+                              fontSize: 15,
+                              textTransform: "none",
+                            }}
+                            className={montserratBold.className}
+                          >
+                            {page.title}
+                          </Button>
+                        </Link>
+                      </Box>
+                    ) : (
+                      <Box key={page.title}></Box>
+                    )
+                  )}
+              </Box>
+
+              {/* Mental Health Bar */}
+              {isLoaded &&
+                login?.authorized == true &&
+                login?.consultant == false && (
+                  <HtmlTooltip
+                    sx={{
+                      [`& .${tooltipClasses.tooltip}`]: {
+                        maxWidth: 400,
+                      },
+                    }}
+                    TransitionComponent={Fade}
+                    TransitionProps={{ timeout: 400 }}
+                    title={
+                      <Box>
+                        <Typography className={montserrat.className}>
+                          Mental Health Points: {login?.MHpoints}
+                        </Typography>
+
+                        {login?.MHpoints == 100 ? (
+                          <Box sx={{}}>
+                            <Typography
+                              className={montserrat.className}
+                              sx={{ fontSize: "13px" }}
+                            >
+                              <b style={{ color: "black" }}>
+                                Mental Health Points anda sudah mencapai 100!
+                              </b>
+                              <br />
+                              Silahkan mengklaim konsultasi gratis anda dibawah
+                              ini!
+                            </Typography>
+                            <Box sx={{ textAlign: "center", mt: "5px" }}>
+                              <Button
+                                className={montserrat.className}
+                                sx={{
+                                  textTransform: "none",
+                                  color: "white",
+                                  bgcolor: "#3DB388",
+                                  textAlign: "center",
+                                  width: "100%",
+                                  "&:hover": {
+                                    bgcolor: "#8AEC9F",
+                                    color: "black",
+                                  },
+                                }}
+                                onClick={claimConsultationHandler}
+                              >
+                                Klaim Konsultasi Gratis
+                              </Button>
+                            </Box>
+                          </Box>
+                        ) : (
+                          <Typography
+                            className={montserrat.className}
+                            sx={{ fontSize: "13px" }}
+                          >
+                            <b style={{ color: "black" }}>
+                              Setiap Daily Health Test yang dilakukan secara
+                              berturut akan menambahkan 20 poin.
+                            </b>
+                            <br />
+                            <br />
+                            Saat poin mencapai 100, Anda akan mendapatkan sesi
+                            konsultasi <b style={{ color: "red" }}>
+                              GRATIS
+                            </b>{" "}
+                            <br />
+                            <br />
+                            Poin akan menjadi 0 lagi ketika sudah mengklaim
+                            konsultasi gratis atau <i>streak</i> Daily Health
+                            Test berakhir
+                          </Typography>
+                        )}
+                      </Box>
+                    }
+                  >
+                    <Box
+                      sx={{
+                        marginBottom: "14px",
+                        display: {
+                          xs: "none",
+                          sm: "none",
+                          md: "none",
+                          lg: "flex",
+                        },
+                      }}
+                    >
+                      <FavoriteIcon
+                        sx={{
+                          color: "red",
+                          marginRight: "10px",
+                          marginTop: "17px",
+                        }}
+                      />
+                      <Box sx={{ marginTop: "0px  " }}>
+                        <Typography
+                          sx={{ color: "black", fontSize: "13px" }}
+                          className={montserrat.className}
+                        >
+                          Mental Health Bar
+                        </Typography>
+                        {login?.MHpoints == 100 ? (
+                          <LineProgressBar
+                            rounded={36}
+                            height={20}
+                            width={300}
+                            percent={login?.MHpoints}
+                            transition={{ easing: "linear" }}
+                            progressColor="linear-gradient(to left, #A3FFA6,#8AEC9F,#70D997,#57C690 )"
+                          />
+                        ) : (
+                          <LineProgressBar
+                            rounded={36}
+                            height={20}
+                            width={300}
+                            percent={login?.MHpoints}
+                            transition={{ easing: "linear" }}
+                            progressColor="linear-gradient(to right, #FF6962, #FF7974, #FF8986, #FF9997, #FFA9A9)"
+                          />
+                        )}
+                      </Box>
+                    </Box>
+                  </HtmlTooltip>
+                )}
+
+              {/* Profile Avatar */}
+              {isLoaded &&
+                (login?.authorized == true ||
+                  loginConsultant?.authorized == true) && (
+                  <Box sx={{ ml: "30px" }}>
+                    <IconButton
+                      id="basic-button"
+                      aria-controls={openAvatar ? "basic-menu" : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={openAvatar ? "true" : undefined}
+                      onClick={handleClick}
+                    >
+                      <Avatar />
+                    </IconButton>
+                    <Menu
+                      anchorEl={anchorEl}
+                      open={openAvatar}
+                      onClose={handleClose}
+                      anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "right",
+                      }}
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "left",
+                      }}
+                    >
+                      {login?.authorized == true ? (
+                        <Typography
+                          className={montserrat.className}
+                          style={{
+                            textAlign: "center",
+                            padding: "10px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {login.fullname}
+                        </Typography>
+                      ) : loginConsultant?.authorized == true ? (
+                        <Typography
+                          className={montserrat.className}
+                          style={{
+                            textAlign: "center",
+                            padding: "10px",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {loginConsultant.fullname}
+                        </Typography>
+                      ) : (
+                        <Typography></Typography>
+                      )}
+                      {login?.authorized && (
+                        <Link href="/TransactionHistory">
+                          <MenuItem>
+                            <HistoryIcon sx={{ fontSize: "18px", mr: "7px" }} />
+                            <Typography
+                              className={montserrat.className}
+                              sx={{ textAlign: "center" }}
+                            >
+                              Transaction History
+                            </Typography>
+                          </MenuItem>
+                        </Link>
+                      )}
+
+                      <MenuItem onClick={handleLogout}>
+                        <LogoutIcon sx={{ fontSize: "18px", mr: "7px" }} />
+                        <Typography
+                          className={montserrat.className}
+                          sx={{ textAlign: "center" }}
+                        >
+                          Logout
+                        </Typography>
+                      </MenuItem>
+                    </Menu>
+                  </Box>
+                )}
+
+              {/* Login Button */}
+              {isLoaded &&
+                login?.authorized == false &&
+                loginConsultant?.authorized == false && (
+                  <Link legacyBehavior href="/Login">
+                    <Button
+                      variant="outlined"
+                      sx={{
+                        color: "#FFAACF",
+                        borderColor: "#FFAACF",
+                        "&:hover": {
+                          color: "#EA8FEA",
+                          backgroundColor: "white",
+                          borderColor: "#EA8FEA",
+                        },
+                      }}
+                    >
+                      Log In
+                    </Button>
+                  </Link>
+                )}
+            </Toolbar>
+          </Container>
+        </AppBar>
+
+        {/* Side Bar */}
+        <Drawer
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            "& .MuiDrawer-paper": {
+              width: drawerWidth,
+              boxSizing: "border-box",
+            },
+          }}
+          variant="persistent"
+          anchor="left"
+          open={open}
+        >
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === "ltr" ? (
+                <ChevronLeftIcon />
+              ) : (
+                <ChevronRightIcon />
+              )}
+            </IconButton>
+          </DrawerHeader>
+          <Divider />
+
+          {isLoaded &&
+            login?.authorized != false &&
+            login?.consultant == false && (
+              <Box
+                sx={{
+                  py: "10px",
+                  alignContent: "center",
+                  margin: "0 auto",
+                  textAlign: "center",
+                  display: {
+                    lg: "flex",
+                  },
+                }}
+              >
+                <Typography
+                  className={montserrat.className}
+                  sx={{ fontSize: "15px" }}
+                >
+                  Mental Health Points: {login?.MHpoints}
+                </Typography>
                 <HtmlTooltip
                   sx={{
                     [`& .${tooltipClasses.tooltip}`]: {
-                      maxWidth: 400,
+                      maxWidth: 200,
                     },
                   }}
-                  TransitionComponent={Fade}
-                  TransitionProps={{ timeout: 400 }}
                   title={
                     <Box>
                       <Typography className={montserrat.className}>
                         Mental Health Points: {login?.MHpoints}
                       </Typography>
 
-                      {login?.MHpoints == 100 ? (
-                        <Box sx={{}}>
-                          <Typography
-                            className={montserrat.className}
-                            sx={{ fontSize: "13px" }}
-                          >
-                            <b style={{ color: "black" }}>
-                              Mental Health Points anda sudah mencapai 100!
-                            </b>
-                            <br />
-                            Silahkan mengklaim konsultasi gratis anda dibawah
-                            ini!
-                          </Typography>
-                          <Box sx={{ textAlign: "center", mt: "5px" }}>
-                            <Button
-                              className={montserrat.className}
-                              sx={{
-                                textTransform: "none",
-                                color: "white",
-                                bgcolor: "#3DB388",
-                                textAlign: "center",
-                                width: "100%",
-                                "&:hover": {
-                                  bgcolor: "#8AEC9F",
-                                  color: "black",
-                                },
-                              }}
-                              onClick={claimConsultationHandler}
-                            >
-                              Klaim Konsultasi Gratis
-                            </Button>
-                          </Box>
-                        </Box>
-                      ) : (
-                        <Typography
-                          className={montserrat.className}
-                          sx={{ fontSize: "13px" }}
-                        >
-                          <b style={{ color: "black" }}>
-                            Setiap Daily Health Test yang dilakukan secara
-                            berturut akan menambahkan 20 poin.
-                          </b>
-                          <br />
-                          <br />
-                          Saat poin mencapai 100, Anda akan mendapatkan sesi
-                          konsultasi <b style={{ color: "red" }}>GRATIS</b>{" "}
-                          <br />
-                          <br />
-                          Poin akan menjadi 0 lagi ketika sudah mengklaim
-                          konsultasi gratis atau <i>streak</i> Daily Health Test
-                          berakhir
-                        </Typography>
-                      )}
+                      <Typography
+                        className={montserrat.className}
+                        sx={{ fontSize: "13px" }}
+                      >
+                        <br />
+                        Setiap{" "}
+                        <b style={{ color: "black" }}>
+                          Daily Health Check
+                        </b>{" "}
+                        yang dilakukan secara <b>berturut</b> akan menambahkan
+                        poin.
+                        <br />
+                        <br />
+                        Saat poin mencapai 100, Anda akan mendapatkan sesi
+                        konsultasi <b style={{ color: "red" }}>GRATIS</b> <br />
+                        <br />
+                        Poin akan menjadi 0 lagi ketika sudah mengklaim
+                        konsultasi gratis atau <i>streak</i> Daily Health Check
+                        berakhir
+                      </Typography>
                     </Box>
                   }
                 >
                   <Box
                     sx={{
-                      marginBottom: "14px",
                       display: {
-                        xs: "none",
-                        sm: "none",
-                        md: "none",
                         lg: "flex",
                       },
                     }}
                   >
-                    <FavoriteIcon
-                      sx={{
-                        color: "red",
-                        marginRight: "10px",
-                        marginTop: "17px",
-                      }}
+                    <LineProgressBar
+                      rounded={36}
+                      height={20}
+                      width={220}
+                      percent={login?.MHpoints}
+                      transition={{ easing: "linear" }}
+                      progressColor="linear-gradient(to right, #FF6962, #FF7974, #FF8986, #FF9997, #FFA9A9)"
                     />
-                    <Box sx={{ marginTop: "0px  " }}>
-                      <Typography
-                        sx={{ color: "black", fontSize: "13px" }}
-                        className={montserrat.className}
-                      >
-                        Mental Health Bar
-                      </Typography>
-                      {login?.MHpoints == 100 ? (
-                        <LineProgressBar
-                          rounded={36}
-                          height={20}
-                          width={300}
-                          percent={login?.MHpoints}
-                          transition={{ easing: "linear" }}
-                          progressColor="linear-gradient(to left, #A3FFA6,#8AEC9F,#70D997,#57C690 )"
-                        />
-                      ) : (
-                        <LineProgressBar
-                          rounded={36}
-                          height={20}
-                          width={300}
-                          percent={login?.MHpoints}
-                          transition={{ easing: "linear" }}
-                          progressColor="linear-gradient(to right, #FF6962, #FF7974, #FF8986, #FF9997, #FFA9A9)"
-                        />
-                      )}
-                    </Box>
                   </Box>
                 </HtmlTooltip>
-              )}
-
-            {/* Profile Avatar */}
-            {isLoaded &&
-              (login?.authorized == true ||
-                loginConsultant?.authorized == true) && (
-                <Box sx={{ ml: "30px" }}>
-                  <IconButton
-                    id="basic-button"
-                    aria-controls={openAvatar ? "basic-menu" : undefined}
-                    aria-haspopup="true"
-                    aria-expanded={openAvatar ? "true" : undefined}
-                    onClick={handleClick}
-                  >
-                    <Avatar />
-                  </IconButton>
-                  <Menu
-                    anchorEl={anchorEl}
-                    open={openAvatar}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "right",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                  >
-                    {login?.authorized == true ? (
-                      <Typography
-                        className={montserrat.className}
-                        style={{
-                          textAlign: "center",
-                          padding: "10px",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        {login.fullname}
-                      </Typography>
-                    ) : loginConsultant?.authorized == true ? (
-                      <Typography
-                        className={montserrat.className}
-                        style={{
-                          textAlign: "center",
-                          padding: "10px",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        {loginConsultant.fullname}
-                      </Typography>
-                    ) : (
-                      <Typography></Typography>
-                    )}
-                    {login?.authorized && (
-                      <Link href="/TransactionHistory">
-                        <MenuItem>
-                          <HistoryIcon sx={{ fontSize: "18px", mr: "7px" }} />
-                          <Typography
-                            className={montserrat.className}
-                            sx={{ textAlign: "center" }}
-                          >
-                            Transaction History
-                          </Typography>
-                        </MenuItem>
-                      </Link>
-                    )}
-
-                    <MenuItem onClick={handleLogout}>
-                      <LogoutIcon sx={{ fontSize: "18px", mr: "7px" }} />
-                      <Typography
-                        className={montserrat.className}
-                        sx={{ textAlign: "center" }}
-                      >
-                        Logout
-                      </Typography>
-                    </MenuItem>
-                  </Menu>
-                </Box>
-              )}
-
-            {/* Login Button */}
-            {isLoaded &&
-              login?.authorized == false &&
-              loginConsultant?.authorized == false && (
-                <Link legacyBehavior href="/Login">
-                  <Button
-                    variant="outlined"
-                    sx={{
-                      color: "#FFAACF",
-                      borderColor: "#FFAACF",
-                      "&:hover": {
-                        color: "#EA8FEA",
-                        backgroundColor: "white",
-                        borderColor: "#EA8FEA",
-                      },
-                    }}
-                  >
-                    Log In
-                  </Button>
-                </Link>
-              )}
-          </Toolbar>
-        </Container>
-      </AppBar>
-
-      {/* Side Bar */}
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box",
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
-      >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? (
-              <ChevronLeftIcon />
-            ) : (
-              <ChevronRightIcon />
+              </Box>
             )}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
 
-        {isLoaded &&
-          login?.authorized != false &&
-          login?.consultant == false && (
-            <Box
-              sx={{
-                py: "10px",
-                alignContent: "center",
-                margin: "0 auto",
-                textAlign: "center",
-                display: {
-                  lg: "flex",
-                },
-              }}
-            >
-              <Typography
-                className={montserrat.className}
-                sx={{ fontSize: "15px" }}
-              >
-                Mental Health Points: {login?.MHpoints}
-              </Typography>
-              <HtmlTooltip
-                sx={{
-                  [`& .${tooltipClasses.tooltip}`]: {
-                    maxWidth: 200,
-                  },
-                }}
-                title={
-                  <Box>
-                    <Typography className={montserrat.className}>
-                      Mental Health Points: {login?.MHpoints}
-                    </Typography>
+          <Divider />
+        </Drawer>
+        <Main open={open}>
+          <DrawerHeader />
+        </Main>
 
-                    <Typography
-                      className={montserrat.className}
-                      sx={{ fontSize: "13px" }}
-                    >
-                      <br />
-                      Setiap{" "}
-                      <b style={{ color: "black" }}>Daily Health Check</b> yang
-                      dilakukan secara <b>berturut</b> akan menambahkan poin.
-                      <br />
-                      <br />
-                      Saat poin mencapai 100, Anda akan mendapatkan sesi
-                      konsultasi <b style={{ color: "red" }}>GRATIS</b> <br />
-                      <br />
-                      Poin akan menjadi 0 lagi ketika sudah mengklaim konsultasi
-                      gratis atau <i>streak</i> Daily Health Check berakhir
-                    </Typography>
-                  </Box>
-                }
-              >
-                <Box
-                  sx={{
-                    display: {
-                      lg: "flex",
-                    },
-                  }}
-                >
-                  <LineProgressBar
-                    rounded={36}
-                    height={20}
-                    width={220}
-                    percent={login?.MHpoints}
-                    transition={{ easing: "linear" }}
-                    progressColor="linear-gradient(to right, #FF6962, #FF7974, #FF8986, #FF9997, #FFA9A9)"
-                  />
-                </Box>
-              </HtmlTooltip>
-            </Box>
-          )}
-
-        <Divider />
-      </Drawer>
-      <Main open={open}>
-        <DrawerHeader />
-      </Main>
-
-      {/* BreadCrumbs */}
-      {/* <Breadcrumbs omitRootLabel containerStyle={{}} /> */}
-    </div>
+        {/* BreadCrumbs */}
+        {/* <Breadcrumbs omitRootLabel containerStyle={{}} /> */}
+      </div>
+    </ThemeProvider>
   );
 }

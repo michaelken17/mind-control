@@ -27,6 +27,7 @@ import {
   Radio,
   Typography,
   circularProgressClasses,
+  createTheme,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -45,7 +46,7 @@ import {
   montserratExtraBold,
   montserratLight,
   montserratBold,
-} from "../../public/fonts";
+} from "fonts";
 import Swal from "sweetalert2";
 import { useRouter } from "next/router";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -76,6 +77,7 @@ import {
   CategoryScale,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { ThemeProvider } from "@emotion/react";
 
 var updateLocale = require("dayjs/plugin/updateLocale");
 dayjs.extend(updateLocale);
@@ -114,10 +116,21 @@ Chart.register(
   BarElement
 );
 const today = dayjs();
+const theme = createTheme({
+  typography: {
+    fontFamily: montserrat,
+  },
+  button: {
+    fontFamily: montserrat,
+  },
+  link: {
+    fontFamily: montserrat,
+  },
+});
+
 export default function PatientList() {
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
-  const theme = useTheme();
   const [listPatientData, setlistPatientData] = useState([]);
   const [timeDiff, setTimeDiff] = useState(0);
   const [timeDiffArr, setTimeDiffArr] = useState([]);
@@ -235,7 +248,8 @@ export default function PatientList() {
   const mhcDataHandler = (val) => {
     axios
       .get(
-        "https://localhost:7184/api/Consultant/GetMHCSeverity?userID=" +
+        process.env.NEXT_PUBLIC_BACKEND_URL +
+          "/api/Consultant/GetMHCSeverity?userID=" +
           val.userID
       )
       .then((resp) => {
@@ -269,7 +283,8 @@ export default function PatientList() {
 
         axios
           .put(
-            "https://localhost:7184/api/Consultant/UpdateStatusListPatient?UserID=" +
+            process.env.NEXT_PUBLIC_BACKEND_URL +
+              "/api/Consultant/UpdateStatusListPatient?UserID=" +
               val.userID +
               "&status=ongoing"
           )
@@ -304,7 +319,8 @@ export default function PatientList() {
 
         axios
           .put(
-            "https://localhost:7184/api/Consultant/UpdateStatusListPatient?UserID=" +
+            process.env.NEXT_PUBLIC_BACKEND_URL +
+              "/api/Consultant/UpdateStatusListPatient?UserID=" +
               val.userID +
               "&status=done"
           )
@@ -313,7 +329,8 @@ export default function PatientList() {
           });
 
         axios.put(
-          "https://localhost:7184/api/Consultant/UpdateIsActiveListPatient?UserID=" +
+          process.env.NEXT_PUBLIC_BACKEND_URL +
+            "/api/Consultant/UpdateIsActiveListPatient?UserID=" +
             login.userid
         );
 
@@ -325,7 +342,8 @@ export default function PatientList() {
   useEffect(() => {
     axios
       .get(
-        "https://localhost:7184/api/Consultant/GetListPatientForConsultant?ConsultantID=" +
+        process.env.NEXT_PUBLIC_BACKEND_URL +
+          "/api/Consultant/GetListPatientForConsultant?ConsultantID=" +
           loginConsultant.consultantid
       )
       .then((resp) => {
@@ -353,128 +371,105 @@ export default function PatientList() {
   }, [timeDiffArr]);
 
   return (
-    <Container component="main" maxWidth="lg" sx={{}}>
-      {isLoaded && (
-        <motion.div
-          style={{
-            // padding: "10px",
-            borderRadius: 10,
-            fontSize: 20,
-            height: "100%",
-            marginTop: "15px",
-            //  border: "1px solid",
-            textAlign: "center",
-            justifyItems: "center",
-            color: "black",
-          }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{
-            duration: 0.8,
-            delay: 0,
-          }}
-          exit={{ opacity: 0 }}
-        >
-          <Box
-            sx={{
-              background: "white",
-              padding: "20px",
+    <ThemeProvider theme={theme}>
+      {" "}
+      <Container component="main" maxWidth="lg" sx={{}}>
+        {isLoaded && (
+          <motion.div
+            style={{
+              // padding: "10px",
               borderRadius: 10,
-              // overflow: "auto",
+              fontSize: 20,
+              height: "100%",
+              marginTop: "15px",
+              //  border: "1px solid",
+              textAlign: "center",
+              justifyItems: "center",
+              color: "black",
             }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              duration: 0.8,
+              delay: 0,
+            }}
+            exit={{ opacity: 0 }}
           >
-            <Box>
+            <Box
+              sx={{
+                background: "white",
+                padding: "20px",
+                borderRadius: 10,
+                // overflow: "auto",
+              }}
+            >
               <Box>
-                <Typography
-                  sx={{
-                    fontSize: { xl: "20px", md: "19px", xs: "17px" },
-                    color: "black",
-                    textAlign: "left",
-                  }}
-                  className={montserratExtraBold.className}
-                >
-                  Jadwal Konsultasi
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: {
-                      lg: "17px",
-                      xl: "17px",
-                      md: "15px",
-                      sm: "15px",
-                      xs: "13px",
-                    },
-                    color: "black",
-                    textAlign: "left",
-                  }}
-                  className={montserrat.className}
-                >
-                  Berikut adalah jadwal konsultasi bersama pasien
-                </Typography>
-              </Box>
-              <Box>
-                {" "}
-                {listPatientData.length == 0 ? (
+                <Box>
                   <Typography
                     sx={{
-                      fontSize: { xl: "30px", md: "19px", xs: "17px" },
+                      fontSize: { xl: "20px", md: "19px", xs: "17px" },
                       color: "black",
                       textAlign: "left",
-                      mt:"20px"
                     }}
                     className={montserratExtraBold.className}
                   >
-                    Tidak ada jadwal konsultasi.
+                    Jadwal Konsultasi
                   </Typography>
-                ) : (
-                  listPatientData.map((val, index) => (
-                    <Box
-                      key={val.fullNamePatient}
+                  <Typography
+                    sx={{
+                      fontSize: {
+                        lg: "17px",
+                        xl: "17px",
+                        md: "15px",
+                        sm: "15px",
+                        xs: "13px",
+                      },
+                      color: "black",
+                      textAlign: "left",
+                    }}
+                    className={montserrat.className}
+                  >
+                    Berikut adalah jadwal konsultasi bersama pasien
+                  </Typography>
+                </Box>
+                <Box>
+                  {" "}
+                  {listPatientData.length == 0 ? (
+                    <Typography
                       sx={{
-                        display: "flex",
-                        textAlign: "center",
-                        justifyContent: "center",
-                        marginTop: "30px",
+                        fontSize: { xl: "30px", md: "19px", xs: "17px" },
+                        color: "black",
+                        textAlign: "left",
+                        mt: "20px",
                       }}
+                      className={montserratExtraBold.className}
                     >
-                      <Card
+                      Tidak ada jadwal konsultasi.
+                    </Typography>
+                  ) : (
+                    listPatientData.map((val, index) => (
+                      <Box
+                        key={val.fullNamePatient}
                         sx={{
-                          width: "100%",
-                          textAlign: "left",
-                          borderRadius: "10px",
+                          display: "flex",
+                          textAlign: "center",
+                          justifyContent: "center",
+                          marginTop: "30px",
                         }}
-                        raised
                       >
-                        <CardHeader
-                          sx={{ padding: "10px" }}
-                          title={
-                            <Box sx={{ display: "flex" }}>
-                              <PersonIcon
-                                sx={{
-                                  fontSize: "17px",
-                                  mt: "2px",
-                                  mr: "5px",
-                                  ml: "10px",
-                                  color: "black",
-                                }}
-                              />
-                              <Typography
-                                className={montserratExtraBold.className}
-                              >
-                                Nama pasien:
-                              </Typography>
-                              <Typography
-                                className={montserrat.className}
-                                sx={{ ml: "7px" }}
-                              >
-                                {val.fullNamePatient}
-                              </Typography>
-                            </Box>
-                          }
-                          subheader={
-                            <Fragment>
+                        <Card
+                          sx={{
+                            width: "100%",
+                            textAlign: "left",
+                            borderRadius: "10px",
+                          }}
+                          raised
+                        >
+                          <CardHeader
+                            sx={{ padding: "10px" }}
+                            title={
                               <Box sx={{ display: "flex" }}>
-                                <AccessTimeFilledIcon
+                                <PersonIcon
                                   sx={{
                                     fontSize: "17px",
                                     mt: "2px",
@@ -485,181 +480,152 @@ export default function PatientList() {
                                 />
                                 <Typography
                                   className={montserratExtraBold.className}
-                                  sx={{ color: "black" }}
                                 >
-                                  Jadwal konseling:
+                                  Nama pasien:
                                 </Typography>
-
                                 <Typography
                                   className={montserrat.className}
-                                  sx={{
-                                    fontSize: "16px",
-                                    mb: "5px",
-                                    color: "black",
-                                    ml: "10px",
-                                  }}
+                                  sx={{ ml: "7px" }}
                                 >
-                                  {dayjs(val.tanggalPertemuan).format(
-                                    "dddd, DD MMMM HH:mm"
-                                  )}{" "}
-                                  -{" "}
-                                  {dayjs(val.tanggalPertemuan)
-                                    .add(1, "hour")
-                                    .format("HH:mm")}
+                                  {val.fullNamePatient}
                                 </Typography>
                               </Box>
-                              <Box>
-                                <Accordion
-                                  onChange={(x) => mhcDataHandler(val)}
-                                >
-                                  <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel1a-content"
-                                    id="panel1a-header"
+                            }
+                            subheader={
+                              <Fragment>
+                                <Box sx={{ display: "flex" }}>
+                                  <AccessTimeFilledIcon
+                                    sx={{
+                                      fontSize: "17px",
+                                      mt: "2px",
+                                      mr: "5px",
+                                      ml: "10px",
+                                      color: "black",
+                                    }}
+                                  />
+                                  <Typography
+                                    className={montserratExtraBold.className}
+                                    sx={{ color: "black" }}
                                   >
-                                    <Typography
-                                      className={montserrat.className}
-                                    >
-                                      Hasil Mental Health Check
-                                    </Typography>
-                                  </AccordionSummary>
-                                  <AccordionDetails>
-                                    <Typography
-                                      sx={{
-                                        fontSize: "15px",
-                                        color: "black",
-                                        textAlign: "center",
-                                      }}
-                                      className={montserrat.className}
-                                    >
-                                      Grafik Tingkat Keparahan Mental Illness
-                                    </Typography>
+                                    Jadwal konseling:
+                                  </Typography>
 
-                                    {/* GRAPH */}
-                                    <Grid
-                                      container
-                                      sx={{
-                                        textAlign: "center",
-                                        justifyContent: "center",
-                                      }}
-                                      column={2}
+                                  <Typography
+                                    className={montserrat.className}
+                                    sx={{
+                                      fontSize: "16px",
+                                      mb: "5px",
+                                      color: "black",
+                                      ml: "10px",
+                                    }}
+                                  >
+                                    {dayjs(val.tanggalPertemuan).format(
+                                      "dddd, DD MMMM HH:mm"
+                                    )}{" "}
+                                    -{" "}
+                                    {dayjs(val.tanggalPertemuan)
+                                      .add(1, "hour")
+                                      .format("HH:mm")}
+                                  </Typography>
+                                </Box>
+                                <Box>
+                                  <Accordion
+                                    onChange={(x) => mhcDataHandler(val)}
+                                  >
+                                    <AccordionSummary
+                                      expandIcon={<ExpandMoreIcon />}
+                                      aria-controls="panel1a-content"
+                                      id="panel1a-header"
                                     >
-                                      <Bar
+                                      <Typography
                                         className={montserrat.className}
-                                        data={data}
-                                        options={optionsBar}
-                                        style={{
-                                          // display: "block",
-                                          // marginLeft: "auto",
-                                          // marginRight: "auto",
-                                          width: "500px",
-                                        }}
-                                      ></Bar>
-                                    </Grid>
-
-                                    <div
-                                      style={{
-                                        marginTop: "10px",
-                                        display: "flex",
-                                      }}
-                                    >
-                                      <ErrorIcon
-                                        fontSize="15px"
-                                        sx={{
-                                          marginTop: "5px",
-                                          marginRight: "5px",
-                                          color: "orange",
-                                        }}
-                                      />
+                                      >
+                                        Hasil Mental Health Check
+                                      </Typography>
+                                    </AccordionSummary>
+                                    <AccordionDetails>
                                       <Typography
                                         sx={{
-                                          fontSize: "16px",
-                                          color: "#5d5d5d",
-                                          textAlign: "justify",
+                                          fontSize: "15px",
+                                          color: "black",
+                                          textAlign: "center",
                                         }}
-                                        className={glacial.className}
+                                        className={montserrat.className}
                                       >
-                                        Tes Mental Health Check diadaptasi dari
-                                        <i>
-                                          DSM-5-TR Self-Rated Level 1
-                                          Cross-Cutting Symptom Measure—Adult
-                                        </i>
+                                        Grafik Tingkat Keparahan Mental Illness
                                       </Typography>
-                                    </div>
-                                  </AccordionDetails>
-                                </Accordion>
-                              </Box>
-                            </Fragment>
-                          }
-                        />
-                        {/* <Divider /> */}
-                        <CardContent
-                          sx={{ pt: "10px", pb: "0px" }}
-                        ></CardContent>
-                        <CardActions
-                          sx={{
-                            justifyContent: "right",
-                            pl: "16px",
-                            pt: "0px",
-                          }}
-                        >
-                          <Box>
-                            {val.status == "waiting" ? (
-                              <Button
-                                sx={{
-                                  textTransform: "none",
-                                  color: "white",
-                                  backgroundColor: "#FFAACF",
-                                  "&:hover": {
-                                    color: "white",
-                                    backgroundColor: "#EA8FEA",
-                                  },
-                                  "&:disabled": {
-                                    color: "black",
-                                    backgroundColor: "#EEEEEE",
-                                  },
-                                }}
-                                disabled={
-                                  timeDiffArr[index] >= 0 &&
-                                  timeDiffArr[index] <= 30
-                                    ? false
-                                    : true
-                                }
-                                onClick={() => startMeetingHandler(val)}
-                              >
-                                {timeDiffArr[index] >= 0 &&
-                                timeDiffArr[index] <= 30 ? (
-                                  <Typography
-                                    className={montserratBold.className}
-                                    sx={{ fontSize: "14px", px: "10px" }}
-                                    //   onClick={startMeetingHandler}
-                                  >
-                                    Mulai Konseling
-                                  </Typography>
-                                ) : timeDiffArr[index] >= 30 ? (
-                                  <Typography
-                                    className={montserratBold.className}
-                                    sx={{ fontSize: "14px", px: "10px" }}
-                                  >
-                                    Sudah melewati jadwal
-                                  </Typography>
-                                ) : (
-                                  <Typography
-                                    className={montserratBold.className}
-                                    sx={{ fontSize: "14px", px: "10px" }}
-                                  >
-                                    Belum waktunya
-                                  </Typography>
-                                )}
-                              </Button>
-                            ) : val.status == "ongoing" ? (
-                              <Box sx={{ textAlign: "right" }}>
-                                <Typography
-                                  className={montserratBold.className}
-                                  sx={{ fontSize: "15px", py: "5px" }}
-                                >
-                                  Konsultasi sedang berlangsung
-                                </Typography>
+
+                                      {/* GRAPH */}
+                                      <Grid
+                                        container
+                                        sx={{
+                                          textAlign: "center",
+                                          justifyContent: "center",
+                                        }}
+                                        column={2}
+                                      >
+                                        <Bar
+                                          className={montserrat.className}
+                                          data={data}
+                                          options={optionsBar}
+                                          style={{
+                                            // display: "block",
+                                            // marginLeft: "auto",
+                                            // marginRight: "auto",
+                                            width: "500px",
+                                          }}
+                                        ></Bar>
+                                      </Grid>
+
+                                      <div
+                                        style={{
+                                          marginTop: "10px",
+                                          display: "flex",
+                                        }}
+                                      >
+                                        <ErrorIcon
+                                          fontSize="15px"
+                                          sx={{
+                                            marginTop: "5px",
+                                            marginRight: "5px",
+                                            color: "orange",
+                                          }}
+                                        />
+                                        <Typography
+                                          sx={{
+                                            fontSize: "16px",
+                                            color: "#5d5d5d",
+                                            textAlign: "justify",
+                                          }}
+                                          className={glacial.className}
+                                        >
+                                          Tes Mental Health Check diadaptasi
+                                          dari
+                                          <i>
+                                            DSM-5-TR Self-Rated Level 1
+                                            Cross-Cutting Symptom Measure—Adult
+                                          </i>
+                                        </Typography>
+                                      </div>
+                                    </AccordionDetails>
+                                  </Accordion>
+                                </Box>
+                              </Fragment>
+                            }
+                          />
+                          {/* <Divider /> */}
+                          <CardContent
+                            sx={{ pt: "10px", pb: "0px" }}
+                          ></CardContent>
+                          <CardActions
+                            sx={{
+                              justifyContent: "right",
+                              pl: "16px",
+                              pt: "0px",
+                            }}
+                          >
+                            <Box>
+                              {val.status == "waiting" ? (
                                 <Button
                                   sx={{
                                     textTransform: "none",
@@ -675,112 +641,168 @@ export default function PatientList() {
                                     },
                                   }}
                                   disabled={
-                                    timeDiffArr[index] >= 30 ? false : true
+                                    timeDiffArr[index] >= 0 &&
+                                    timeDiffArr[index] <= 30
+                                      ? false
+                                      : true
                                   }
-                                  onClick={() => endMeetingHandler(val)}
+                                  onClick={() => startMeetingHandler(val)}
                                 >
+                                  {timeDiffArr[index] >= 0 &&
+                                  timeDiffArr[index] <= 30 ? (
+                                    <Typography
+                                      className={montserratBold.className}
+                                      sx={{ fontSize: "14px", px: "10px" }}
+                                      //   onClick={startMeetingHandler}
+                                    >
+                                      Mulai Konseling
+                                    </Typography>
+                                  ) : timeDiffArr[index] >= 30 ? (
+                                    <Typography
+                                      className={montserratBold.className}
+                                      sx={{ fontSize: "14px", px: "10px" }}
+                                    >
+                                      Sudah melewati jadwal
+                                    </Typography>
+                                  ) : (
+                                    <Typography
+                                      className={montserratBold.className}
+                                      sx={{ fontSize: "14px", px: "10px" }}
+                                    >
+                                      Belum waktunya
+                                    </Typography>
+                                  )}
+                                </Button>
+                              ) : val.status == "ongoing" ? (
+                                <Box sx={{ textAlign: "right" }}>
                                   <Typography
                                     className={montserratBold.className}
-                                    sx={{ fontSize: "15px", px: "10px" }}
+                                    sx={{ fontSize: "15px", py: "5px" }}
                                   >
-                                    End Meeting
+                                    Konsultasi sedang berlangsung
                                   </Typography>
-                                </Button>
-                                <Button
-                                  sx={{
-                                    textTransform: "none",
-                                    color: "white",
-                                    backgroundColor: "#FFAACF",
-                                    "&:hover": {
+                                  <Button
+                                    sx={{
+                                      textTransform: "none",
                                       color: "white",
-                                      backgroundColor: "#EA8FEA",
-                                    },
-                                    "&:disabled": {
-                                      color: "black",
-                                      backgroundColor: "#EEEEEE",
-                                    },
-                                    ml: "10px",
-                                  }}
+                                      backgroundColor: "#FFAACF",
+                                      "&:hover": {
+                                        color: "white",
+                                        backgroundColor: "#EA8FEA",
+                                      },
+                                      "&:disabled": {
+                                        color: "black",
+                                        backgroundColor: "#EEEEEE",
+                                      },
+                                    }}
+                                    disabled={
+                                      timeDiffArr[index] >= 30 ? false : true
+                                    }
+                                    onClick={() => endMeetingHandler(val)}
+                                  >
+                                    <Typography
+                                      className={montserratBold.className}
+                                      sx={{ fontSize: "15px", px: "10px" }}
+                                    >
+                                      End Meeting
+                                    </Typography>
+                                  </Button>
+                                  <Button
+                                    sx={{
+                                      textTransform: "none",
+                                      color: "white",
+                                      backgroundColor: "#FFAACF",
+                                      "&:hover": {
+                                        color: "white",
+                                        backgroundColor: "#EA8FEA",
+                                      },
+                                      "&:disabled": {
+                                        color: "black",
+                                        backgroundColor: "#EEEEEE",
+                                      },
+                                      ml: "10px",
+                                    }}
+                                    className={montserratBold.className}
+                                    target="_blank"
+                                    href="https://binus.zoom.us/j/99515710879"
+                                  >
+                                    Meet Link
+                                  </Button>
+                                </Box>
+                              ) : val.status == "done" ? (
+                                <Typography
                                   className={montserratBold.className}
-                                  target="_blank" 
-                                  href="https://binus.zoom.us/j/99515710879"
+                                  sx={{ fontSize: "15px", py: "5px" }}
                                 >
-                                  Meet Link
-                                </Button>
-                              </Box>
-                            ) : val.status == "done" ? (
-                              <Typography
-                                className={montserratBold.className}
-                                sx={{ fontSize: "15px", py: "5px" }}
-                              >
-                                Konsultasi sudah selesai.
-                              </Typography>
-                            ) : (
-                              <Typography>lol no</Typography>
-                            )}
-                          </Box>
-                        </CardActions>
-                      </Card>
-                    </Box>
-                  ))
-                )}
+                                  Konsultasi sudah selesai.
+                                </Typography>
+                              ) : (
+                                <Typography>lol no</Typography>
+                              )}
+                            </Box>
+                          </CardActions>
+                        </Card>
+                      </Box>
+                    ))
+                  )}
+                </Box>
               </Box>
+              {/* {listPatientData.fullNamePatient != null ? (
+           ) : (
+             <Box sx={{ textAlign: "left" }}>
+               <Typography
+                 sx={{
+                   mt: "30px",
+                   fontSize: { xl: "17px", md: "16px", xs: "14px" },
+                   color: "black",
+                   textAlign: "left",
+                 }}
+                 className={montserratExtraBold.className}
+               >
+                 Anda tidak memiliki jadwal konsultasi.
+               </Typography>
+               <Typography
+                 sx={{
+                   fontSize: { xl: "17px", md: "16px", xs: "14px" },
+                   color: "black",
+                   textAlign: "left",
+                 }}
+                 className={montserratBold.className}
+               >
+                 Mohon mengunjungi halaman Pemesanan Konsultasi untuk booking
+                 konsultasi
+               </Typography>
+               <Button
+                 sx={{
+                   borderRadius: "10px",
+                   padding: "10px",
+                   paddingLeft: "30px",
+                   textTransform: "none",
+                   paddingRight: "30px",
+                   marginTop: "20px",
+                   color: "white",
+                   fontSize: "17px",
+                   backgroundColor: "#FFAACF",
+                   "&:hover": {
+                     color: "white",
+                     backgroundColor: "#EA8FEA",
+                   },
+                 }}
+                 className={montserrat.className}
+               >
+                 <Link
+                   legacyBehavior
+                   href="/KonsultasiOnline/PemesananKonsultasi"
+                 >
+                   Pemesanan Konsultasi
+                 </Link>
+               </Button>
+             </Box>
+           )} */}
             </Box>
-            {/* {listPatientData.fullNamePatient != null ? (
-            ) : (
-              <Box sx={{ textAlign: "left" }}>
-                <Typography
-                  sx={{
-                    mt: "30px",
-                    fontSize: { xl: "17px", md: "16px", xs: "14px" },
-                    color: "black",
-                    textAlign: "left",
-                  }}
-                  className={montserratExtraBold.className}
-                >
-                  Anda tidak memiliki jadwal konsultasi.
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: { xl: "17px", md: "16px", xs: "14px" },
-                    color: "black",
-                    textAlign: "left",
-                  }}
-                  className={montserratBold.className}
-                >
-                  Mohon mengunjungi halaman Pemesanan Konsultasi untuk booking
-                  konsultasi
-                </Typography>
-                <Button
-                  sx={{
-                    borderRadius: "10px",
-                    padding: "10px",
-                    paddingLeft: "30px",
-                    textTransform: "none",
-                    paddingRight: "30px",
-                    marginTop: "20px",
-                    color: "white",
-                    fontSize: "17px",
-                    backgroundColor: "#FFAACF",
-                    "&:hover": {
-                      color: "white",
-                      backgroundColor: "#EA8FEA",
-                    },
-                  }}
-                  className={montserrat.className}
-                >
-                  <Link
-                    legacyBehavior
-                    href="/KonsultasiOnline/PemesananKonsultasi"
-                  >
-                    Pemesanan Konsultasi
-                  </Link>
-                </Button>
-              </Box>
-            )} */}
-          </Box>
-        </motion.div>
-      )}
-    </Container>
+          </motion.div>
+        )}
+      </Container>
+    </ThemeProvider>
   );
 }

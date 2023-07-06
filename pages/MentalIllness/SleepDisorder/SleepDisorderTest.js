@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
+import { montserrat, glacial, cooperHewitt } from "fonts";
 import { appActions, submitSD } from "@/redux/slices/appSlice";
 import axios from "axios";
 import { SDSeverity } from "@/public/ShortFormConversionTable";
@@ -88,7 +88,7 @@ export default function SleepDisorderTest() {
 
       axios
         .post(
-          "https://localhost:7184/api/MI/InsertMICheckSleepDisorderHeader",
+          process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MI/InsertMICheckSleepDisorderHeader",
           {
             userId: login.userid,
             totalRawScore: rawScore,
@@ -99,7 +99,7 @@ export default function SleepDisorderTest() {
           console.log(resp.data);
           console.log(resp.data.headerID);
           axios.post(
-            "https://localhost:7184/api/MI/InsertMICheckSleepDisorderDetail?headerID=" +
+            process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MI/InsertMICheckSleepDisorderDetail?headerID=" +
               resp.data.headerID,
             {
               sdDetailData: SDData,

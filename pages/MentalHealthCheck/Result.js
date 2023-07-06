@@ -38,7 +38,7 @@ import Swal from "sweetalert2";
 import ArticleIcon from "@mui/icons-material/Article";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { montserratBold, montserrat, openSans } from "../../public/fonts";
+import { montserratBold, montserrat, openSans } from "fonts";
 import { current } from "@reduxjs/toolkit";
 import CircleIcon from "@mui/icons-material/Circle";
 import appSlice, { appActions, MHCData } from "@/redux/slices/appSlice";
