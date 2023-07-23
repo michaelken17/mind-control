@@ -5,7 +5,7 @@ import { Montserrat } from "next/font/google";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
-import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
+import { montserrat, glacial, cooperHewitt } from "fonts";
 import styles from "styles/Quiz.module.css";
 import Link from "next/link";
 import ErrorIcon from "@mui/icons-material/Error";

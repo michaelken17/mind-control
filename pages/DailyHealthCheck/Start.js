@@ -14,7 +14,7 @@ import {
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
-import { glacial, montserrat } from "../../public/fonts";
+import { glacial, montserrat } from "fonts";
 import styles from "styles/Quiz.module.css";
 import Link from "next/link";
 import { Circle } from "@mui/icons-material";

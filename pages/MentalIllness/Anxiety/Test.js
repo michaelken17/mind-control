@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
+import { montserrat, glacial, cooperHewitt } from "fonts";
 import { appActions, submitAnxiety } from "@/redux/slices/appSlice";
 import { AnxietySeverity } from "../../../public/ShortFormConversionTable";
 import axios from "axios";
@@ -91,14 +91,14 @@ export default function AnxietyTest() {
       router.push("Result");
 
       axios
-        .post("https://localhost:7184/api/MI/InsertMICheckAnxietyHeader", {
+        .post(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MI/InsertMICheckAnxietyHeader", {
           userId: login.userid,
           totalRawScore: rawScore,
           severity: AnxietySeverity(rawScore),
         })
         .then((resp) => {
           axios.post(
-            "https://localhost:7184/api/MI/InsertMICheckAnxietyDetail?headerID=" +
+            process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MI/InsertMICheckAnxietyDetail?headerID=" +
               resp.data.headerID,
             {
               anxDetailData: anxietyData,

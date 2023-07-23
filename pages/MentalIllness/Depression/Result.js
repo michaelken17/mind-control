@@ -25,7 +25,7 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
+import { montserrat, glacial, cooperHewitt } from "fonts";
 import { depressionSeverity } from "../../../public/ShortFormConversionTable";
 import { rekomendasiDepression } from "../../../public/RekomendasiKegiatan";
 import CircleIcon from "@mui/icons-material/Circle";

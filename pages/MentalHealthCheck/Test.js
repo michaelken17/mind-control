@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
+import { montserrat, glacial, cooperHewitt } from "fonts";
 import appSlice, { appActions, submitMHC } from "@/redux/slices/appSlice";
 import ArrowBack from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForward from "@mui/icons-material/ArrowForwardIos";
@@ -158,13 +158,13 @@ export default function MHCTest() {
     //   // Insert Header
     //   await axios
     //     .post(
-    //       "https://localhost:7184/api/MHCheck/InsertMHCheckHeader?username=" +
+    //       process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MHCheck/InsertMHCheckHeader?username=" +
     //         login.username
     //     )
     //     .then(async (responseHeader) => {
     //       // Insert MD
     //       await axios
-    //         .post("https://localhost:7184/api/MHCheck/InsertMHCheckMD", {
+    //         .post(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MHCheck/InsertMHCheckMD", {
     //           headerID: responseHeader.data.headerID,
     //           dprSeverity: depressionSeverity,
     //           anxSeverity: anxietySeverity,
@@ -175,7 +175,7 @@ export default function MHCTest() {
     //           console.log(responseMD.data);
     //           // Insert Detail
     //           await axios.post(
-    //             "https://localhost:7184/api/MHCheck/InsertMHCheckDetail?headerID=" +
+    //             process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MHCheck/InsertMHCheckDetail?headerID=" +
     //               responseMD.data,
     //             {
     //               MHCdata: MHCdata,
@@ -268,13 +268,13 @@ export default function MHCTest() {
       // Insert Header
       axios
         .post(
-          "https://localhost:7184/api/MHCheck/InsertMHCheckHeader?username=" +
+          process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MHCheck/InsertMHCheckHeader?username=" +
             login.username
         )
         .then(async (responseHeader) => {
           // Insert MD
           axios
-            .post("https://localhost:7184/api/MHCheck/InsertMHCheckMD", {
+            .post(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MHCheck/InsertMHCheckMD", {
               headerID: responseHeader.data.headerID,
               dprSeverity: depressionSeverity,
               anxSeverity: anxietySeverity,
@@ -285,7 +285,7 @@ export default function MHCTest() {
               console.log(responseMD.data);
               // Insert Detail
               axios.post(
-                "https://localhost:7184/api/MHCheck/InsertMHCheckDetail?headerID=" +
+                process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MHCheck/InsertMHCheckDetail?headerID=" +
                   responseMD.data,
                 {
                   MHCdata: MHCdata,

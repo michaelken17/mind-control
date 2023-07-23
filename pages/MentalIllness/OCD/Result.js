@@ -24,7 +24,7 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
+import { montserrat, glacial, cooperHewitt } from "fonts";
 import { rekomendasiOCD } from "../../../public/RekomendasiKegiatan";
 import { OCDSeverity } from "../../../public/ShortFormConversionTable";
 import ErrorIcon from "@mui/icons-material/Error";

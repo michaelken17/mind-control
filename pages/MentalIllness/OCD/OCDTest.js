@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
+import { montserrat, glacial, cooperHewitt } from "fonts";
 import appSlice, { appActions, submitOCD } from "@/redux/slices/appSlice";
 import { OCDSeverity } from "@/public/ShortFormConversionTable";
 import axios from "axios";
@@ -83,14 +83,14 @@ export default function OCDTest() {
       router.push("Result");
 
       axios
-        .post("https://localhost:7184/api/MI/InsertMICheckOCDHeader", {
+        .post(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MI/InsertMICheckOCDHeader", {
           userId: login.userid,
           totalRawScore: rawScore,
           severity: OCDSeverity(rawScore),
         })
         .then((resp) => {
           axios.post(
-            "https://localhost:7184/api/MI/InsertMICheckOCDDetail?headerID=" +
+            process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MI/InsertMICheckOCDDetail?headerID=" +
               resp.data.headerID,
             {
               ocdDetailData: OCDData,

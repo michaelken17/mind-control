@@ -49,7 +49,7 @@ import {
   montserratExtraBold,
   montserratLight,
   montserratBold,
-} from "../../public/fonts";
+} from "fonts";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
 import Slide from "@mui/material/Slide";
@@ -80,7 +80,6 @@ export default function JadwalKonsultasi(val) {
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
   const [open, setOpen] = useState(false);
-  const theme = useTheme();
   const [datePicked, setdatePicked] = useState(dayjs());
   const [timePicked, settimePicked] = useState("");
   const [availability, setAvailability] = useState([]);
@@ -119,7 +118,7 @@ export default function JadwalKonsultasi(val) {
     setIsLoaded(true);
     axios
       .get(
-        "https://localhost:7184/api/Consultant/GetConsultantAvailability?ConsultantID=" +
+        process.env.NEXT_PUBLIC_BACKEND_URL + "/api/Consultant/GetConsultantAvailability?ConsultantID=" +
           val.consultantData.consultantID
       )
       .then((resp) => {
@@ -218,7 +217,7 @@ export default function JadwalKonsultasi(val) {
                       {val.consultantData.fullName}, {val.consultantData.gelar}
                     </Typography>
                     {/* <Box sx={{ flex: "1 1 auto" }} /> */}
-                    <Typography
+                    {/* <Typography
                       className={montserratLight.className}
                       sx={{ fontSize: "20px", ml: "20px" }}
                     >
@@ -232,7 +231,7 @@ export default function JadwalKonsultasi(val) {
                           />
                         </Grid>
                       </Grid>
-                    </Typography>
+                    </Typography> */}
                   </Box>
                 </Box>
 

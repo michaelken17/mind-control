@@ -47,7 +47,7 @@ import {
   montserratExtraBold,
   montserratLight,
   montserratBold,
-} from "../../public/fonts";
+} from "fonts";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
 import Slide from "@mui/material/Slide";
@@ -78,12 +78,18 @@ dayjs.updateLocale("en", {
   weekdays: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
 });
 const today = dayjs();
-
+const theme = createTheme({
+  typography: {
+    fontFamily: montserrat,
+  },
+  button: {
+    fontFamily: montserrat,
+  },
+});
 // List Konsultasi
 export default function ListKonsultasi() {
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
-  const theme = useTheme();
   const [listPatientData, setlistPatientData] = useState([]);
   const [timeDiff, setTimeDiff] = useState(0);
   const login = useSelector((state) => state.persistedReducer.login);
@@ -93,7 +99,8 @@ export default function ListKonsultasi() {
   useEffect(() => {
     axios
       .get(
-        "https://localhost:7184/api/Consultant/GetListPatientForPatient?UserID=" +
+        process.env.NEXT_PUBLIC_BACKEND_URL +
+          "/api/Consultant/GetListPatientForPatient?UserID=" +
           login.userid
       )
       .then((resp) => {
@@ -131,39 +138,51 @@ export default function ListKonsultasi() {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        axios.put(
-          "https://localhost:7184/api/Consultant/UpdateStatusListPatient?UserID=" +
-            login.userid +
-            "&status=ongoing"
-        );
-
-        router.reload(window.location.pathname);
+        axios
+          .put(
+            process.env.NEXT_PUBLIC_BACKEND_URL +
+              "/api/Consultant/UpdateStatusListPatient?UserID=" +
+              login.userid +
+              "&status=ongoing"
+          )
+          .then((x) => {
+            router.reload(window.location.pathname);
+          });
       }
     });
   };
 
   const resetMeetingHandler = () => {
-    axios.put(
-      "https://localhost:7184/api/Consultant/UpdateStatusListPatient?UserID=" +
-        login.userid +
-        "&status=patientlate"
-    );
-
-    axios.put(
-      "https://localhost:7184/api/Consultant/UpdateIsActiveListPatient?UserID=" +
-        login.userid
-    );
-
-    router.reload(window.location.pathname);
+    axios
+      .put(
+        process.env.NEXT_PUBLIC_BACKEND_URL +
+          "/api/Consultant/UpdateStatusListPatient?UserID=" +
+          login.userid +
+          "&status=patientlate"
+      )
+      .then((x) => {
+        axios
+          .put(
+            process.env.NEXT_PUBLIC_BACKEND_URL +
+              "/api/Consultant/UpdateIsActiveListPatient?UserID=" +
+              login.userid
+          )
+          .then((x) => {
+            router.reload(window.location.pathname);
+          });
+      });
   };
 
   const confirmEndConsultation = () => {
-    axios.put(
-      "https://localhost:7184/api/Consultant/UpdateIsActiveListPatient?UserID=" +
-        login.userid
-    );
-
-    router.reload(window.location.pathname);
+    axios
+      .put(
+        process.env.NEXT_PUBLIC_BACKEND_URL +
+          "/api/Consultant/UpdateIsActiveListPatient?UserID=" +
+          login.userid
+      )
+      .then((x) => {
+        router.reload(window.location.pathname);
+      });
   };
 
   return (
@@ -527,14 +546,14 @@ export default function ListKonsultasi() {
                                 ml: "10px",
                               }}
                               className={montserratBold.className}
-                              target="_blank" 
+                              target="_blank"
                               href="https://binus.zoom.us/j/99515710879"
                             >
                               Meet Link
                             </Button>
                           </Box>
                         ) : listPatientData.status == "done" ? (
-                          <Box sx={{textAlign:"right"}}>
+                          <Box sx={{ textAlign: "right" }}>
                             <Typography
                               className={montserratBold.className}
                               sx={{ fontSize: "15px", pl: "10px" }}
