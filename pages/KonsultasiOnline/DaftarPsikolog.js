@@ -47,7 +47,7 @@ import {
   montserratExtraBold,
   montserratLight,
   montserratBold,
-} from "../../public/fonts";
+} from "fonts";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
 import Slide from "@mui/material/Slide";
@@ -78,7 +78,7 @@ export default function DaftarPsikolog({ handleScheduleBtn }) {
 
   useEffect(() => {
     axios
-      .get("https://localhost:7184/api/Consultant/GetAllConsultantData")
+      .get(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/Consultant/GetAllConsultantData")
       .then((resp) => {
         setconsultantData(resp.data);
         setIsLoaded(true);

@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
+import { montserrat, glacial, cooperHewitt } from "fonts";
 import appSlice, {
   appActions,
   submitDepression,
@@ -94,7 +94,7 @@ export default function DepressionTest() {
       router.push("Result");
 
       axios
-        .post("https://localhost:7184/api/MI/InsertMICheckDepressionHeader", {
+        .post(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MI/InsertMICheckDepressionHeader", {
           userId: login.userid,
           totalRawScore: rawScore,
           severity: depressionSeverity(rawScore),
@@ -103,7 +103,7 @@ export default function DepressionTest() {
           console.log(resp.data);
           console.log(resp.data.headerID);
           axios.post(
-            "https://localhost:7184/api/MI/InsertMICheckDepressionDetail?headerID=" +
+            process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MI/InsertMICheckDepressionDetail?headerID=" +
               resp.data.headerID,
             {
               dprDetailData: depressionData,

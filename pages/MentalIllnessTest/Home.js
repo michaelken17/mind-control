@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Button, Container, Grid } from "@mui/material";
-import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
+import { montserrat, glacial, cooperHewitt } from "fonts";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";

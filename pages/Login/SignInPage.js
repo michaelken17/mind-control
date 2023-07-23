@@ -22,13 +22,21 @@ import { loginActions } from "@/redux/slices/loginSlice";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 import Link from "next/link";
-import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
+import { montserrat, glacial, cooperHewitt } from "fonts";
 import { appActions } from "@/redux/slices/appSlice";
 import { isDoneActions } from "@/redux/slices/isDoneSlice";
 import Breadcrumbs from "nextjs-breadcrumbs";
 import Image from "next/image";
 import dayjs from "dayjs";
-
+import { ThemeProvider } from "@emotion/react";
+const theme = createTheme({
+  typography: {
+    fontFamily: montserrat,
+  },
+  button: {
+    fontFamily: montserrat,
+  },
+});
 const today = dayjs();
 
 const SignInPage = () => {
@@ -54,7 +62,11 @@ const SignInPage = () => {
       });
     } else {
       axios
-        .get("https://localhost:7184/api/Users/GetData?Username=" + username)
+        .get(
+          process.env.NEXT_PUBLIC_BACKEND_URL +
+            "/api/Users/GetData?Username=" +
+            username
+        )
         .then((resp) => {
           console.log(resp.data[0]);
 
@@ -69,7 +81,8 @@ const SignInPage = () => {
           } else {
             axios
               .get(
-                "https://localhost:7184/api/Users/CheckPassword?username=" +
+                process.env.NEXT_PUBLIC_BACKEND_URL +
+                  "/api/Users/CheckPassword?username=" +
                   username +
                   "&password=" +
                   password
@@ -88,7 +101,8 @@ const SignInPage = () => {
                   // Check if user has done MHC
                   axios
                     .get(
-                      "https://localhost:7184/api/MHCheck/CheckUserMhCheckHeaderExit?userId=" +
+                      process.env.NEXT_PUBLIC_BACKEND_URL +
+                        "/api/MHCheck/CheckUserMhCheckHeaderExit?userId=" +
                         resp.data[0].userId
                     )
                     .then((respcheckMHC) => {
@@ -98,7 +112,8 @@ const SignInPage = () => {
                       if (respcheckMHC.data == "True") {
                         axios
                           .get(
-                            "https://localhost:7184/api/MHCheck/GetSeverity?userId=" +
+                            process.env.NEXT_PUBLIC_BACKEND_URL +
+                              "/api/MHCheck/GetSeverity?userId=" +
                               resp.data[0].userId
                           )
                           .then((respSeverity) => {
@@ -181,7 +196,8 @@ const SignInPage = () => {
                   // CHECK DHC STREAK (if streak broken, set MHP back to 0)
                   axios
                     .get(
-                      "https://localhost:7184/api/Users/GetDHCData?UserID=" +
+                      process.env.NEXT_PUBLIC_BACKEND_URL +
+                        "/api/Users/GetDHCData?UserID=" +
                         resp.data[0].userId
                     )
                     .then((respDHCData) => {
@@ -193,7 +209,8 @@ const SignInPage = () => {
                       if (dayDiff > 1) {
                         axios
                           .put(
-                            "https://localhost:7184/api/DHC/UpdateMHCPoint?UserID=" +
+                            process.env.NEXT_PUBLIC_BACKEND_URL +
+                              "/api/DHC/UpdateMHCPoint?UserID=" +
                               resp.data[0].userId +
                               "&opr=reset"
                           )
@@ -250,209 +267,211 @@ const SignInPage = () => {
   }, []);
 
   return (
-    <Grid xs={12} sm={12} md={7} lg={6} xl={7} item={true}>
-      <Box
-        sx={{
-          padding: "20px",
-          backgroundColor: "white",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          height: "65vh",
-          // boxShadow: `0 0 5 px black`,
-          borderRadius: {
-            xs: "30px",
-            sm: "30px",
-            md: "30px 0 0 30px",
-            lg: "30px 0 0 30px",
-            xl: "30px 0 0 30px",
-          },
-        }}
-      >
-        <Box width="70%">
-          <Box display="flex" flexDirection="column" alignItems="center">
-            {/* LOGO */}
-            <Box
-              sx={{
-                width: "40%",
-                height: "40%",
-                //  borderRadius: "12px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
+    <ThemeProvider theme={theme}>
+      {" "}
+      <Grid xs={12} sm={12} md={7} lg={6} xl={7} item={true}>
+        <Box
+          sx={{
+            padding: "20px",
+            backgroundColor: "white",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            height: "65vh",
+            // boxShadow: `0 0 5 px black`,
+            borderRadius: {
+              xs: "30px",
+              sm: "30px",
+              md: "30px 0 0 30px",
+              lg: "30px 0 0 30px",
+              xl: "30px 0 0 30px",
+            },
+          }}
+        >
+          <Box width="70%">
+            <Box display="flex" flexDirection="column" alignItems="center">
+              {/* LOGO */}
               <Box
-                component="img"
                 sx={{
-                  maxHeight: 150,
-                  maxWidth: 150,
-                  borderRadius: 10,
+                  width: "40%",
+                  height: "40%",
+                  //  borderRadius: "12px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
-                alt=""
-                src="image/mcwebicon.png"
-              />
-            </Box>
-            {/* LOGO END */}
+              >
+                <Box
+                  component="img"
+                  sx={{
+                    maxHeight: 150,
+                    maxWidth: 150,
+                    borderRadius: 10,
+                  }}
+                  alt=""
+                  src="image/mcwebicon.png"
+                />
+              </Box>
+              {/* LOGO END */}
 
-            <Typography
-              color="#FFAACF"
-              className={cooperHewitt.className}
-              sx={{
-                textAlign: "center",
-                marginTop: 0,
-                marginBottom: 0,
-                fontSize: "20px",
-                letterSpacing: "1px",
-              }}
-              mt={7}
-              mb={1}
-            >
-              SIGN IN TO <a style={{ color: "#EA8FEA" }}>MINDCONTROL</a>
-            </Typography>
+              <Typography
+                color="#FFAACF"
+                className={cooperHewitt.className}
+                sx={{
+                  textAlign: "center",
+                  marginTop: 0,
+                  marginBottom: 0,
+                  fontSize: "20px",
+                  letterSpacing: "1px",
+                }}
+                mt={7}
+                mb={1}
+              >
+                SIGN IN TO <a style={{ color: "#EA8FEA" }}>MINDCONTROL</a>
+              </Typography>
+            </Box>
+
+            {/* INPUTS */}
+            <div style={{ marginTop: "20px" }}>
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignContent="center"
+                justifyContent="flex-start"
+                mb={2}
+              >
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="flex-start"
+                >
+                  <Typography
+                    color="#2f4858"
+                    pb={1}
+                    className={montserrat.className}
+                  >
+                    Username
+                  </Typography>
+
+                  <Paper
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <InputBase
+                      className={montserrat.className}
+                      placeholder="Tulis username anda..."
+                      fullWidth
+                      sx={{
+                        bgcolor: "white",
+                        p: 1,
+                        borderRadius: "5px",
+                      }}
+                      inputRef={usernameRef}
+                    />
+                  </Paper>
+                </Box>
+              </Box>
+
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignContent="center"
+                justifyContent="flex-start"
+                mb={1}
+              >
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="flex-start"
+                >
+                  <Typography
+                    color="#2f4858"
+                    pb={1}
+                    className={montserrat.className}
+                  >
+                    Password
+                  </Typography>
+
+                  <Paper
+                    sx={{
+                      width: "100%",
+                    }}
+                  >
+                    <InputBase
+                      className={montserrat.className}
+                      placeholder="Tulis password anda..."
+                      fullWidth
+                      sx={{
+                        bgcolor: "white",
+                        p: 1,
+                        borderRadius: "5px",
+                      }}
+                      type="password"
+                      inputRef={passwordRef}
+                    />
+                  </Paper>
+                </Box>
+              </Box>
+
+              <Box
+                display="flex"
+                flexDirection="column"
+                alignContent="center"
+                justifyContent="flex-start"
+                mb={2}
+              ></Box>
+            </div>
+
+            <motion.div whileHover={{ scale: 1.05 }}>
+              <Button
+                className={montserrat.className}
+                fullWidth
+                sx={{
+                  mt: {xl:"30px", md:"30px"},
+                  boxShadow: `0 0 10px #FFAACF`,
+                  color: "white",
+                  bgcolor: "#FFAACF",
+                  "&:hover": {
+                    backgroundColor: "#FFAACF",
+                  },
+                }}
+                onClick={loginHandler}
+              >
+                Login
+              </Button>
+            </motion.div>
           </Box>
-
-          {/* INPUTS */}
-          <div style={{ marginTop: "20px" }}>
-            <Box
-              display="flex"
-              flexDirection="column"
-              alignContent="center"
-              justifyContent="flex-start"
-              mb={2}
-            >
-              <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent="flex-start"
-              >
-                <Typography
-                  color="#2f4858"
-                  pb={1}
-                  className={montserrat.className}
-                >
-                  Username
-                </Typography>
-
-                <Paper
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <InputBase
-                    className={montserrat.className}
-                    placeholder="Tulis username anda..."
-                    fullWidth
-                    sx={{
-                      bgcolor: "white",
-                      p: 1,
-                      borderRadius: "5px",
-                    }}
-                    inputRef={usernameRef}
-                  />
-                </Paper>
-              </Box>
-            </Box>
-
-            <Box
-              display="flex"
-              flexDirection="column"
-              alignContent="center"
-              justifyContent="flex-start"
-              mb={2}
-            >
-              <Box
-                display="flex"
-                flexDirection="column"
-                justifyContent="flex-start"
-              >
-                <Typography
-                  color="#2f4858"
-                  pb={1}
-                  className={montserrat.className}
-                >
-                  Password
-                </Typography>
-
-                <Paper
-                  sx={{
-                    width: "100%",
-                  }}
-                >
-                  <InputBase
-                    className={montserrat.className}
-                    placeholder="Tulis password anda..."
-                    fullWidth
-                    sx={{
-                      bgcolor: "white",
-                      p: 1,
-                      borderRadius: "5px",
-                    }}
-                    type="password"
-                    inputRef={passwordRef}
-                  />
-                </Paper>
-              </Box>
-            </Box>
-
-            <Box
-              display="flex"
-              flexDirection="column"
-              alignContent="center"
-              justifyContent="flex-start"
-              mb={2}
-            ></Box>
-          </div>
-
-          <motion.div whileHover={{ scale: 1.05 }}>
-            <Button
-              className={montserrat.className}
-              fullWidth
+          <Link legacyBehavior href="Login/SignUpPage">
+            <Typography
               sx={{
-                mt: 4,
-                mn: 4,
-                boxShadow: `0 0 10px #FFAACF`,
-                color: "white",
-                bgcolor: "#FFAACF",
-                "&:hover": {
-                  backgroundColor: "#FFAACF",
-                },
+                mt: 1,
+                fontSize: 13,
+                textDecoration: "underline",
+                color: "gray",
+                cursor: "pointer",
               }}
-              onClick={loginHandler}
             >
-              Login
-            </Button>
-          </motion.div>
-        </Box>
-        <Link legacyBehavior href="Login/SignUpPage">
-          <Typography
-            sx={{
-              mt: 1,
-              fontSize: 13,
-              textDecoration: "underline",
-              color: "gray",
-              cursor: "pointer",
-            }}
-          >
-            Sign Up
-          </Typography>
-        </Link>
+              Sign Up
+            </Typography>
+          </Link>
 
-        <Link legacyBehavior href="Login/LoginConsultant">
-          <Typography
-            sx={{
-              mt: 1,
-              fontSize: 13,
-              color: "#FFAACF",
-              cursor: "pointer",
-            }}
-            className={montserrat.className}
-          >
-            Login sebagai Konsultan
-          </Typography>
-        </Link>
-      </Box>
-    </Grid>
+          <Link legacyBehavior href="Login/LoginConsultant">
+            <Typography
+              sx={{
+                mt: 1,
+                fontSize: 13,
+                color: "#FFAACF",
+                cursor: "pointer",
+              }}
+              className={montserrat.className}
+            >
+              Login sebagai Konsultan
+            </Typography>
+          </Link>
+        </Box>
+      </Grid>
+    </ThemeProvider>
   );
 };
 

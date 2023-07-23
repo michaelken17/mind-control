@@ -15,7 +15,7 @@ import Link from "next/link";
 import { container, item } from "/animation";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
-import { montserrat, glacial, cooperHewitt } from "../../../public/fonts";
+import { montserrat, glacial, cooperHewitt } from "fonts";
 import ErrorIcon from "@mui/icons-material/Error";
 import Image from "next/image";
 

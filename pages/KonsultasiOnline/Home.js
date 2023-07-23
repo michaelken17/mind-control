@@ -5,7 +5,7 @@ import {
   glacial,
   cooperHewitt,
   montserratExtraBold,
-} from "../../public/fonts";
+} from "fonts";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material";
 import { motion, AnimatePresence, color } from "framer-motion";
