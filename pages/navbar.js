@@ -329,22 +329,22 @@ export default function Navbar() {
                   zIndex: "5",
                 }}
               >
-                {isLoaded ? (
-                  <Link legacyBehavior href="/Home" sx={{ cursor: "pointer" }}>
+                {isLoaded && loginConsultant?.authorized == true ? (
+                  <Link
+                    legacyBehavior
+                    href="/HomeConsultant"
+                    sx={{ cursor: "pointer" }}
+                  >
                     <Image
-                      src="/image/MCIcon.png"
+                      src="/image/MCIconConsultant.png"
                       width={160}
                       height={80}
                       alt="Mind Control"
                       style={{ margin: 15 }}
                     />
                   </Link>
-                ) : isLoaded && loginConsultant?.authorized == true ? (
-                  <Link
-                    legacyBehavior
-                    href="/HomeConsultant"
-                    sx={{ cursor: "pointer" }}
-                  >
+                ) : isLoaded ? (
+                  <Link legacyBehavior href="/Home" sx={{ cursor: "pointer" }}>
                     <Image
                       src="/image/MCIcon.png"
                       width={160}
@@ -1112,6 +1112,7 @@ export default function Navbar() {
                             display: "flex",
                             justifyContent: "left",
                           }}
+                          key={page.title}
                         >
                           <Link href={page.path}>
                             <Button
