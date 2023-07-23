@@ -34,7 +34,7 @@ import {
   cooperHewitt,
   montserratBold,
   montserratExtraBold,
-} from "../../public/fonts";
+} from "fonts";
 import { depressionSeverity } from "../../public/ShortFormConversionTable";
 import { rekomendasiDepression } from "../../public/RekomendasiKegiatan";
 import CircleIcon from "@mui/icons-material/Circle";
@@ -91,7 +91,7 @@ export default function SetAvailability() {
     console.log(waktu);
     axios
       .put(
-        "https://localhost:7184/api/Consultant/UpdateConsultantAvailability",
+        process.env.NEXT_PUBLIC_BACKEND_URL + "/api/Consultant/UpdateConsultantAvailability",
         {
           day: value,
           time: val.time,
@@ -102,7 +102,7 @@ export default function SetAvailability() {
       .then((resp) => {
         axios
           .get(
-            "https://localhost:7184/api/Consultant/GetConsultantAvailability?ConsultantID=" +
+            process.env.NEXT_PUBLIC_BACKEND_URL + "/api/Consultant/GetConsultantAvailability?ConsultantID=" +
               loginConsultant.consultantid
           )
           .then((respGet) => {
@@ -128,7 +128,7 @@ export default function SetAvailability() {
     if (!ignore) {
       axios
         .get(
-          "https://localhost:7184/api/Consultant/GetConsultantAvailability?ConsultantID=" +
+          process.env.NEXT_PUBLIC_BACKEND_URL + "/api/Consultant/GetConsultantAvailability?ConsultantID=" +
             loginConsultant.consultantid
         )
         .then((resp) => {
@@ -299,7 +299,7 @@ export default function SetAvailability() {
                                       control={
                                         <Switch
                                           sx={{
-                                            ".css-5ryogn-MuiButtonBase-root-MuiSwitch-switchBase.Mui-checked": {
+                                            "& .MuiSwitch-switchBase.Mui-checked": {
                                               color: "#FFAACF",
                                             },
                                             "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track":

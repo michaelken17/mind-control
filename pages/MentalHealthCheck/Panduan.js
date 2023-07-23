@@ -14,7 +14,7 @@ import {
   glacial,
   cooperHewitt,
   openSans,
-} from "../../public/fonts";
+} from "fonts";
 import Image from "next/image";
 const theme = createTheme({
   typography: {

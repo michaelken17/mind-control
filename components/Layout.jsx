@@ -2,7 +2,7 @@ import Navbar from "pages/navbar.js";
 import { Box, createTheme, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import styles from "styles/Quiz.module.css";
-import { montserratBold, montserrat, openSans } from "../public/fonts";
+import { montserratBold, montserrat, openSans } from "fonts";
 import { useRouter } from "next/router";
 import Link from "next/link";
 

@@ -48,7 +48,7 @@ import {
   montserratExtraBold,
   montserratLight,
   montserratBold,
-} from "../../public/fonts";
+} from "fonts";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
 import Slide from "@mui/material/Slide";
@@ -123,7 +123,7 @@ export default function Pembayaran(val) {
         if (tipePembayaran == "Konsultasi Gratis") {
           axios
             .put(
-              "https://localhost:7184/api/Consultant/UpdateFreeConsultation?UserID=" +
+              process.env.NEXT_PUBLIC_BACKEND_URL + "/api/Consultant/UpdateFreeConsultation?UserID=" +
                 login.userid +
                 "&opr=reset"
             )
@@ -146,7 +146,7 @@ export default function Pembayaran(val) {
         }
 
         axios
-          .post("https://localhost:7184/api/Consultant/InsertListPatientData", {
+          .post(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/Consultant/InsertListPatientData", {
             consultantID: consultant.consultantID,
             userID: login.userid,
             tipePembayaran: tipePembayaran,
@@ -246,7 +246,7 @@ export default function Pembayaran(val) {
               >
                 <Card
                   sx={{
-                    width: "70%",
+                    width: {xs:"100%", xl: "70%", md: "70%", lg: "70%"},
                     textAlign: "left",
                     borderRadius: "10px",
                   }}

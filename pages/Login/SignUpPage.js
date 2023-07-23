@@ -5,6 +5,7 @@ import {
   Paper,
   TextField,
   Typography,
+  createTheme,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { useEffect, useRef, useState } from "react";
@@ -18,9 +19,21 @@ import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
-import { montserrat, glacial, cooperHewitt } from "../../public/fonts";
+import { montserrat, glacial, cooperHewitt } from "fonts";
 import Image from "next/image";
-
+import { ThemeProvider } from "@emotion/react";
+function validateEmail(email) {
+  var re = /\S+@\S+\.\S+/;
+  return re.test(email);
+}
+const theme = createTheme({
+  typography: {
+    fontFamily: montserrat,
+  },
+  button: {
+    fontFamily: montserrat,
+  },
+});
 const SignUpPage = () => {
   const usernameRef = useRef();
   const passwordRef = useRef();
@@ -49,13 +62,7 @@ const SignUpPage = () => {
     //   icon: "success",
     //   title: "User has been registered!",
     // });
-    if (
-      username == "" ||
-      password == "" ||
-      fullname == "" ||
-      email == "" ||
-      gender == ""
-    ) {
+    if (username == "" || password == "" || fullname == "" || gender == "") {
       Swal.fire({
         icon: "error",
         title: "Error",
@@ -63,9 +70,17 @@ const SignUpPage = () => {
         timer: 2000,
         showConfirmButton: false,
       });
+    } else if (validateEmail(email) == false) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Mohon mengisi email yang valid!",
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } else {
       axios
-        .post("https://localhost:7184/api/Users/InsertData", {
+        .post(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/Users/InsertData", {
           fullName: fullname,
           username: username,
           email: email,
@@ -113,19 +128,15 @@ const SignUpPage = () => {
   }, []);
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 1 }}
-    >
+    <ThemeProvider theme={theme}>
       <Box
         sx={{
-          bgcolor: "white",
-          height: "100vh",
+          padding: "20px",
+          backgroundColor: "white",
           display: "flex",
-          justifyContent: "center",
+          flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center",
         }}
       >
         <Box
@@ -136,16 +147,16 @@ const SignUpPage = () => {
             flexDirection: "column",
             alignItems: "center",
             height: "100%",
-            width: "50%",
+            width: { xs: "100%", sm: "70%", lg: "50%", xl: "50%" },
           }}
         >
-          <Box>
+          <Box sx={{ bgcolor: "white" }}>
+            {" "}
             <Box display="flex" flexDirection="column" alignItems="center">
               {/* LOGO */}
               <Box
                 sx={{
-                  width: "50%",
-                  height: "50%",
+                  width: { xs: "40%", xl: "20%" },
                   //  borderRadius: "12px",
                   display: "flex",
                   alignItems: "center",
@@ -162,10 +173,10 @@ const SignUpPage = () => {
                   src="/image/mcwebicon.png"
                 />
                 {/* <Image
-                  src="/image/mcwebicon.png"
-                  width="100%"
-                  style={{ borderRadius: 10 }}
-                /> */}
+                src="/image/mcwebicon.png"
+                width="100%"
+                style={{ borderRadius: 10 }}
+              /> */}
               </Box>
               {/* LOGO END */}
 
@@ -185,7 +196,6 @@ const SignUpPage = () => {
                 SIGN UP TO <a style={{ color: "#EA8FEA" }}>MINDCONTROL</a>
               </Typography>
             </Box>
-
             {/* INPUTS */}
             <div style={{ marginTop: "20px" }}>
               {/* Full Name */}
@@ -378,7 +388,6 @@ const SignUpPage = () => {
                 </RadioGroup>
               </FormControl>
             </div>
-
             <motion.div whileHover={{ scale: 1.05 }}>
               <Button
                 className={montserrat.className}
@@ -401,7 +410,7 @@ const SignUpPage = () => {
           </Box>
         </Box>
       </Box>
-    </motion.div>
+    </ThemeProvider>
   );
 };
 

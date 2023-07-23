@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
-import { montserrat, montserratItalic } from "../../public/fonts";
+import { montserrat, montserratItalic } from "fonts";
 
 const TitleBox = () => {
   return (

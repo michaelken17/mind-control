@@ -39,7 +39,7 @@ import {
   montserratExtraBold,
   montserratBold,
   montserratLight,
-} from "../../public/fonts";
+} from "fonts";
 import { depressionSeverity } from "../../public/ShortFormConversionTable";
 import { rekomendasiDepression } from "../../public/RekomendasiKegiatan";
 import CircleIcon from "@mui/icons-material/Circle";
@@ -163,7 +163,7 @@ export default function DHCTest() {
         if (result.isConfirmed) {
           // INSERT DHC HEADER
           axios
-            .post("https://localhost:7184/api/DHC/InsertDHCheckHeader", {
+            .post(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/DHC/InsertDHCheckHeader", {
               moodScore: perasaan + 1,
               moodScoreDescription: emosi,
               journal: textRef.current.value,
@@ -174,7 +174,7 @@ export default function DHCTest() {
               // INSERT DHC DETAIL
               axios
                 .post(
-                  "https://localhost:7184/api/DHC/InsertDHCheckDetail?headerID=" +
+                  process.env.NEXT_PUBLIC_BACKEND_URL + "/api/DHC/InsertDHCheckDetail?headerID=" +
                     resp.data.dhCheckHeaderID,
                   {
                     dhCheckData: dhcDetail,
@@ -187,7 +187,7 @@ export default function DHCTest() {
               // UPDATE MHP
               axios
                 .put(
-                  "https://localhost:7184/api/DHC/UpdateMHCPoint?UserID=" +
+                  process.env.NEXT_PUBLIC_BACKEND_URL + "/api/DHC/UpdateMHCPoint?UserID=" +
                     login.userid +
                     "&opr=add"
                 )
@@ -234,13 +234,13 @@ export default function DHCTest() {
   // Set Solutions & check is done DHC
   useEffect(() => {
     axios
-      .get("https://localhost:7184/api/MI/GetSolutions?MDID=1")
+      .get(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/MI/GetSolutions?MDID=1")
       .then((resp) => {
         setSolutions(resp.data);
       });
     axios
       .get(
-        "https://localhost:7184/api/DHC/CheckDHCIsDone?userId=" + login.userid
+        process.env.NEXT_PUBLIC_BACKEND_URL + "/api/DHC/CheckDHCIsDone?userId=" + login.userid
       )
       .then((resp) => {
         setisDoneDHC(resp.data);

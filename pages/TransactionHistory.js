@@ -47,7 +47,7 @@ import {
   montserratExtraBold,
   montserratLight,
   montserratBold,
-} from "/public/fonts";
+} from "fonts";
 import HistoryIcon from "@mui/icons-material/History";
 import Slide from "@mui/material/Slide";
 import dayjs from "dayjs";
@@ -69,7 +69,6 @@ export default function TransactionHistory() {
   const router = useRouter();
   const [isLoaded, setIsLoaded] = useState(false);
   const login = useSelector((state) => state.persistedReducer.login);
-  const theme = useTheme();
   const [transactionHistory, settransactionHistory] = useState([]);
   const [hasHistory, sethasHistory] = useState(false);
   const axios = require("axios");
@@ -78,7 +77,7 @@ export default function TransactionHistory() {
   useEffect(() => {
     axios
       .get(
-        "https://localhost:7184/api/Users/GetTransactionHistory?userId=" +
+        process.env.NEXT_PUBLIC_BACKEND_URL + "/api/Users/GetTransactionHistory?userId=" +
           login.userid
       )
       .then((resp) => {
@@ -98,11 +97,11 @@ export default function TransactionHistory() {
   const infoButtonHandler = (val) => {
     console.log(val);
     axios
-      .get("https://localhost:7184/api/Consultant/GetAllConsultantData")
+      .get(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/Consultant/GetAllConsultantData")
       .then((resp) => {
         axios
           .get(
-            "https://localhost:7184/api/Consultant/GetConsultantData?username=" +
+            process.env.NEXT_PUBLIC_BACKEND_URL + "/api/Consultant/GetConsultantData?username=" +
               resp.data
                 .filter((x) => x.consultantID === val.consultantID)
                 .map((x) => x.username)
