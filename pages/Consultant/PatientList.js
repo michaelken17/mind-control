@@ -290,9 +290,8 @@ export default function PatientList() {
           )
           .then((respUpdate) => {
             console.log(respUpdate);
+            router.reload(window.location.pathname);
           });
-
-        router.reload(window.location.pathname);
       }
     });
   };
@@ -325,16 +324,17 @@ export default function PatientList() {
               "&status=done"
           )
           .then((respUpdate) => {
+            axios
+              .put(
+                process.env.NEXT_PUBLIC_BACKEND_URL +
+                  "/api/Consultant/UpdateIsActiveListPatient?UserID=" +
+                  login.userid
+              )
+              .then((respUpdate) => {
+                router.reload(window.location.pathname);
+              });
             console.log(respUpdate);
           });
-
-        axios.put(
-          process.env.NEXT_PUBLIC_BACKEND_URL +
-            "/api/Consultant/UpdateIsActiveListPatient?UserID=" +
-            login.userid
-        );
-
-        router.reload(window.location.pathname);
       }
     });
   };

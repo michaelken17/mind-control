@@ -246,7 +246,7 @@ export default function Pembayaran(val) {
               >
                 <Card
                   sx={{
-                    width: "70%",
+                    width: {xs:"100%", xl: "70%", md: "70%", lg: "70%"},
                     textAlign: "left",
                     borderRadius: "10px",
                   }}

@@ -44,38 +44,13 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { Logout } from "@mui/icons-material";
 import { ThemeProvider } from "@emotion/react";
 import { loginConsultantAction } from "@/redux/slices/loginConsultantSlice";
-import InfoIcon from "@mui/icons-material/Info";
 const pages = [
-  {
-    title: "Mental Health Check",
-    path: "/MentalHealthCheck/Start",
-    actor: "patient",
-  },
-  {
-    title: "Daily Health Check",
-    path: "/DailyHealthCheck/Start",
-    actor: "patient",
-  },
-  {
-    title: "Mental Illness Test",
-    path: "/MentalIllnessTest/Home ",
-    actor: "patient",
-  },
-  {
-    title: "Konsultasi Online",
-    path: "/KonsultasiOnline/Home",
-    actor: "patient",
-  },
-  {
-    title: "Set Availability",
-    path: "/Consultant/SetAvailability",
-    actor: "consultant",
-  },
-  {
-    title: "Patient List",
-    path: "/Consultant/PatientList",
-    actor: "consultant",
-  },
+  { title: "Mental Health Check", path: "/MentalHealthCheck/Start" },
+  { title: "Daily Health Check", path: "/DailyHealthCheck/Start" },
+  { title: "Mental Illness Test", path: "/MentalIllnessTest/Home " },
+  { title: "Konsultasi Online", path: "/KonsultasiOnline/Home" },
+  { title: "Set Availability", path: "/Consultant/SetAvailability" },
+  { title: "Patient List", path: "/Consultant/PatientList" },
 ];
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -697,7 +672,7 @@ export default function Navbar() {
                           </Button>
                         </Link>
                       </Box>
-                    ) : // SET AVAILABILITY
+                    ) : // PATIENT LIST
                     page.title == "Patient List" &&
                       loginConsultant?.authorized == true ? (
                       <Box key={page.title}>
@@ -1007,199 +982,62 @@ export default function Navbar() {
                 >
                   Mental Health Points: {login?.MHpoints}
                 </Typography>
-
-                <Box
+                <HtmlTooltip
                   sx={{
-                    display: {
-                      lg: "flex",
-                      xs: "flex",
+                    [`& .${tooltipClasses.tooltip}`]: {
+                      maxWidth: 200,
                     },
-                    justifyContent: "center",
                   }}
-                >
-                  <FavoriteIcon
-                    sx={{
-                      color: "red",
-                      marginRight: "5px",
-                    }}
-                  />
-                  <Box sx={{ marginTop: "2px  " }}>
-                    {login?.MHpoints == 100 ? (
-                      <LineProgressBar
-                        rounded={36}
-                        height={20}
-                        width={200}
-                        percent={login?.MHpoints}
-                        transition={{ easing: "linear" }}
-                        progressColor="linear-gradient(to left, #A3FFA6,#8AEC9F,#70D997,#57C690 )"
-                      />
-                    ) : (
-                      <LineProgressBar
-                        rounded={36}
-                        height={20}
-                        width={200}
-                        percent={login?.MHpoints}
-                        transition={{ easing: "linear" }}
-                        progressColor="linear-gradient(to right, #FF6962, #FF7974, #FF8986, #FF9997, #FFA9A9)"
-                      />
-                    )}
-                  </Box>
-                </Box>
-                {/* <IconButton>
-                  <InfoIcon />
-                </IconButton> */}
+                  title={
+                    <Box>
+                      <Typography className={montserrat.className}>
+                        Mental Health Points: {login?.MHpoints}
+                      </Typography>
 
-                <Box sx={{ p: "10px" }}>
-                  {login?.MHpoints == 100 ? (
-                    <Box sx={{}}>
                       <Typography
                         className={montserrat.className}
                         sx={{ fontSize: "13px" }}
                       >
-                        <b style={{ color: "black" }}>
-                          Mental Health Points anda sudah mencapai 100!
-                        </b>
                         <br />
-                        Silahkan mengklaim konsultasi gratis anda dibawah ini!
+                        Setiap{" "}
+                        <b style={{ color: "black" }}>
+                          Daily Health Check
+                        </b>{" "}
+                        yang dilakukan secara <b>berturut</b> akan menambahkan
+                        poin.
+                        <br />
+                        <br />
+                        Saat poin mencapai 100, Anda akan mendapatkan sesi
+                        konsultasi <b style={{ color: "red" }}>GRATIS</b> <br />
+                        <br />
+                        Poin akan menjadi 0 lagi ketika sudah mengklaim
+                        konsultasi gratis atau <i>streak</i> Daily Health Check
+                        berakhir
                       </Typography>
-                      <Box sx={{ textAlign: "center", mt: "5px" }}>
-                        <Button
-                          className={montserrat.className}
-                          sx={{
-                            textTransform: "none",
-                            color: "white",
-                            bgcolor: "#3DB388",
-                            textAlign: "center",
-                            width: "100%",
-                            "&:hover": {
-                              bgcolor: "#8AEC9F",
-                              color: "black",
-                            },
-                          }}
-                          onClick={claimConsultationHandler}
-                        >
-                          Klaim Konsultasi Gratis
-                        </Button>
-                      </Box>
                     </Box>
-                  ) : (
-                    <Typography
-                      className={montserrat.className}
-                      sx={{ fontSize: "13px" }}
-                    >
-                      <b style={{ color: "black" }}>
-                        Setiap Daily Health Test yang dilakukan secara berturut
-                        akan menambahkan 20 poin.
-                      </b>
-                      <br />
-                      <br />
-                      Saat poin mencapai 100, Anda akan mendapatkan sesi
-                      konsultasi <b style={{ color: "red" }}>GRATIS</b> <br />
-                    </Typography>
-                  )}
-                </Box>
-
-                <Divider />
-                <Box sx={{ textAlign: "center" }}>
-                  {isLoaded &&
-                    pages.map((page) =>
-                      login?.authorized == true &&
-                      isDone.isDoneMHC == true &&
-                      page.actor == "patient" ? (
-                        <Box
-                          sx={{
-                            px: "10px",
-                            display: "flex",
-                            justifyContent: "left",
-                          }}
-                        >
-                          <Link href={page.path}>
-                            <Button
-                              sx={{
-                                color: "#42493A",
-                                width: "100%",
-                                fontSize: 15,
-                                textAlign: "left",
-                                textTransform: "none",
-                                "&:hover": {
-                                  color: "green",
-                                  backgroundColor: "black",
-                                },
-                              }}
-                              className={montserratBold.className}
-                              onClick={() => setOpen(false)}
-                            >
-                              {page.title}
-                            </Button>
-                          </Link>
-                        </Box>
-                      ) : page.title == "Set Availability" &&
-                        loginConsultant?.authorized == true &&
-                        page.actor == "consultant" ? (
-                        <Box key={page.title}>
-                          <Link href={page.path}>
-                            <Button
-                              sx={{
-                                mx: 2,
-                                py: 4,
-                                color: "#42493A",
-                                display: "block",
-                                borderBottom: window.location.pathname.includes(
-                                  "SetAvailability"
-                                )
-                                  ? "4px solid #FFAACF"
-                                  : "4px solid white",
-                                "&:hover": {
-                                  color: "gray",
-                                  backgroundColor: "white",
-                                  borderBottom: "4px solid #FFAACF",
-                                },
-                                fontSize: 15,
-                                textTransform: "none",
-                              }}
-                              className={montserratBold.className}
-                            >
-                              {page.title}
-                            </Button>
-                          </Link>
-                        </Box>
-                      ) : page.title == "Patient List" &&
-                        loginConsultant?.authorized == true &&
-                        page.actor == "consultant" ? (
-                        <Box key={page.title}>
-                          <Link href={page.path}>
-                            <Button
-                              sx={{
-                                mx: 2,
-                                py: 4,
-                                color: "#42493A",
-                                display: "block",
-                                borderBottom: window.location.pathname.includes(
-                                  "PatientList"
-                                )
-                                  ? "4px solid #FFAACF"
-                                  : "4px solid white",
-                                "&:hover": {
-                                  color: "gray",
-                                  backgroundColor: "white",
-                                  borderBottom: "4px solid #FFAACF",
-                                },
-                                fontSize: 15,
-                                textTransform: "none",
-                              }}
-                              className={montserratBold.className}
-                            >
-                              {page.title}
-                            </Button>
-                          </Link>
-                        </Box>
-                      ) : (
-                        <Box key={page.title}></Box>
-                      )
-                    )}
-                </Box>
+                  }
+                >
+                  <Box
+                    sx={{
+                      display: {
+                        lg: "flex",
+                      },
+                    }}
+                  >
+                    <LineProgressBar
+                      rounded={36}
+                      height={20}
+                      width={220}
+                      percent={login?.MHpoints}
+                      transition={{ easing: "linear" }}
+                      progressColor="linear-gradient(to right, #FF6962, #FF7974, #FF8986, #FF9997, #FFA9A9)"
+                    />
+                  </Box>
+                </HtmlTooltip>
               </Box>
             )}
+
+          <Divider />
         </Drawer>
         <Main open={open}>
           <DrawerHeader />

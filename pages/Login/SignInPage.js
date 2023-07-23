@@ -378,7 +378,7 @@ const SignInPage = () => {
                 flexDirection="column"
                 alignContent="center"
                 justifyContent="flex-start"
-                mb={2}
+                mb={1}
               >
                 <Box
                   display="flex"
@@ -428,8 +428,7 @@ const SignInPage = () => {
                 className={montserrat.className}
                 fullWidth
                 sx={{
-                  mt: 4,
-                  mn: 4,
+                  mt: {xl:"30px", md:"30px"},
                   boxShadow: `0 0 10px #FFAACF`,
                   color: "white",
                   bgcolor: "#FFAACF",

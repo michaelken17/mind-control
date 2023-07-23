@@ -138,43 +138,51 @@ export default function ListKonsultasi() {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        axios.put(
-          process.env.NEXT_PUBLIC_BACKEND_URL +
-            "/api/Consultant/UpdateStatusListPatient?UserID=" +
-            login.userid +
-            "&status=ongoing"
-        );
-
-        router.reload(window.location.pathname);
+        axios
+          .put(
+            process.env.NEXT_PUBLIC_BACKEND_URL +
+              "/api/Consultant/UpdateStatusListPatient?UserID=" +
+              login.userid +
+              "&status=ongoing"
+          )
+          .then((x) => {
+            router.reload(window.location.pathname);
+          });
       }
     });
   };
 
   const resetMeetingHandler = () => {
-    axios.put(
-      process.env.NEXT_PUBLIC_BACKEND_URL +
-        "/api/Consultant/UpdateStatusListPatient?UserID=" +
-        login.userid +
-        "&status=patientlate"
-    );
-
-    axios.put(
-      process.env.NEXT_PUBLIC_BACKEND_URL +
-        "/api/Consultant/UpdateIsActiveListPatient?UserID=" +
-        login.userid
-    );
-
-    router.reload(window.location.pathname);
+    axios
+      .put(
+        process.env.NEXT_PUBLIC_BACKEND_URL +
+          "/api/Consultant/UpdateStatusListPatient?UserID=" +
+          login.userid +
+          "&status=patientlate"
+      )
+      .then((x) => {
+        axios
+          .put(
+            process.env.NEXT_PUBLIC_BACKEND_URL +
+              "/api/Consultant/UpdateIsActiveListPatient?UserID=" +
+              login.userid
+          )
+          .then((x) => {
+            router.reload(window.location.pathname);
+          });
+      });
   };
 
   const confirmEndConsultation = () => {
-    axios.put(
-      process.env.NEXT_PUBLIC_BACKEND_URL +
-        "/api/Consultant/UpdateIsActiveListPatient?UserID=" +
-        login.userid
-    );
-
-    router.reload(window.location.pathname);
+    axios
+      .put(
+        process.env.NEXT_PUBLIC_BACKEND_URL +
+          "/api/Consultant/UpdateIsActiveListPatient?UserID=" +
+          login.userid
+      )
+      .then((x) => {
+        router.reload(window.location.pathname);
+      });
   };
 
   return (
