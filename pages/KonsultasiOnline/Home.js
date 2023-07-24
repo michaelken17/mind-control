@@ -213,7 +213,7 @@ export default function KonsultasiOnlineHome() {
       </Box>
 
       {/* Footer */}
-      <Box
+      {/* <Box
         className={styles.quizDiv}
         sx={{
           p: "10px",
@@ -226,7 +226,7 @@ export default function KonsultasiOnlineHome() {
           // justifyContent: "center",
           // display: { xl: "block" },
         }}
-      ></Box>
+      ></Box> */}
     </ThemeProvider>
   );
 }

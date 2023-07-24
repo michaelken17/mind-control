@@ -114,9 +114,14 @@ export default function DHCTest() {
   const axios = require("axios");
   const textRef = useRef();
   const dispatch = useDispatch();
-  const handleChange = (event, perasaan) => {
-    setPerasaan(perasaan - 1);
-    setEmosi("");
+  const handleChange = (event, perasaanGet) => {
+    // console.log(perasaanGet);
+    // console.log(perasaan);
+    if ((perasaanGet == null)) {
+    } else {
+      setPerasaan(perasaanGet - 1);
+      setEmosi("");
+    }
   };
   const handleEmosi = (event, emosi) => {
     setEmosi(emosi);
@@ -163,18 +168,23 @@ export default function DHCTest() {
         if (result.isConfirmed) {
           // INSERT DHC HEADER
           axios
-            .post(process.env.NEXT_PUBLIC_BACKEND_URL + "/api/DHC/InsertDHCheckHeader", {
-              moodScore: perasaan + 1,
-              moodScoreDescription: emosi,
-              journal: textRef.current.value,
-              userID: login.userid,
-            })
+            .post(
+              process.env.NEXT_PUBLIC_BACKEND_URL +
+                "/api/DHC/InsertDHCheckHeader",
+              {
+                moodScore: perasaan + 1,
+                moodScoreDescription: emosi,
+                journal: textRef.current.value,
+                userID: login.userid,
+              }
+            )
             .then((resp) => {
               console.log(resp.data);
               // INSERT DHC DETAIL
               axios
                 .post(
-                  process.env.NEXT_PUBLIC_BACKEND_URL + "/api/DHC/InsertDHCheckDetail?headerID=" +
+                  process.env.NEXT_PUBLIC_BACKEND_URL +
+                    "/api/DHC/InsertDHCheckDetail?headerID=" +
                     resp.data.dhCheckHeaderID,
                   {
                     dhCheckData: dhcDetail,
@@ -187,7 +197,8 @@ export default function DHCTest() {
               // UPDATE MHP
               axios
                 .put(
-                  process.env.NEXT_PUBLIC_BACKEND_URL + "/api/DHC/UpdateMHCPoint?UserID=" +
+                  process.env.NEXT_PUBLIC_BACKEND_URL +
+                    "/api/DHC/UpdateMHCPoint?UserID=" +
                     login.userid +
                     "&opr=add"
                 )
@@ -240,7 +251,9 @@ export default function DHCTest() {
       });
     axios
       .get(
-        process.env.NEXT_PUBLIC_BACKEND_URL + "/api/DHC/CheckDHCIsDone?userId=" + login.userid
+        process.env.NEXT_PUBLIC_BACKEND_URL +
+          "/api/DHC/CheckDHCIsDone?userId=" +
+          login.userid
       )
       .then((resp) => {
         setisDoneDHC(resp.data);
@@ -335,13 +348,13 @@ export default function DHCTest() {
                           sx={{
                             textTransform: "none",
                             color: "black",
-                            px: "30px",
+                            px: "10px",
                           }}
                         >
                           <Grid>
                             <FontAwesomeIcon
                               icon={faFaceAngry}
-                              style={{ fontSize: "40px", color: "#EB5353" }}
+                              style={{ fontSize: "30px", color: "#EB5353" }}
                             />
                             <Typography>Buruk</Typography>
                           </Grid>
@@ -352,14 +365,14 @@ export default function DHCTest() {
                           sx={{
                             textTransform: "none",
                             color: "black",
-                            px: "30px",
+                            px: "10px",
                           }}
                           value="2"
                         >
                           <Grid>
                             <FontAwesomeIcon
                               icon={faFaceFrown}
-                              style={{ fontSize: "40px", color: "#ffa700" }}
+                              style={{ fontSize: "30px", color: "#ffa700" }}
                             />
                             <Typography>Kurang</Typography>
                           </Grid>
@@ -370,14 +383,14 @@ export default function DHCTest() {
                           sx={{
                             textTransform: "none",
                             color: "black",
-                            px: "30px",
+                            px: "10px",
                           }}
                           value="3"
                         >
                           <Grid>
                             <FontAwesomeIcon
                               icon={faFaceMeh}
-                              style={{ fontSize: "40px", color: "#fff400" }}
+                              style={{ fontSize: "30px", color: "#fff400" }}
                             />
                             <Typography>Biasa</Typography>
                           </Grid>
@@ -388,14 +401,14 @@ export default function DHCTest() {
                           sx={{
                             textTransform: "none",
                             color: "black",
-                            px: "20px",
+                            px: "10px",
                           }}
                           value="4"
                         >
                           <Grid>
                             <FontAwesomeIcon
                               icon={faFaceSmile}
-                              style={{ fontSize: "40px", color: "#b0cdff" }}
+                              style={{ fontSize: "30px", color: "#b0cdff" }}
                             />
                             <Typography>Lumayan</Typography>
                           </Grid>
@@ -406,14 +419,14 @@ export default function DHCTest() {
                           sx={{
                             textTransform: "none",
                             color: "black",
-                            px: "30px",
+                            px: "10px",
                           }}
                           value="5"
                         >
                           <Grid>
                             <FontAwesomeIcon
                               icon={faFaceGrinBeam}
-                              style={{ fontSize: "40px", color: "#59CE8F" }}
+                              style={{ fontSize: "30px", color: "#59CE8F" }}
                             />
                             <Typography>Baik</Typography>
                           </Grid>
